@@ -1,0 +1,72 @@
+# Briefing Awal Project Social Media Listening
+
+
+# Pendahuluan
+
+Penggunaan sosial media setiap tahunnya makin meningkat seiring dengan
+pertumbuhan jaringan internet dan penggunaan *gadget*.
+
+Sudah menjadi hal yang penting bagi setiap perusahaan untuk bisa
+mengekstrak *insights* dari konten di sosial media.
+
+# *Flow Chart*
+
+<img src="nomnoml.png" width="1800" alt="Flowchart Project" />
+
+# Beberapa Hal Penting
+
+## Jurnal
+
+Beberapa jurnal yang mungkin relevan dengan *project* ini sudah disimpan
+dalam folder `Journals and Materials`.
+
+## Metode *Web Scraping*
+
+### Skrip Mandiri
+
+Ada berbagai macam cara melakukan *web scraping*, baik untuk situs
+sosial media atau situs lain pada umumnya. Salah satunya adalah dengan
+membuat skrip menggunakan **R** atau **Python**.
+
+Saya telah membuat penjelasan dan tutorial singkatnya di tautan berikut
+[ini](https://ikanx101.com/blog/webscrape-tutorial/) dan
+[ini](https://ikanx101.com/blog/webscrape-tutorial-2/).
+
+Beberapa *cases* *web scraping* menggunakan **R** bisa dilihat di
+[sini](https://ikanx101.com/tags/#web-scrap).
+
+Selain membuat skrip secara mandiri, kita bisa melakukan *web scraping*
+menggunakan layanan yang tersedia secara *online* dan *freemium* seperti
+[**Apify**](https://apify.com).
+
+### Layanan [**Apify**](https://apify.com)
+
+Salah satu layanan yang biasa digunakan untuk *web scrape* dari berbagai
+sosial media adalah [**Apify**](https://apify.com). Silakan melakukan
+eksplorasi dari berbagai *actors* yang tersedia.
+
+## **Huggingface**
+
+Salah satu layanan penyedia **AI** yang sedang populer dan naik daun
+dewasa ini adalah [**Huggingface**](https://huggingface.co). Kita bisa
+menggunakan layanan *cloud computing* yang tersedia di sana.
+
+Beberapa tulisan dan eksperimen saya terkait penggunaan **Huggingface**
+bisa dilihat di tautan berikut
+[ini](https://ikanx101.com/tags/#huggingface).
+
+## Analisa Gambar
+
+Beberapa tulisan dan eksperimen saya terkait analisa gambar bisa dilihat
+di tautan berikut [ini](https://ikanx101.com/tags/#google-vision).
+
+# Epilog
+
+Rekaman *briefing* tadi pagi bisa dilihat di tautan berikut
+[ini](https://youtu.be/V-uH7E4qFoo).
+
+*Best regards*,
+
+Ikang Fadhli
+
+*Find me at*: [ikanx101.com](https://ikanx101.com)
