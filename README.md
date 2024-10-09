@@ -4,8 +4,8 @@ Anak magang datang dan pergi, oleh karena itu _knowledge_ dan _learning forum_ h
 
 Sesi _learning forum_ yang sudah pernah dilakukan:
 
-1. Web scraping: online web data acquisition using R.
-2. Social media listening: visi terkait social media analytics.
-3. Komputasi: parallel computing dan high performance computer.
+1. _Web scraping_: _online web data acquisition using_ __R__.
+2. _Social media listening_: visi terkait _social media analytics_.
+3. Komputasi: _parallel computing_ dan _high performance computer_.
 
 [Ikang Fadhli](https://ikanx101.com/)
