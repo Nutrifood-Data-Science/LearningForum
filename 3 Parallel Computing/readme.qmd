@@ -1,0 +1,92 @@
+---
+title: "BAGAIMANA MEMPERCEPAT KOMPUTASI?"
+format: 
+  gfm:
+    html-math-method: webtex
+    fig-dpi: 500
+    fig-width: 8
+    fig-height: 4.5
+editor: visual
+execute:
+  echo: false
+  warning: false
+  error: false
+---
+
+
+Saya mulai dari pertanyaan berikut ini:
+
+> Pernahkah Anda berhadapan dengan tampilan berikut ini?
+
+![](blue.png)
+
+Atau pertanyaan berikut ini:
+
+> Pernahkan komputer Anda menjadi lemot dan tidak kuat saat nge-_run_ skrip tertentu?
+
+```{r}
+#| include: false
+
+#direction: right
+# [komputasi] -> [aspek software]
+# [komputasi] -> [aspek hardware]
+# [aspek software] -> [operating system]
+# 
+# [<note>bahasa pemrograman] --:> [cara coding|mengubah paradigma processing]
+# [cara coding] -> [komputasi serial|proses i+1 depends on i]
+# [cara coding] -> [komputasi parallel|proses i and i+1 independent]
+# [komputasi parallel] -> [vectorization|embarassingly parallel|one core only]
+# [komputasi parallel] -> [multi core processing]
+# [aspek software] -- [<note>bahasa pemrograman]
+# [<note>bahasa pemrograman] -> [<database>R]
+# [<note>bahasa pemrograman] -> [<database>Python]
+# [R] -> [library(parallel)]
+# [Python] -> [Open MPI]
+# [Open MPI] --> [library mpi4py]
+# 
+# [operating system] -> [windows]
+# [windows] -> [<note>pasrah saja|dengan keadaan]
+# [<note>pasrah saja] -> [<note>bekerja dengan|tangan terikat]
+# [operating system] -> [support parallel computing|UNIX based OS]
+# [support parallel computing] -> [linux]
+# [support parallel computing] -> [macOS]
+# 
+# [aspek hardware] -> [komputer "biasa"]
+# [aspek hardware] -> [high performance computer]
+# [high performance computer] -> [server]
+# [high performance computer] -> [local]
+# 
+# [server] -> [paid|beberapa dapat bonus|usage per bulan|atau per user]
+# [server] -> [freemium]
+# 
+# [paid] -> [Railway.app]
+# [paid] -> [Google Cloud]
+# [paid] -> [Digital Ocean]
+# [freemium] -> [Github]
+# 
+# [komputer "biasa"] -> [ganti OS]
+# [komputer "biasa"] -> [virtualbox|virtual OS]
+# [virtualbox] -> [install linux]
+# [install linux] -> [ubuntu]
+# [install linux] -> [debian]
+# [ganti OS] -> [ubuntu]
+# [ganti OS] -> [debian]
+# [ganti OS] -> [chromeOS flex]
+# [local] -- [komputer "biasa"]
+# 
+# [Github] -> [codespace]
+# [codespace] -> [GUI|Visual Studio Code]
+# [codespace] -> [OS|Linux based]
+# [codespace] -> [bahasa|R|Py|based on docker container]
+
+```
+
+## Materi
+
+![](nomnoml.png)
+
+## Pustaka
+
+Saat kuliah lalu, beberapa tugas _parallel computating_ menggunakan _Python_ saya sudah sematkan pada _folder_ `Bahan Bacaan Python`.
+
+Untuk __R__, bisa baca tulisan di _blog_ saya [berikut ini](https://ikanx101.com/blog/serial-parallel/).
