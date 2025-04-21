@@ -1,0 +1,299 @@
+---
+title: "Analisa Curah Hujan Tahunan"
+subtitle: "Berdasarkan Tingkat Warna Hijau Pada Laporan BMKG"
+author: "Departemen Market Research"
+institute: Nutrifood Indonesia
+format: 
+  revealjs:
+    theme: simple
+    slide-number: true
+    footer: Analisa Curah Hujan Tahunan
+    incremental: false
+    show-slide-number: all
+    transition: convex
+    width: 1280
+    height: 720
+    highlight-style: arrow-dark
+    output-location: column
+    code-overflow: scroll
+    scrollable: true
+    fig-dpi: 900
+    fig-format: svg
+    fig-align: center
+editor: visual
+execute: 
+  echo: false
+  warning: false
+  message: false
+---
+
+# LAPORAN CURAH HUJAN
+
+## Laporan BMKG {.center .smaller}
+
+::::: columns
+::: {.column width="50%"}
+Setiap bulan, BMKG membuat laporan terkait curah hujan di Indonesia dalam *website*-nya. Namun laporan tersebut disajikan dalam bentuk gambar peta berwarna sebagai berikut ini.
+
+Semakin **hijau** petanya, berarti curah hujannya semakin tinggi.
+:::
+
+::: {.column width="50%"}
+![](bulanan.png){width="450"}
+:::
+:::::
+
+## Membandingkan Curah Hujan Tahunan {.smaller .center}
+
+Untuk membandingkan curah hujan tahunan, kita perlu mengumpulkan data bulanan terlebih dahulu. Oleh karena itu, kami mengumpulkan semua gambar dari laporan bulanan di *website* BMKG sejak **Desember 2022 hingga Maret 2025**.
+
+Berdasarkan gambar tersebut, kita akan melakukan pendekatan sebagai berikut: **untuk menghitung curah hujan bulanan, kita bisa mengukur seberapa hijau gambar tersebut**.
+
+> ***Semakin hijau gambar bulanan, maka curah hujan semakin tinggi.***
+
+```{r}
+#| include: false
+
+rm(list=ls())
+gc()
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+load("data.rda")
+
+df_hijau = 
+  df_hijau %>% 
+  mutate(tahun = lubridate::year(tgl)) %>% 
+  filter(tahun != 2022) 
+```
+
+## Cara Mengukur Seberapa Hijau {.center .smaller}
+
+Setiap gambar digital memiliki setidaknya tiga *layers* yang terdiri dari *layer **Red***, ***Green***, dan ***Blue***. Ketiga nilai dari setiap *layer* ini bisa diekstrak dengan teknik tertentu dan disajikan dalam bentuk matriks. Ukuran dari matriks ini merupakan $n \times m$ yang berasal dari dimensi *pixel* gambar tersebut.
+
+::: {style="font-size: 80%;"}
+Dari data berbentuk matriks tersebut, akan dihitung **tiga *metrics*** pengukuran, yakni:
+
+1.  `average_green_intensity`: merupakan nilai rata-rata dari matriks di *layer green*.
+2.  `proportion_high_green`: merupakan proporsi berapa banyak *pixel* di *layer green* yang memiliki tingkat hijau di atas *threhold* yang kita definisikan dibandingkan total *pixel* yang ada di *layer green* tersebut.
+3.  `average_green_dominance`: merupakan nilai rata-rata dominasi warna *green* dibandingkan warna *red* dan *blue*.
+:::
+
+## *Trend* `average_green_intensity` {.center}
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+df_hijau %>% 
+  ggplot(aes(x = tgl,
+             y = average_green_intensity)) +
+  geom_line(group = 1,color = "darkgreen") +
+  ylim(.7,1) +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+df_hijau %>% 
+  ggplot(aes(x = factor(tahun),y = average_green_intensity)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+:::::
+
+## Perbedaan Tahunan: Uji *Mean*
+
+### `average_green_intensity`
+
+Berikut adalah hasil uji signifikansinya:
+
+```{r}
+#| include: false
+
+df_temp = df_hijau %>% filter(tahun %in% 2023:2024)
+t1 = 
+  wilcox.test(
+    as.numeric(average_green_intensity) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k1 = ifelse(t1$p.value < 0.05,"Sig","No Sig")
+
+
+df_temp = df_hijau %>% filter(tahun %in% 2024:2025)
+t2 =
+  wilcox.test(
+    as.numeric(average_green_intensity) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k2 = ifelse(t2$p.value < 0.05,"Sig","No Sig")
+
+
+df_temp = df_hijau %>% filter(tahun %in% c(2023,2025))
+t3 =
+  wilcox.test(
+    as.numeric(average_green_intensity) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k3 = ifelse(t3$p.value < 0.05,"Sig","No Sig")
+
+```
+
+|           | Data 2023 | Data 2024 | Data 2025 |
+|-----------|-----------|-----------|-----------|
+| Data 2023 |           | `r k1`    | `r k3`    |
+| Data 2024 | `r k1`    |           | `r k2`    |
+| Data 2025 | `r k3`    | `r k2`    |           |
+
+
+
+
+
+## *Trend* `proportion_high_green` {.center}
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+df_hijau %>% 
+  ggplot(aes(x = tgl,
+             y = proportion_high_green)) +
+  geom_line(group = 1,color = "darkgreen") +
+  ylim(.7,1) +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+df_hijau %>% 
+  ggplot(aes(x = factor(tahun),y = proportion_high_green)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+:::::
+
+## Perbedaan Tahunan: Uji *Mean*
+
+### `proportion_high_green`
+
+Berikut adalah hasil uji signifikansinya:
+
+```{r}
+#| include: false
+
+df_temp = df_hijau %>% filter(tahun %in% 2023:2024)
+t1 = 
+  wilcox.test(
+    as.numeric(proportion_high_green) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k1 = ifelse(t1$p.value < 0.05,"Sig","No Sig")
+
+
+df_temp = df_hijau %>% filter(tahun %in% 2024:2025)
+t2 =
+  wilcox.test(
+    as.numeric(proportion_high_green) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k2 = ifelse(t2$p.value < 0.05,"Sig","No Sig")
+
+
+df_temp = df_hijau %>% filter(tahun %in% c(2023,2025))
+t3 =
+  wilcox.test(
+    as.numeric(proportion_high_green) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k3 = ifelse(t3$p.value < 0.05,"Sig","No Sig")
+
+```
+
+|           | Data 2023 | Data 2024 | Data 2025 |
+|-----------|-----------|-----------|-----------|
+| Data 2023 |           | `r k1`    | `r k3`    |
+| Data 2024 | `r k1`    |           | `r k2`    |
+| Data 2025 | `r k3`    | `r k2`    |           |
+
+
+
+## *Trend* `average_green_dominance` {.center}
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+df_hijau %>% 
+  ggplot(aes(x = tgl,
+             y = average_green_dominance)) +
+  geom_line(group = 1,color = "darkgreen") +
+  ylim(0,.1) +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+df_hijau %>% 
+  ggplot(aes(x = factor(tahun),y = average_green_dominance)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+:::::
+
+## Perbedaan Tahunan: Uji *Mean*
+
+### `average_green_dominance`
+
+Berikut adalah hasil uji signifikansinya:
+
+```{r}
+#| include: false
+
+df_temp = df_hijau %>% filter(tahun %in% 2023:2024)
+t1 = 
+  wilcox.test(
+    as.numeric(average_green_dominance) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k1 = ifelse(t1$p.value < 0.05,"Sig","No Sig")
+
+
+df_temp = df_hijau %>% filter(tahun %in% 2024:2025)
+t2 =
+  wilcox.test(
+    as.numeric(average_green_dominance) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k2 = ifelse(t2$p.value < 0.05,"Sig","No Sig")
+
+
+df_temp = df_hijau %>% filter(tahun %in% c(2023,2025))
+t3 =
+  wilcox.test(
+    as.numeric(average_green_dominance) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k3 = ifelse(t3$p.value < 0.05,"Sig","No Sig")
+
+```
+
+|           | Data 2023 | Data 2024 | Data 2025 |
+|-----------|-----------|-----------|-----------|
+| Data 2023 |           | `r k1`    | `r k3`    |
+| Data 2024 | `r k1`    |           | `r k2`    |
+| Data 2025 | `r k3`    | `r k2`    |           |
+
+
+# TERIMA KASIH
+
