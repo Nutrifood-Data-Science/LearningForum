@@ -16,11 +16,15 @@ area        = baca %>% html_nodes(".bg-c-text--body-1") %>% html_text() %>% stri
 area        = area[!grepl("diskon|promo",area,ignore.case = T)]
 harga       = baca %>% html_nodes(".rc-price__text") %>% html_text() %>% stringr::str_trim()
 harga       = gsub("[^0-9]","",harga) %>% as.numeric()
+fasilitas   = baca %>% html_nodes(".rc-facilities") %>% html_text()
 
 df_raw = 
-  data.frame(nama_tempat,area,harga) %>% 
+  data.frame(nama_tempat,area,harga,fasilitas) %>% 
   mutate(area = gsub("kecamatan ","",area,ignore.case = T)) %>% 
   mutate(nama_cari = paste(area,"Surabaya, Indonesia",sep = ", "))
+
+openxlsx::write.xlsx(df_raw,file = "raw.xlsx")
+save(df_raw,file = "raw.rda")
 
 # sekarang kita geocoding
 library(tidygeocoder)
