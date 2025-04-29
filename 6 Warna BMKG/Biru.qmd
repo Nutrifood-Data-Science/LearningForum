@@ -1,0 +1,325 @@
+---
+title: "Analisa Curah Hujan Tahunan"
+subtitle: "Berdasarkan Tingkat Warna Biru Pada Laporan BMKG"
+author: "Departemen Market Research"
+institute: Nutrifood Indonesia
+format: 
+  revealjs:
+    theme: simple
+    slide-number: true
+    footer: Analisa Curah Hujan Tahunan
+    incremental: false
+    show-slide-number: all
+    transition: convex
+    width: 1280
+    height: 720
+    highlight-style: arrow-dark
+    output-location: column
+    code-overflow: scroll
+    scrollable: true
+    fig-dpi: 900
+    fig-format: svg
+    fig-align: center
+editor: visual
+execute: 
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+#| include: false
+
+rm(list=ls())
+gc()
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+load("data_biru.rda")
+
+df_biru = 
+  df_biru %>% 
+  mutate(tahun = lubridate::year(tgl)) %>% 
+  filter(tahun != 2022) 
+
+df_q = 
+  df_biru %>% 
+  mutate(kyu = lubridate::quarter(tgl)) %>% 
+  group_by(kyu,tahun) %>% 
+  summarise_all(mean) %>% 
+  ungroup() %>% 
+  mutate(kyu = paste0("Q",kyu,"-",tahun)) %>% 
+  mutate(kyu = factor(kyu,levels = c("Q1-2023","Q2-2023","Q3-2023","Q4-2023",
+                                     "Q1-2024","Q2-2024","Q3-2024","Q4-2024",
+                                     "Q1-2025")
+                      )
+         )
+```
+
+## Cara Mengukur Seberapa Biru {.center .smaller}
+
+Setiap gambar digital memiliki setidaknya tiga *layers* yang terdiri dari *layer **Red***, ***Green***, dan ***Blue***. Ketiga nilai dari setiap *layer* ini bisa diekstrak dengan teknik tertentu dan disajikan dalam bentuk matriks. Ukuran dari matriks ini merupakan $n \times m$ yang berasal dari dimensi *pixel* gambar tersebut.
+
+::: {style="font-size: 80%;"}
+Dari data berbentuk matriks tersebut, akan dihitung **tiga *metrics*** pengukuran, yakni:
+
+1.  `average_blue_intensity`: merupakan nilai rata-rata dari matriks di *layer blue*.
+2.  `proportion_high_blue`: merupakan proporsi berapa banyak *pixel* di *layer blue* yang memiliki tingkat biru di atas *threhold* yang kita definisikan dibandingkan total *pixel* yang ada di *layer blue* tersebut.
+3.  `average_blue_dominance`: merupakan nilai rata-rata dominasi warna *blue* dibandingkan warna *red* dan *green*.
+:::
+
+## *Trend* `average_blue_intensity` {.center}
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+df_biru %>% 
+  ggplot(aes(x = tgl,
+             y = average_blue_intensity)) +
+  geom_line(group = 1,color = "darkblue") +
+  ylim(.7,1) +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+df_biru %>% 
+  ggplot(aes(x = factor(tahun),y = average_blue_intensity)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+:::::
+
+------------------------------------------------------------------------
+
+```{r}
+df_q %>% 
+  ggplot(aes(x = kyu,
+             y = average_blue_intensity)) +
+  geom_col(color = "black",fill = "blue",alpha = .3) +
+  geom_label(aes(label = round(average_blue_intensity,3))) +
+  theme_minimal() +
+  theme(axis.title = element_blank(),
+        axis.text.y = element_blank())
+```
+
+## Perbedaan Tahunan: Uji *Mean* {.smaller .center}
+
+### `average_blue_intensity`
+
+Berikut adalah hasil uji signifikansinya:
+
+```{r}
+#| include: false
+
+df_temp = df_biru %>% filter(tahun %in% 2023:2024)
+t1 = 
+  wilcox.test(
+    as.numeric(average_blue_intensity) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k1 = ifelse(t1$p.value < 0.05,"Sig","No Sig")
+
+
+df_temp = df_biru %>% filter(tahun %in% 2024:2025)
+t2 =
+  wilcox.test(
+    as.numeric(average_blue_intensity) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k2 = ifelse(t2$p.value < 0.05,"Sig","No Sig")
+
+
+df_temp = df_biru %>% filter(tahun %in% c(2023,2025))
+t3 =
+  wilcox.test(
+    as.numeric(average_blue_intensity) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k3 = ifelse(t3$p.value < 0.05,"Sig","No Sig")
+
+```
+
+|           | Data 2023 | Data 2024 | Data 2025 |
+|-----------|-----------|-----------|-----------|
+| Data 2023 |           | `r k1`    | `r k3`    |
+| Data 2024 | `r k1`    |           | `r k2`    |
+| Data 2025 | `r k3`    | `r k2`    |           |
+
+Catatan: Perhitungan rata-rata data bulanan.
+
+## *Trend* `proportion_high_blue` {.center}
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+df_biru %>% 
+  ggplot(aes(x = tgl,
+             y = proportion_high_blue)) +
+  geom_line(group = 1,color = "darkblue") +
+  ylim(.7,1) +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+df_biru %>% 
+  ggplot(aes(x = factor(tahun),y = proportion_high_blue)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+:::::
+
+------------------------------------------------------------------------
+
+```{r}
+df_q %>% 
+  ggplot(aes(x = kyu,
+             y = proportion_high_blue)) +
+  geom_col(color = "black",fill = "blue",alpha = .3) +
+  geom_label(aes(label = round(proportion_high_blue,3))) +
+  theme_minimal() +
+  theme(axis.title = element_blank(),
+        axis.text.y = element_blank())
+```
+
+## Perbedaan Tahunan: Uji *Mean* {.smaller .center}
+
+### `proportion_high_blue`
+
+Berikut adalah hasil uji signifikansinya:
+
+```{r}
+#| include: false
+
+df_temp = df_biru %>% filter(tahun %in% 2023:2024)
+t1 = 
+  wilcox.test(
+    as.numeric(proportion_high_blue) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k1 = ifelse(t1$p.value < 0.05,"Sig","No Sig")
+
+
+df_temp = df_biru %>% filter(tahun %in% 2024:2025)
+t2 =
+  wilcox.test(
+    as.numeric(proportion_high_blue) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k2 = ifelse(t2$p.value < 0.05,"Sig","No Sig")
+
+
+df_temp = df_biru %>% filter(tahun %in% c(2023,2025))
+t3 =
+  wilcox.test(
+    as.numeric(proportion_high_blue) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k3 = ifelse(t3$p.value < 0.05,"Sig","No Sig")
+
+```
+
+|           | Data 2023 | Data 2024 | Data 2025 |
+|-----------|-----------|-----------|-----------|
+| Data 2023 |           | `r k1`    | `r k3`    |
+| Data 2024 | `r k1`    |           | `r k2`    |
+| Data 2025 | `r k3`    | `r k2`    |           |
+
+Catatan: Perhitungan rata-rata data bulanan.
+
+## *Trend* `average_blue_dominance` {.center}
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+df_biru %>% 
+  ggplot(aes(x = tgl,
+             y = average_blue_dominance)) +
+  geom_line(group = 1,color = "darkblue") +
+  # ylim(0,.1) +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+df_biru %>% 
+  ggplot(aes(x = factor(tahun),y = average_blue_dominance)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+:::::
+
+------------------------------------------------------------------------
+
+```{r}
+df_q %>% 
+  ggplot(aes(x = kyu,
+             y = average_blue_dominance)) +
+  geom_col(color = "black",fill = "blue",alpha = .3) +
+  geom_label(aes(label = round(average_blue_dominance,3))) +
+  theme_minimal() +
+  theme(axis.title = element_blank(),
+        axis.text.y = element_blank())
+```
+
+## Perbedaan Tahunan: Uji *Mean* {.center .smaller}
+
+### `average_blue_dominance`
+
+Berikut adalah hasil uji signifikansinya:
+
+```{r}
+#| include: false
+
+df_temp = df_biru %>% filter(tahun %in% 2023:2024)
+t1 = 
+  wilcox.test(
+    as.numeric(average_blue_dominance) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k1 = ifelse(t1$p.value < 0.05,"Sig","No Sig")
+
+
+df_temp = df_biru %>% filter(tahun %in% 2024:2025)
+t2 =
+  wilcox.test(
+    as.numeric(average_blue_dominance) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k2 = ifelse(t2$p.value < 0.05,"Sig","No Sig")
+
+
+df_temp = df_biru %>% filter(tahun %in% c(2023,2025))
+t3 =
+  wilcox.test(
+    as.numeric(average_blue_dominance) ~ factor(tahun),exact = F,
+    data = df_temp
+  )
+k3 = ifelse(t3$p.value < 0.05,"Sig","No Sig")
+
+```
+
+|           | Data 2023 | Data 2024 | Data 2025 |
+|-----------|-----------|-----------|-----------|
+| Data 2023 |           | `r k1`    | `r k3`    |
+| Data 2024 | `r k1`    |           | `r k2`    |
+| Data 2025 | `r k3`    | `r k2`    |           |
+
+Catatan: Perhitungan rata-rata data bulanan.
+
+# TERIMA KASIH

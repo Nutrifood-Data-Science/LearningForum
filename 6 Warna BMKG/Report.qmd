@@ -67,6 +67,19 @@ df_hijau =
   df_hijau %>% 
   mutate(tahun = lubridate::year(tgl)) %>% 
   filter(tahun != 2022) 
+
+df_q = 
+  df_hijau %>% 
+  mutate(kyu = lubridate::quarter(tgl)) %>% 
+  group_by(kyu,tahun) %>% 
+  summarise_all(mean) %>% 
+  ungroup() %>% 
+  mutate(kyu = paste0("Q",kyu,"-",tahun)) %>% 
+  mutate(kyu = factor(kyu,levels = c("Q1-2023","Q2-2023","Q3-2023","Q4-2023",
+                                     "Q1-2024","Q2-2024","Q3-2024","Q4-2024",
+                                     "Q1-2025")
+                      )
+         )
 ```
 
 ## Cara Mengukur Seberapa Hijau {.center .smaller}
@@ -107,7 +120,20 @@ df_hijau %>%
 :::
 :::::
 
-## Perbedaan Tahunan: Uji *Mean*
+------------------------------------------------------------------------
+
+```{r}
+df_q %>% 
+  ggplot(aes(x = kyu,
+             y = average_green_intensity)) +
+  geom_col(color = "black",fill = "green",alpha = .3) +
+  geom_label(aes(label = round(average_green_intensity,3))) +
+  theme_minimal() +
+  theme(axis.title = element_blank(),
+        axis.text.y = element_blank())
+```
+
+## Perbedaan Tahunan: Uji *Mean* {.smaller .center}
 
 ### `average_green_intensity`
 
@@ -150,8 +176,7 @@ k3 = ifelse(t3$p.value < 0.05,"Sig","No Sig")
 | Data 2024 | `r k1`    |           | `r k2`    |
 | Data 2025 | `r k3`    | `r k2`    |           |
 
-
-
+Catatan: Perhitungan rata-rata data bulanan.
 
 
 ## *Trend* `proportion_high_green` {.center}
@@ -180,7 +205,20 @@ df_hijau %>%
 :::
 :::::
 
-## Perbedaan Tahunan: Uji *Mean*
+------------------------------------------------------------------------
+
+```{r}
+df_q %>% 
+  ggplot(aes(x = kyu,
+             y = proportion_high_green)) +
+  geom_col(color = "black",fill = "green",alpha = .3) +
+  geom_label(aes(label = round(proportion_high_green,3))) +
+  theme_minimal() +
+  theme(axis.title = element_blank(),
+        axis.text.y = element_blank())
+```
+
+## Perbedaan Tahunan: Uji *Mean* {.smaller .center}
 
 ### `proportion_high_green`
 
@@ -223,7 +261,7 @@ k3 = ifelse(t3$p.value < 0.05,"Sig","No Sig")
 | Data 2024 | `r k1`    |           | `r k2`    |
 | Data 2025 | `r k3`    | `r k2`    |           |
 
-
+Catatan: Perhitungan rata-rata data bulanan.
 
 ## *Trend* `average_green_dominance` {.center}
 
@@ -251,7 +289,20 @@ df_hijau %>%
 :::
 :::::
 
-## Perbedaan Tahunan: Uji *Mean*
+------------------------------------------------------------------------
+
+```{r}
+df_q %>% 
+  ggplot(aes(x = kyu,
+             y = average_green_dominance)) +
+  geom_col(color = "black",fill = "green",alpha = .3) +
+  geom_label(aes(label = round(average_green_dominance,3))) +
+  theme_minimal() +
+  theme(axis.title = element_blank(),
+        axis.text.y = element_blank())
+```
+
+## Perbedaan Tahunan: Uji *Mean* {.center .smaller}
 
 ### `average_green_dominance`
 
@@ -294,6 +345,7 @@ k3 = ifelse(t3$p.value < 0.05,"Sig","No Sig")
 | Data 2024 | `r k1`    |           | `r k2`    |
 | Data 2025 | `r k3`    | `r k2`    |           |
 
+Catatan: Perhitungan rata-rata data bulanan.
+
 
 # TERIMA KASIH
-
