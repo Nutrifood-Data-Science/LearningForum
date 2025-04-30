@@ -58,6 +58,31 @@ df_q =
          )
 ```
 
+
+# LAPORAN CURAH HUJAN
+
+## Laporan BMKG {.center .smaller}
+
+::::: columns
+::: {.column width="50%"}
+Setiap bulan, BMKG membuat laporan terkait curah hujan di Indonesia dalam *website*-nya. Namun laporan tersebut disajikan dalam bentuk gambar peta berwarna sebagai berikut ini.
+
+Semakin **merah** petanya, berarti curah hujannya semakin sedikit.
+:::
+
+::: {.column width="50%"}
+![](bulanan.png){width="450"}
+:::
+:::::
+
+## Membandingkan Curah Hujan Tahunan {.smaller .center}
+
+Untuk membandingkan curah hujan tahunan, kita perlu mengumpulkan data bulanan terlebih dahulu. Oleh karena itu, kami mengumpulkan semua gambar dari laporan bulanan di *website* BMKG sejak **Desember 2022 hingga Maret 2025**.
+
+Berdasarkan gambar tersebut, kita akan melakukan pendekatan sebagai berikut: **untuk menghitung seberapa kering bulan itu, kita bisa mengukur seberapa merah gambar tersebut**.
+
+> ***Semakin merah gambar bulanan, maka curah hujan semakin sedikit.***
+
 ## Cara Mengukur Seberapa Merah {.center .smaller}
 
 Setiap gambar digital memiliki setidaknya tiga *layers* yang terdiri dari *layer **Red***, ***Green***, dan ***Blue***. Ketiga nilai dari setiap *layer* ini bisa diekstrak dengan teknik tertentu dan disajikan dalam bentuk matriks. Ukuran dari matriks ini merupakan $n \times m$ yang berasal dari dimensi *pixel* gambar tersebut.
