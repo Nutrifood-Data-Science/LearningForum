@@ -178,7 +178,6 @@ k3 = ifelse(t3$p.value < 0.05,"Sig","No Sig")
 
 Catatan: Perhitungan rata-rata data bulanan.
 
-
 ## *Trend* `proportion_high_green` {.center}
 
 ::::: columns
@@ -346,6 +345,5 @@ k3 = ifelse(t3$p.value < 0.05,"Sig","No Sig")
 | Data 2025 | `r k3`    | `r k2`    |           |
 
 Catatan: Perhitungan rata-rata data bulanan.
-
 
 # TERIMA KASIH
