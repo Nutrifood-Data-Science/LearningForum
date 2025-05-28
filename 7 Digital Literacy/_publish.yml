@@ -1,0 +1,4 @@
+- source: index.qmd
+  quarto-pub:
+    - id: 6d3b09db-5994-49a9-97d3-b973772f2572
+      url: https://ikanx101.quarto.pub/digital-data-literacy

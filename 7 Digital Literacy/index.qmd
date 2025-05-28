@@ -1,0 +1,195 @@
+---
+title: "Digital Data Literacy"
+subtitle: "Program Orientasi Karyawan 2025"
+author: "ikanx101.com"
+institute: Nutrifood Indonesia
+title-slide-attributes:
+  data-background-image: logo_nfi.png
+  data-background-size: cover
+  data-background-opacity: "0.15"
+format: 
+  revealjs:
+    theme: simple
+    slide-number: true
+    footer: Program Orientasi Karyawan Nutrifood 2025
+    incremental: false
+    show-slide-number: all
+    transition: convex
+    width: 1280
+    height: 720
+    highlight-style: arrow-dark
+    output-location: column
+    code-overflow: scroll
+    scrollable: true
+    fig-dpi: 900
+    fig-format: svg
+    fig-align: center
+editor: visual
+execute: 
+  echo: false
+  warning: false
+  message: false
+---
+
+## *About me* {.smaller .center}
+
+### *Just a little bit*
+
+:::::: columns
+:::: {.column width="35%"}
+Ikang Fadhli from *market research dept*, *Nutrifood Research Center Division*.
+
+::: {style="font-size: 70%;"}
+Ask me about:
+
+-   Market research
+-   Data science
+-   Math and computational science
+:::
+
+Find me at [ikanx101.com](https://ikanx101.com/).
+::::
+
+::: {.column width="65%"}
+![](blog.png){fig-align="center" width="550"}
+:::
+::::::
+
+## *Pre Face* {.smaller .center}
+
+### Untuk apa POK ini?
+
+::::: columns
+::: {.column width="50%"}
+***Objective***
+
+Memahami peran data dalam *digital transformation*.
+:::
+
+::: {.column width="50%"}
+***Outlines***
+
+1.  Kenapa harus *aware* dengan data?
+2.  Apa efek *digital transformation* terhadap data?
+3.  Apa saja masalah-masalah terkait data yang timbul dalam era *digital*?
+:::
+:::::
+
+# Apa itu DATA? {.center}
+
+------------------------------------------------------------------------
+
+![](data.png){fig-align="center" width="350"}
+
+# Kenapa DATA penting bagi _business_? {.center}
+
+## Dalam Konteks _Marketing_ {.center}
+
+### _From Data to Insights_
+
+![](alur.png){fig-align="center" width="350"}
+
+```{r}
+# nomnoml::nomnoml("#direction: down,
+#                  [data] -> [informasi]
+#                  [data] -> [tak ada informasi]
+#                  [informasi] -> [insights]
+#                  [insights] -> [action]
+#                  
+#                  [insights|
+#                     [Nice to know]
+#                     [Must know]
+#                     ]
+#                  ")
+```
+
+## Dalam Konteks _Marketing_ {.center .smaller}
+
+### _We are looking for insights!_
+
+:::::: columns
+:::: {.column width="35%"}
+__Apa kegunaan *insights*?__
+
+1. Mengubah cara komunikasi.
+1. Mencari _target market_ baru.
+1. Membantu pengembangan produk baru.
+::::
+
+:::: {.column width="65%"}
+![](insight.jpg){fig-align="center" width="450"}
+::::
+::::::
+
+# Mengubah cara komunikasi {.center}
+
+Apa contohnya?
+
+# Mencari _target market_ baru ATAU membantu pengembangan produk baru {.center}
+
+Apa contohnya?
+
+## Contoh sederhana {.center}
+
+### _Insights_ dari _Focus Group Discussion_ kepada ibu-ibu yang punya anak usia SD
+
+:::::: columns
+:::: {.column width="50%"}
+![](dancow.png){fig-align="center" width="250"}
+::::
+
+:::: {.column width="50%"}
+![](ultra.jpg){fig-align="center" width="250"}
+::::
+::::::
+
+# Kenapa harus _aware_ dengan data? {.center}
+
+## _Digitalization Effects_
+
+![](digital_efek.png){fig-align="center" width="300"}
+
+sumber: [ecb.europa.eu](ecb.ebbox201807_04.en.html)
+---
+
+## _User Generated Content_ {.center}
+
+![](UGC.png){fig-align="center" width="350"}
+
+# Apa efek _digital transformation_ terhadap data?
+
+---
+
+![](flow_data.png){fig-align="center" width="450"}
+
+## Akibatnya timbul __tiga__ masalah besar: {.center .smaller}
+
+:::::: columns
+
+:::: {.column width="33%"}
+__Bagaimana cara mendapatkan datanya?__
+
+::: {style="font-size: 80%;"}
+_Katanya data ada di mana-mana, terus ada di mana? Bagaimana cara mengambilnya?_
+:::
+::::
+
+:::: {.column width="33%"}
+__Tidak semua data itu bersih!__
+
+::: {style="font-size: 80%;"}
+_Data yang tersebar di publik bagaikan messy spaghetti._
+:::
+::::
+
+:::: {.column width="33%"}
+__Bagaimana cara mengekstrak insights-nya?__
+
+::: {style="font-size: 80%;"}
+_From data to insights!_
+:::
+::::
+
+::::::
+
+# _Let's Discuss!_
