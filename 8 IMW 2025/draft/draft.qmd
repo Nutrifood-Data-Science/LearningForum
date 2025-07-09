@@ -1,0 +1,51 @@
+---
+title: "Bahan Diskusi"
+subtitle: "Project Khusus Panas Dingin"
+author: "Departemen Market Research"
+institute: Nutrifood Indonesia
+title-slide-attributes:
+  data-background-image: back.jpg
+  data-background-size: cover
+  data-background-opacity: "0.25"
+format: 
+  revealjs:
+    theme: solarized
+    slide-number: true
+    footer: Industrial Math Week 2025
+    incremental: false
+    show-slide-number: all
+    transition: convex
+    width: 2160
+    height: 1620
+    highlight-style: arrow-dark
+    output-location: column
+    code-overflow: scroll
+    scrollable: true
+    fig-dpi: 650
+    fig-format: svg
+    fig-align: center
+editor: visual
+execute: 
+  echo: false
+  warning: false
+  message: false
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+
+## Bullets
+
+When you click the **Render** button a document will be generated that includes:
+
+-   Content authored with markdown
+-   Output from executable code
+
+## Code
+
+When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
