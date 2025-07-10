@@ -12,10 +12,10 @@ library(ggplot2)
 source("rotator.R")
 
 # kita set corenya berapa
-numcore = 2
+numcore = detectCores()
 
 # banyaknya calon solusi yang hendak di-generate
-n_calon_solusi = 10
+n_calon_solusi = numcore * 100
 
 # berapa banyak SDOA dilakukan
 n_SDOA  = 60
@@ -78,7 +78,7 @@ calon_solusi = mclapply(1:n_calon_solusi,
 f_hit        = mcmapply(obj_func,calon_solusi,mc.cores = numcore)
 
 # kita buat matriks rotasi
-mat_rotasi   = buat_rot_mat(2*pi/10,2)
+mat_rotasi   = buat_rot_mat(2*pi/50,2)
 
 # dengan cara memulai SDOAnya
 for(iter in 1:n_SDOA){
@@ -103,4 +103,5 @@ for(iter in 1:n_SDOA){
 # ini adalah hasil akhirnya
 solusi = calon_solusi[[which.min(f_hit)]]
 solusi
+
 
