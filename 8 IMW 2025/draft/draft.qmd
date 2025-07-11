@@ -15,8 +15,8 @@ format:
     incremental: false
     show-slide-number: all
     transition: convex
-    width: 2160
-    height: 1620
+    width: 1440
+    height: 1080
     highlight-style: arrow-dark
     output-location: column
     code-overflow: scroll
@@ -53,6 +53,10 @@ When you click the **Render** button a document will be generated that includes:
 
 -   Content authored with markdown
 -   Output from executable code
+
+1. lalala
+1. hehehe
+1. wkwkwkw
 
 ## Code
 
