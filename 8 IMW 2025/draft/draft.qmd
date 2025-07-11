@@ -1,8 +1,8 @@
 ---
 title: "Bahan Diskusi"
-subtitle: "Project Khusus Panas Dingin"
-author: "Departemen Market Research"
-institute: Nutrifood Indonesia
+subtitle: "xxxx"
+author: "xxxx"
+institute: xxxx
 title-slide-attributes:
   data-background-image: back.jpg
   data-background-size: cover
@@ -30,6 +30,18 @@ execute:
   warning: false
   message: false
 ---
+
+```{r}
+#| include: false
+
+library(ggtext)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+# plot.caption = element_markdown()
+# "Sig: __Upper > Middle__ pada <span style='color:blue;'>**Ya**</span>"
+```
 
 ## Quarto
 
