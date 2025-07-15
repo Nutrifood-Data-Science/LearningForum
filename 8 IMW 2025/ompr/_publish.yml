@@ -1,0 +1,4 @@
+- source: draft.qmd
+  quarto-pub:
+    - id: e532bf44-533c-4c15-ae0b-30799f64add9
+      url: 'https://ikanx101.quarto.pub/optimisasi-antrian-security-check-bandara'

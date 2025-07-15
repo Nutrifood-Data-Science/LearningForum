@@ -80,7 +80,11 @@ bin_prog =
   # set_objective(sum_over(unpro[i],i = 1:12),
   #               "min") %>% 
   # obj func kedua
-  set_objective(sum_over(unpro[i] + 12*l[i],i = 1:12),"min")
+  # set_objective(sum_over(unpro[i] + 12*l[i],i = 1:12),"min")
+  # 
+  # obj func ketiga
+  set_objective(sum_over(unpro[i] + 11*l[i],i = 1:12),"min")
+
 
   
 bin_prog 

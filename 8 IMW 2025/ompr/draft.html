@@ -10,7 +10,7 @@
 <link href="draft_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.5.57">
 
-  <meta name="author" content="Ikang Fadhli">
+  <meta name="author" content="Tim Security">
   <title>Optimisasi Antrian Security Check Bandara</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -333,10 +333,10 @@
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Ikang Fadhli 
+Tim Security 
 </div>
         <p class="quarto-title-affiliation">
-            ikanx101.com
+            Institut Teknologi Bandung
           </p>
     </div>
 </div>
@@ -427,8 +427,8 @@ A BibTeX entry for LaTeX users is
 <h2>Pencarian <span class="math inline">\(sr_i\)</span></h2>
 <p>Salah satu pertanyaan terbesar pada masalah ini adalah bagaimana mendekati nilai <span class="math inline">\(sr_i\)</span>.</p>
 <ul>
-<li>Apakah <span class="math inline">\(sr_i\)</span> tergantung dari berapa banyak orang <em>passengers</em> yang datang?</li>
 <li>Apakah <span class="math inline">\(sr_i\)</span> tergantung dari jam berapa petugas <em>lane</em> bekerja?</li>
+<li>Apakah <span class="math inline">\(sr_i\)</span> tergantung dari berapa banyak orang <em>passengers</em> yang datang?</li>
 </ul>
 </section>
 <section id="sebaran-service-rate" class="slide level2 center">
@@ -462,20 +462,32 @@ A BibTeX entry for LaTeX users is
 </section>
 <section id="hubungan-service-rate-dengan-total-passengers" class="slide level2 center smaller">
 <h2>Hubungan <em>Service Rate</em> dengan <em>Total Passengers</em></h2>
-
-<img data-src="draft_files/figure-revealjs/unnamed-chunk-6-1.svg" class="r-stretch"><div style="font-size: 70%;">
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="draft_files/figure-revealjs/unnamed-chunk-6-1.svg"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:40%;">
+<div style="font-size: 80%;">
 <p>Dari semua grafik yang ditampilkan, kita melihat bahwa ada pola yang mirip antara <em>service rate</em> dengan <em>total passengers</em> jika disajikan dalam <em>timeline</em> yang sama. Dari sini kita bisa mengeliminasi faktor <em>timeline</em> dan bisa menghubungkan langsung antara <em>service rate</em> dan <em>total passengers</em>.</p>
 <blockquote>
-<p>Saat <em>passengers</em> yang masuk antrian membludak, para petugas <em>lane</em> akan “terpaksa” mempercepat pekerjaannya (meningkatkan <em>service rate</em>-nya). Namun <em>service rate</em> akan <strong>mentok</strong> di suatu nilai tertentu dan tak akan bisa naik lagi (manusiawi).</p>
+<p>Saat <em>passengers</em> yang masuk antrian membludak, <em>security manager</em> akan memaksa para petugas <em>lane</em> “mempercepat” pekerjaannya (meningkatkan <em>service rate</em>-nya). Namun <em>service rate</em> akan <strong>mentok</strong> di suatu nilai tertentu dan tak akan bisa naik lagi (manusiawi).</p>
 </blockquote>
 </div>
+</div></div>
 </section>
-<section id="model-hubungan-service-rate-dengan-total-passengers" class="slide level2 center">
+<section id="model-hubungan-service-rate-dengan-total-passengers" class="slide level2 center smaller">
 <h2>Model Hubungan <em>Service Rate</em> dengan <em>Total Passengers</em></h2>
 
-<img data-src="draft_files/figure-revealjs/unnamed-chunk-7-1.svg" class="r-stretch"><p>Model ini menghasilkan <em>mean absolute error</em> sebesar 0.4071074.</p>
+<img data-src="draft_files/figure-revealjs/unnamed-chunk-7-1.svg" class="r-stretch"><p>Model ini menghasilkan <em>mean absolute error</em> sebesar 0.409766.</p>
 </section>
-<section id="beberapa-objective-functions-yang-dicoba" class="slide level2 center">
+<section id="beberapa-objective-functions-yang-dicoba" class="slide level2 center smaller">
 <h2>Beberapa <em>Objective Functions</em> yang Dicoba</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -489,8 +501,9 @@ A BibTeX entry for LaTeX users is
 <blockquote>
 <p>Dengan petugas seminimal mungkin, <strong>pokoknya</strong> saya tidak mau ada antrian yang panjang!</p>
 </blockquote>
-<p><span class="math display">\[\min{\sum_{i=1}^{12}{ (u_i + 12 \times l_i) }}\]</span></p>
-<p>Nilai 12 diasumsikan sebagai bobot: <strong>seorang petugas <em>lane</em> setara dengan 12 orang <em>passengers</em> dalam selang waktu <span class="math inline">\(i\)</span></strong>.</p>
+<p><span class="math display">\[\min{\sum_{i=1}^{12}{ (u_i + 11 \times l_i) }}\]</span></p>
+<p>Nilai 11 adalah bobot: <strong>seorang petugas <em>lane</em> setara dengan 11 orang <em>passengers</em> dalam selang waktu <span class="math inline">\(i\)</span></strong>.</p>
+<p>Nilai ini diambil dari <em>expected service rate</em> data.</p>
 </div></div>
 </section>
 <section id="hasil-model" class="slide level2 center">
@@ -499,24 +512,24 @@ A BibTeX entry for LaTeX users is
 <div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<div id="ivhelqwipm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="cyhtlrxipg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#ivhelqwipm table {
+#cyhtlrxipg table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ivhelqwipm thead, #ivhelqwipm tbody, #ivhelqwipm tfoot, #ivhelqwipm tr, #ivhelqwipm td, #ivhelqwipm th {
+#cyhtlrxipg thead, #cyhtlrxipg tbody, #cyhtlrxipg tfoot, #cyhtlrxipg tr, #cyhtlrxipg td, #cyhtlrxipg th {
   border-style: none;
 }
 
-#ivhelqwipm p {
+#cyhtlrxipg p {
   margin: 0;
   padding: 0;
 }
 
-#ivhelqwipm .gt_table {
+#cyhtlrxipg .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -542,12 +555,12 @@ A BibTeX entry for LaTeX users is
   border-left-color: #D3D3D3;
 }
 
-#ivhelqwipm .gt_caption {
+#cyhtlrxipg .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ivhelqwipm .gt_title {
+#cyhtlrxipg .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -559,7 +572,7 @@ A BibTeX entry for LaTeX users is
   border-bottom-width: 0;
 }
 
-#ivhelqwipm .gt_subtitle {
+#cyhtlrxipg .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -571,7 +584,7 @@ A BibTeX entry for LaTeX users is
   border-top-width: 0;
 }
 
-#ivhelqwipm .gt_heading {
+#cyhtlrxipg .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -583,13 +596,13 @@ A BibTeX entry for LaTeX users is
   border-right-color: #D3D3D3;
 }
 
-#ivhelqwipm .gt_bottom_border {
+#cyhtlrxipg .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ivhelqwipm .gt_col_headings {
+#cyhtlrxipg .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -604,7 +617,7 @@ A BibTeX entry for LaTeX users is
   border-right-color: #D3D3D3;
 }
 
-#ivhelqwipm .gt_col_heading {
+#cyhtlrxipg .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -624,7 +637,7 @@ A BibTeX entry for LaTeX users is
   overflow-x: hidden;
 }
 
-#ivhelqwipm .gt_column_spanner_outer {
+#cyhtlrxipg .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -636,15 +649,15 @@ A BibTeX entry for LaTeX users is
   padding-right: 4px;
 }
 
-#ivhelqwipm .gt_column_spanner_outer:first-child {
+#cyhtlrxipg .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ivhelqwipm .gt_column_spanner_outer:last-child {
+#cyhtlrxipg .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ivhelqwipm .gt_column_spanner {
+#cyhtlrxipg .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -656,11 +669,11 @@ A BibTeX entry for LaTeX users is
   width: 100%;
 }
 
-#ivhelqwipm .gt_spanner_row {
+#cyhtlrxipg .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ivhelqwipm .gt_group_heading {
+#cyhtlrxipg .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -686,7 +699,7 @@ A BibTeX entry for LaTeX users is
   text-align: left;
 }
 
-#ivhelqwipm .gt_empty_group_heading {
+#cyhtlrxipg .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -701,15 +714,15 @@ A BibTeX entry for LaTeX users is
   vertical-align: middle;
 }
 
-#ivhelqwipm .gt_from_md > :first-child {
+#cyhtlrxipg .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ivhelqwipm .gt_from_md > :last-child {
+#cyhtlrxipg .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ivhelqwipm .gt_row {
+#cyhtlrxipg .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -728,7 +741,7 @@ A BibTeX entry for LaTeX users is
   overflow-x: hidden;
 }
 
-#ivhelqwipm .gt_stub {
+#cyhtlrxipg .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -741,7 +754,7 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#ivhelqwipm .gt_stub_row_group {
+#cyhtlrxipg .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -755,15 +768,15 @@ A BibTeX entry for LaTeX users is
   vertical-align: top;
 }
 
-#ivhelqwipm .gt_row_group_first td {
+#cyhtlrxipg .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ivhelqwipm .gt_row_group_first th {
+#cyhtlrxipg .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ivhelqwipm .gt_summary_row {
+#cyhtlrxipg .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -773,16 +786,16 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#ivhelqwipm .gt_first_summary_row {
+#cyhtlrxipg .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ivhelqwipm .gt_first_summary_row.thick {
+#cyhtlrxipg .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ivhelqwipm .gt_last_summary_row {
+#cyhtlrxipg .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -792,7 +805,7 @@ A BibTeX entry for LaTeX users is
   border-bottom-color: #D3D3D3;
 }
 
-#ivhelqwipm .gt_grand_summary_row {
+#cyhtlrxipg .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -802,7 +815,7 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#ivhelqwipm .gt_first_grand_summary_row {
+#cyhtlrxipg .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -812,7 +825,7 @@ A BibTeX entry for LaTeX users is
   border-top-color: #D3D3D3;
 }
 
-#ivhelqwipm .gt_last_grand_summary_row_top {
+#cyhtlrxipg .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -822,11 +835,11 @@ A BibTeX entry for LaTeX users is
   border-bottom-color: #D3D3D3;
 }
 
-#ivhelqwipm .gt_striped {
+#cyhtlrxipg .gt_striped {
   background-color: #FAFAFA;
 }
 
-#ivhelqwipm .gt_table_body {
+#cyhtlrxipg .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -835,7 +848,7 @@ A BibTeX entry for LaTeX users is
   border-bottom-color: #D3D3D3;
 }
 
-#ivhelqwipm .gt_footnotes {
+#cyhtlrxipg .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -849,7 +862,7 @@ A BibTeX entry for LaTeX users is
   border-right-color: #D3D3D3;
 }
 
-#ivhelqwipm .gt_footnote {
+#cyhtlrxipg .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -858,7 +871,7 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#ivhelqwipm .gt_sourcenotes {
+#cyhtlrxipg .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -872,7 +885,7 @@ A BibTeX entry for LaTeX users is
   border-right-color: #D3D3D3;
 }
 
-#ivhelqwipm .gt_sourcenote {
+#cyhtlrxipg .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -880,72 +893,72 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#ivhelqwipm .gt_left {
+#cyhtlrxipg .gt_left {
   text-align: left;
 }
 
-#ivhelqwipm .gt_center {
+#cyhtlrxipg .gt_center {
   text-align: center;
 }
 
-#ivhelqwipm .gt_right {
+#cyhtlrxipg .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ivhelqwipm .gt_font_normal {
+#cyhtlrxipg .gt_font_normal {
   font-weight: normal;
 }
 
-#ivhelqwipm .gt_font_bold {
+#cyhtlrxipg .gt_font_bold {
   font-weight: bold;
 }
 
-#ivhelqwipm .gt_font_italic {
+#cyhtlrxipg .gt_font_italic {
   font-style: italic;
 }
 
-#ivhelqwipm .gt_super {
+#cyhtlrxipg .gt_super {
   font-size: 65%;
 }
 
-#ivhelqwipm .gt_footnote_marks {
+#cyhtlrxipg .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ivhelqwipm .gt_asterisk {
+#cyhtlrxipg .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ivhelqwipm .gt_indent_1 {
+#cyhtlrxipg .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ivhelqwipm .gt_indent_2 {
+#cyhtlrxipg .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ivhelqwipm .gt_indent_3 {
+#cyhtlrxipg .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ivhelqwipm .gt_indent_4 {
+#cyhtlrxipg .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ivhelqwipm .gt_indent_5 {
+#cyhtlrxipg .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ivhelqwipm .katex-display {
+#cyhtlrxipg .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ivhelqwipm div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#cyhtlrxipg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1080,24 +1093,24 @@ total_antri  0.000000</code></pre>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<div id="jfpauucrpy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="ihulauopob" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#jfpauucrpy table {
+#ihulauopob table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#jfpauucrpy thead, #jfpauucrpy tbody, #jfpauucrpy tfoot, #jfpauucrpy tr, #jfpauucrpy td, #jfpauucrpy th {
+#ihulauopob thead, #ihulauopob tbody, #ihulauopob tfoot, #ihulauopob tr, #ihulauopob td, #ihulauopob th {
   border-style: none;
 }
 
-#jfpauucrpy p {
+#ihulauopob p {
   margin: 0;
   padding: 0;
 }
 
-#jfpauucrpy .gt_table {
+#ihulauopob .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1123,12 +1136,12 @@ total_antri  0.000000</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#jfpauucrpy .gt_caption {
+#ihulauopob .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#jfpauucrpy .gt_title {
+#ihulauopob .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -1140,7 +1153,7 @@ total_antri  0.000000</code></pre>
   border-bottom-width: 0;
 }
 
-#jfpauucrpy .gt_subtitle {
+#ihulauopob .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1152,7 +1165,7 @@ total_antri  0.000000</code></pre>
   border-top-width: 0;
 }
 
-#jfpauucrpy .gt_heading {
+#ihulauopob .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -1164,13 +1177,13 @@ total_antri  0.000000</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#jfpauucrpy .gt_bottom_border {
+#ihulauopob .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#jfpauucrpy .gt_col_headings {
+#ihulauopob .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1185,7 +1198,7 @@ total_antri  0.000000</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#jfpauucrpy .gt_col_heading {
+#ihulauopob .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -1205,7 +1218,7 @@ total_antri  0.000000</code></pre>
   overflow-x: hidden;
 }
 
-#jfpauucrpy .gt_column_spanner_outer {
+#ihulauopob .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -1217,15 +1230,15 @@ total_antri  0.000000</code></pre>
   padding-right: 4px;
 }
 
-#jfpauucrpy .gt_column_spanner_outer:first-child {
+#ihulauopob .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#jfpauucrpy .gt_column_spanner_outer:last-child {
+#ihulauopob .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#jfpauucrpy .gt_column_spanner {
+#ihulauopob .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1237,11 +1250,11 @@ total_antri  0.000000</code></pre>
   width: 100%;
 }
 
-#jfpauucrpy .gt_spanner_row {
+#ihulauopob .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#jfpauucrpy .gt_group_heading {
+#ihulauopob .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1267,7 +1280,7 @@ total_antri  0.000000</code></pre>
   text-align: left;
 }
 
-#jfpauucrpy .gt_empty_group_heading {
+#ihulauopob .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1282,15 +1295,15 @@ total_antri  0.000000</code></pre>
   vertical-align: middle;
 }
 
-#jfpauucrpy .gt_from_md > :first-child {
+#ihulauopob .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#jfpauucrpy .gt_from_md > :last-child {
+#ihulauopob .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#jfpauucrpy .gt_row {
+#ihulauopob .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -1309,7 +1322,7 @@ total_antri  0.000000</code></pre>
   overflow-x: hidden;
 }
 
-#jfpauucrpy .gt_stub {
+#ihulauopob .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -1322,7 +1335,7 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#jfpauucrpy .gt_stub_row_group {
+#ihulauopob .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1336,15 +1349,15 @@ total_antri  0.000000</code></pre>
   vertical-align: top;
 }
 
-#jfpauucrpy .gt_row_group_first td {
+#ihulauopob .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#jfpauucrpy .gt_row_group_first th {
+#ihulauopob .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#jfpauucrpy .gt_summary_row {
+#ihulauopob .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1354,16 +1367,16 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#jfpauucrpy .gt_first_summary_row {
+#ihulauopob .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#jfpauucrpy .gt_first_summary_row.thick {
+#ihulauopob .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#jfpauucrpy .gt_last_summary_row {
+#ihulauopob .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1373,7 +1386,7 @@ total_antri  0.000000</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#jfpauucrpy .gt_grand_summary_row {
+#ihulauopob .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1383,7 +1396,7 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#jfpauucrpy .gt_first_grand_summary_row {
+#ihulauopob .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1393,7 +1406,7 @@ total_antri  0.000000</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#jfpauucrpy .gt_last_grand_summary_row_top {
+#ihulauopob .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1403,11 +1416,11 @@ total_antri  0.000000</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#jfpauucrpy .gt_striped {
+#ihulauopob .gt_striped {
   background-color: #FAFAFA;
 }
 
-#jfpauucrpy .gt_table_body {
+#ihulauopob .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1416,7 +1429,7 @@ total_antri  0.000000</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#jfpauucrpy .gt_footnotes {
+#ihulauopob .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1430,7 +1443,7 @@ total_antri  0.000000</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#jfpauucrpy .gt_footnote {
+#ihulauopob .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1439,7 +1452,7 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#jfpauucrpy .gt_sourcenotes {
+#ihulauopob .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1453,7 +1466,7 @@ total_antri  0.000000</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#jfpauucrpy .gt_sourcenote {
+#ihulauopob .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1461,72 +1474,72 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#jfpauucrpy .gt_left {
+#ihulauopob .gt_left {
   text-align: left;
 }
 
-#jfpauucrpy .gt_center {
+#ihulauopob .gt_center {
   text-align: center;
 }
 
-#jfpauucrpy .gt_right {
+#ihulauopob .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#jfpauucrpy .gt_font_normal {
+#ihulauopob .gt_font_normal {
   font-weight: normal;
 }
 
-#jfpauucrpy .gt_font_bold {
+#ihulauopob .gt_font_bold {
   font-weight: bold;
 }
 
-#jfpauucrpy .gt_font_italic {
+#ihulauopob .gt_font_italic {
   font-style: italic;
 }
 
-#jfpauucrpy .gt_super {
+#ihulauopob .gt_super {
   font-size: 65%;
 }
 
-#jfpauucrpy .gt_footnote_marks {
+#ihulauopob .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#jfpauucrpy .gt_asterisk {
+#ihulauopob .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#jfpauucrpy .gt_indent_1 {
+#ihulauopob .gt_indent_1 {
   text-indent: 5px;
 }
 
-#jfpauucrpy .gt_indent_2 {
+#ihulauopob .gt_indent_2 {
   text-indent: 10px;
 }
 
-#jfpauucrpy .gt_indent_3 {
+#ihulauopob .gt_indent_3 {
   text-indent: 15px;
 }
 
-#jfpauucrpy .gt_indent_4 {
+#ihulauopob .gt_indent_4 {
   text-indent: 20px;
 }
 
-#jfpauucrpy .gt_indent_5 {
+#ihulauopob .gt_indent_5 {
   text-indent: 25px;
 }
 
-#jfpauucrpy .katex-display {
+#ihulauopob .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#jfpauucrpy div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ihulauopob div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1552,7 +1565,7 @@ total_antri  0.000000</code></pre>
 <tr class="odd">
 <td class="gt_row gt_right" headers="n_real">100</td>
 <td class="gt_row gt_right" headers="n_total">100</td>
-<td class="gt_row gt_right" headers="s_rate">10.841956</td>
+<td class="gt_row gt_right" headers="s_rate">10.814056</td>
 <td class="gt_row gt_right" headers="lane">9</td>
 <td class="gt_row gt_right" headers="processed">97</td>
 <td class="gt_row gt_right" headers="unprocessed">3</td>
@@ -1560,7 +1573,7 @@ total_antri  0.000000</code></pre>
 <tr class="even">
 <td class="gt_row gt_right gt_striped" headers="n_real">90</td>
 <td class="gt_row gt_right gt_striped" headers="n_total">93</td>
-<td class="gt_row gt_right gt_striped" headers="s_rate">10.059110</td>
+<td class="gt_row gt_right gt_striped" headers="s_rate">10.106861</td>
 <td class="gt_row gt_right gt_striped" headers="lane">9</td>
 <td class="gt_row gt_right gt_striped" headers="processed">90</td>
 <td class="gt_row gt_right gt_striped" headers="unprocessed">3</td>
@@ -1568,7 +1581,7 @@ total_antri  0.000000</code></pre>
 <tr class="odd">
 <td class="gt_row gt_right" headers="n_real">212</td>
 <td class="gt_row gt_right" headers="n_total">215</td>
-<td class="gt_row gt_right" headers="s_rate">14.722498</td>
+<td class="gt_row gt_right" headers="s_rate">14.687097</td>
 <td class="gt_row gt_right" headers="lane">15</td>
 <td class="gt_row gt_right" headers="processed">215</td>
 <td class="gt_row gt_right" headers="unprocessed">0</td>
@@ -1576,47 +1589,47 @@ total_antri  0.000000</code></pre>
 <tr class="even">
 <td class="gt_row gt_right gt_striped" headers="n_real">43</td>
 <td class="gt_row gt_right gt_striped" headers="n_total">43</td>
-<td class="gt_row gt_right gt_striped" headers="s_rate">5.955611</td>
-<td class="gt_row gt_right gt_striped" headers="lane">1</td>
-<td class="gt_row gt_right gt_striped" headers="processed">5</td>
-<td class="gt_row gt_right gt_striped" headers="unprocessed">38</td>
+<td class="gt_row gt_right gt_striped" headers="s_rate">5.925740</td>
+<td class="gt_row gt_right gt_striped" headers="lane">7</td>
+<td class="gt_row gt_right gt_striped" headers="processed">41</td>
+<td class="gt_row gt_right gt_striped" headers="unprocessed">2</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="n_real">111</td>
-<td class="gt_row gt_right" headers="n_total">149</td>
-<td class="gt_row gt_right" headers="s_rate">11.577131</td>
-<td class="gt_row gt_right" headers="lane">13</td>
-<td class="gt_row gt_right" headers="processed">149</td>
+<td class="gt_row gt_right" headers="n_total">113</td>
+<td class="gt_row gt_right" headers="s_rate">11.507915</td>
+<td class="gt_row gt_right" headers="lane">10</td>
+<td class="gt_row gt_right" headers="processed">113</td>
 <td class="gt_row gt_right" headers="unprocessed">0</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_right gt_striped" headers="n_real">65</td>
 <td class="gt_row gt_right gt_striped" headers="n_total">65</td>
-<td class="gt_row gt_right gt_striped" headers="s_rate">7.764831</td>
+<td class="gt_row gt_right gt_striped" headers="s_rate">8.034616</td>
 <td class="gt_row gt_right gt_striped" headers="lane">8</td>
-<td class="gt_row gt_right gt_striped" headers="processed">62</td>
-<td class="gt_row gt_right gt_striped" headers="unprocessed">3</td>
+<td class="gt_row gt_right gt_striped" headers="processed">64</td>
+<td class="gt_row gt_right gt_striped" headers="unprocessed">1</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="n_real">34</td>
-<td class="gt_row gt_right" headers="n_total">37</td>
-<td class="gt_row gt_right" headers="s_rate">5.449367</td>
+<td class="gt_row gt_right" headers="n_total">35</td>
+<td class="gt_row gt_right" headers="s_rate">5.023391</td>
 <td class="gt_row gt_right" headers="lane">2</td>
 <td class="gt_row gt_right" headers="processed">10</td>
-<td class="gt_row gt_right" headers="unprocessed">27</td>
+<td class="gt_row gt_right" headers="unprocessed">25</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_right gt_striped" headers="n_real">143</td>
-<td class="gt_row gt_right gt_striped" headers="n_total">170</td>
-<td class="gt_row gt_right gt_striped" headers="s_rate">13.087148</td>
+<td class="gt_row gt_right gt_striped" headers="n_total">168</td>
+<td class="gt_row gt_right gt_striped" headers="s_rate">13.052182</td>
 <td class="gt_row gt_right gt_striped" headers="lane">13</td>
-<td class="gt_row gt_right gt_striped" headers="processed">170</td>
+<td class="gt_row gt_right gt_striped" headers="processed">168</td>
 <td class="gt_row gt_right gt_striped" headers="unprocessed">0</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="n_real">98</td>
 <td class="gt_row gt_right" headers="n_total">98</td>
-<td class="gt_row gt_right" headers="s_rate">10.694036</td>
+<td class="gt_row gt_right" headers="s_rate">10.678441</td>
 <td class="gt_row gt_right" headers="lane">9</td>
 <td class="gt_row gt_right" headers="processed">96</td>
 <td class="gt_row gt_right" headers="unprocessed">2</td>
@@ -1624,7 +1637,7 @@ total_antri  0.000000</code></pre>
 <tr class="even">
 <td class="gt_row gt_right gt_striped" headers="n_real">45</td>
 <td class="gt_row gt_right gt_striped" headers="n_total">47</td>
-<td class="gt_row gt_right gt_striped" headers="s_rate">6.088485</td>
+<td class="gt_row gt_right gt_striped" headers="s_rate">6.124587</td>
 <td class="gt_row gt_right gt_striped" headers="lane">8</td>
 <td class="gt_row gt_right gt_striped" headers="processed">47</td>
 <td class="gt_row gt_right gt_striped" headers="unprocessed">0</td>
@@ -1632,18 +1645,18 @@ total_antri  0.000000</code></pre>
 <tr class="odd">
 <td class="gt_row gt_right" headers="n_real">65</td>
 <td class="gt_row gt_right" headers="n_total">65</td>
-<td class="gt_row gt_right" headers="s_rate">7.764831</td>
+<td class="gt_row gt_right" headers="s_rate">8.034616</td>
 <td class="gt_row gt_right" headers="lane">8</td>
-<td class="gt_row gt_right" headers="processed">62</td>
-<td class="gt_row gt_right" headers="unprocessed">3</td>
+<td class="gt_row gt_right" headers="processed">64</td>
+<td class="gt_row gt_right" headers="unprocessed">1</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_right gt_striped" headers="n_real">32</td>
-<td class="gt_row gt_right gt_striped" headers="n_total">35</td>
-<td class="gt_row gt_right gt_striped" headers="s_rate">5.353371</td>
+<td class="gt_row gt_right gt_striped" headers="n_total">33</td>
+<td class="gt_row gt_right gt_striped" headers="s_rate">4.822358</td>
 <td class="gt_row gt_right gt_striped" headers="lane">1</td>
-<td class="gt_row gt_right gt_striped" headers="processed">5</td>
-<td class="gt_row gt_right gt_striped" headers="unprocessed">30</td>
+<td class="gt_row gt_right gt_striped" headers="processed">4</td>
+<td class="gt_row gt_right gt_striped" headers="unprocessed">29</td>
 </tr>
 </tbody>
 </table>
@@ -1651,20 +1664,103 @@ total_antri  0.000000</code></pre>
 </div>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>            [,1]
-min_lane       1
-max_lane      15
-mean_lane      8
-total_antri  109</code></pre>
+<pre><code>             [,1]
+min_lane     1.00
+max_lane    15.00
+mean_lane    8.25
+total_antri 66.00</code></pre>
 </div>
 </div>
 </div></div>
+</section>
+<section id="sensitivity-analysis" class="slide level2 center scrollable">
+<h2><em>Sensitivity Analysis</em></h2>
+<p>Dari model di atas, kita bisa melakukan <em>sensitivity analysis</em> untuk beberapa variabel yang bisa diatur oleh sang <em>security manager</em>.</p>
+<ol type="1">
+<li>Menurunkan atau menaikkan berapa <strong>maksimal <em>lane</em></strong> agar didapatkan nilai optimal secara bisnis.
+<ul>
+<li>Contoh: tak semua hari petugas yang bertugas bisa lengkap 17 <em>lanes</em>. Barangkali ada yang cuti atau izin bekerja sehingga <span class="math inline">\(\leq 17\)</span> orang.</li>
+</ul></li>
+<li>Menyeragamkan atau membuat standar nilai <em>service rate</em> sehingga lebih seragam dan “tinggi”.</li>
+</ol>
+</section>
+<section id="fit-dengan-data-pada-rentang-waktu-terbatas" class="slide level2 center">
+<h2><em>Fit</em> dengan Data pada Rentang Waktu Terbatas</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$x
+[1] "timeline"
+
+attr(,"class")
+[1] "labels"</code></pre>
+</div>
+
+</div>
+<img data-src="draft_files/figure-revealjs/unnamed-chunk-11-1.svg" class="r-stretch"></section>
+<section id="findings" class="slide level2 center">
+<h2><em>Findings</em></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h3 id="data">Data</h3>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>              [,1]
+min_lane      3.00
+max_lane      8.00
+mean_lane     6.48
+total_antri 181.00</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<h3 id="hasil-optimasi">Hasil Optimasi</h3>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>            [,1]
+min_lane     1.0
+max_lane    14.0
+mean_lane    9.2
+total_antri 67.0</code></pre>
+</div>
+</div>
+</div></div>
+<ul>
+<li>Jika dibandingkan, data saat ini menghasilkan utilisasi <em>lane</em> terendah dibandingkan dengan hasil model optimisasi.</li>
+<li>Hal ini wajar karena model optimisasi meminimumkan banyaknya <em>unprocessed</em> di setiap <em>range</em>.</li>
+</ul>
+</section>
+<section id="fit-dengan-data" class="slide level2 center">
+<h2><em>Fit</em> dengan Data</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$x
+[1] "timeline"
+
+attr(,"class")
+[1] "labels"</code></pre>
+</div>
+
+</div>
+<img data-src="draft_files/figure-revealjs/unnamed-chunk-15-1.svg" class="r-stretch"></section>
+<section id="hasil-tweak" class="slide level2 center">
+<h2>Hasil <em>Tweak</em></h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>              [,1]
+min_lane      1.00
+max_lane     16.00
+mean_lane     8.68
+total_antri 232.00</code></pre>
+</div>
+</div>
+</section></section>
+<section id="terima-kasih" class="title-slide slide level1 center">
+<h1>TERIMA KASIH</h1>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 <p>Industrial Math Week 2025</p>
 </div>
 </div>
-</section></section>
+</section>
     </div>
   </div>
 

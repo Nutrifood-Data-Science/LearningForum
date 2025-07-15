@@ -1,8 +1,8 @@
 ---
 title: "Optimisasi Antrian Security Check Bandara"
 subtitle: "Bahan Diskusi"
-author: "Ikang Fadhli"
-institute: ikanx101.com
+author: "Tim Security"
+institute: Institut Teknologi Bandung
 title-slide-attributes:
   data-background-image: back.jpg
   data-background-size: cover
@@ -120,8 +120,8 @@ citation("ompr")
 
 Salah satu pertanyaan terbesar pada masalah ini adalah bagaimana mendekati nilai $sr_i$. 
 
-- Apakah $sr_i$ tergantung dari berapa banyak orang _passengers_ yang datang?
 - Apakah $sr_i$ tergantung dari jam berapa petugas _lane_ bekerja?
+- Apakah $sr_i$ tergantung dari berapa banyak orang _passengers_ yang datang?
 
 ## Sebaran _Service Rate_ {.center}
 
@@ -177,6 +177,8 @@ df %>%
 
 ## Hubungan _Service Rate_ dengan _Total Passengers_ {.center .smaller}
 
+::::: columns
+::: {.column width="60%"}
 ```{r}
 df %>% 
   filter(total_in > 0) %>% 
@@ -192,20 +194,27 @@ df %>%
   labs(title = "Service Rate vs Total Passengers In",
        x = "passengers_in") 
 ```
+:::
 
-::: {style="font-size: 70%;"}
+::: {.column width="40%"}
+
+::: {style="font-size: 80%;"}
 
 Dari semua grafik yang ditampilkan, kita melihat bahwa ada pola yang mirip antara _service rate_ dengan _total passengers_ jika disajikan dalam _timeline_ yang sama. Dari sini kita bisa mengeliminasi faktor _timeline_ dan bisa menghubungkan langsung antara _service rate_ dan _total passengers_.
 
-> Saat _passengers_ yang masuk antrian membludak, para petugas _lane_ akan "terpaksa" mempercepat pekerjaannya (meningkatkan _service rate_-nya). Namun _service rate_ akan __mentok__ di suatu nilai tertentu dan tak akan bisa naik lagi (manusiawi).
+> Saat _passengers_ yang masuk antrian membludak, _security manager_ akan memaksa para petugas _lane_ "mempercepat" pekerjaannya (meningkatkan _service rate_-nya). Namun _service rate_ akan __mentok__ di suatu nilai tertentu dan tak akan bisa naik lagi (manusiawi).
 :::
 
-## Model Hubungan _Service Rate_ dengan _Total Passengers_ {.center}
+:::
+:::::
+
+
+## Model Hubungan _Service Rate_ dengan _Total Passengers_ {.center .smaller}
 
 ```{r}
 df_temp = df %>% filter(total_in > 0)
 model = 
-  lm(service_rate ~ poly(total_in,degree = 15,raw = T),
+  lm(service_rate ~ poly(total_in,degree = 7,raw = T),
      data = df_temp)
 
 sr_pred = predict(model,df_temp)
@@ -219,7 +228,8 @@ df_temp %>%
   filter(total_in <= 600) %>% 
   ggplot(aes(x = total_in,
              y = pred)) +
-  geom_line(color = "darkblue") +
+  # geom_line(color = "darkblue") +
+  geom_smooth(method = "loess") +
   theme_minimal() +
   labs(y = "service rate",
        x = "passengers in") 
@@ -227,7 +237,7 @@ df_temp %>%
 
 Model ini menghasilkan _mean absolute error_ sebesar `r mae`.
 
-## Beberapa _Objective Functions_ yang Dicoba {.center}
+## Beberapa _Objective Functions_ yang Dicoba {.center .smaller}
 
 ::::: columns
 ::: {.column width="50%"}
@@ -243,9 +253,12 @@ _Security manager_ berkata:
 
 > Dengan petugas seminimal mungkin, __pokoknya__ saya tidak mau ada antrian yang panjang!
 
-$$\min{\sum_{i=1}^{12}{ (u_i + 12 \times l_i) }}$$
+$$\min{\sum_{i=1}^{12}{ (u_i + 11 \times l_i) }}$$
 
-Nilai 12 diasumsikan sebagai bobot: __seorang petugas *lane* setara dengan 12 orang *passengers* dalam selang waktu $i$__.
+Nilai 11 adalah bobot: __seorang petugas *lane* setara dengan 11 orang *passengers* dalam selang waktu $i$__.
+
+Nilai ini diambil dari _expected service rate_ data.
+
 :::
 :::::
 
@@ -292,9 +305,140 @@ output %>% summarise(min_lane = min(lane),
 :::
 :::::
 
+## _Sensitivity Analysis_ {.center}
 
+Dari model di atas, kita bisa melakukan _sensitivity analysis_ untuk beberapa variabel yang bisa diatur oleh sang _security manager_.
 
+1. Menurunkan atau menaikkan berapa __maksimal *lane*__ agar didapatkan nilai optimal secara bisnis.
+    - Contoh: tak semua hari petugas yang bertugas bisa lengkap 17 _lanes_. Barangkali ada yang cuti atau izin bekerja sehingga $\leq 17$ orang.
+1. Menyeragamkan atau membuat standar nilai _service rate_ sehingga lebih seragam dan "tinggi".
 
+```{r}
+rm(list = ls())
+```
+
+## _Fit_ dengan Data pada Rentang Waktu Terbatas {.center}
+
+```{r}
+#| echo: false
+
+rm(list=ls())
+
+load("ompr_real.rda")
+
+p_1 = 
+  output %>% 
+  mutate(id = 1:nrow(output)) %>% 
+  ggplot(aes(x = id,
+             y = lane)) +
+  geom_line(group = 1,color = "darkblue") +
+  theme_minimal()
+  labs(x = "timeline")
+
+p_2 = 
+  output %>% 
+  mutate(id = 1:nrow(output)) %>% 
+  select(id,n_total,processed,unprocessed) %>% 
+  reshape2::melt(id.vars = "id") %>% 
+  ggplot(aes(x = id,y = value,group = variable)) +
+  geom_line(aes(color = variable)) +
+  labs(fill = "Keterangan",
+       y = "Berapa banyak passenger yang:",
+       x = "timeline") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+ggarrange(p_1,p_2,nrow = 2) 
+
+ompr = 
+  output %>% summarise(min_lane = min(lane),
+                     max_lane = max(lane),
+                     mean_lane = mean(lane),
+                     total_antri = sum(unprocessed)) %>% 
+  t()
+```
+
+```{r}
+#| include: false
+
+load("~/LearningForum/8 IMW 2025/draft/data.rda")
+
+asli = 
+  df[1:25,] %>% summarise(min_lane = min(lane_count),
+                     max_lane = max(lane_count),
+                     mean_lane = mean(lane_count),
+                     total_antri = sum(queue_length)) %>% 
+  t()
+```
+
+## _Findings_ {.center}
+
+::::: columns
+::: {.column width="50%"}
+### Data
+
+```{r}
+asli
+```
+:::
+
+::: {.column width="50%"}
+### Hasil Optimasi
+
+```{r}
+ompr
+```
+:::
+:::::
+
+- Jika dibandingkan, data saat ini menghasilkan utilisasi _lane_ terendah dibandingkan dengan hasil model optimisasi.
+- Hal ini wajar karena model optimisasi meminimumkan banyaknya _unprocessed_ di setiap _range_.
+
+## _Fit_ dengan Data {.center}
+
+```{r}
+#| echo: false
+
+rm(list=ls())
+
+load("ompr_real_2.rda")
+
+p_1 = 
+  output %>% 
+  mutate(id = 1:nrow(output)) %>% 
+  ggplot(aes(x = id,
+             y = lane)) +
+  geom_line(group = 1,color = "darkblue") +
+  theme_minimal()
+  labs(x = "timeline")
+
+p_2 = 
+  output %>% 
+  mutate(id = 1:nrow(output)) %>% 
+  select(id,n_total,processed,unprocessed) %>% 
+  reshape2::melt(id.vars = "id") %>% 
+  ggplot(aes(x = id,y = value,group = variable)) +
+  geom_line(aes(color = variable)) +
+  labs(fill = "Keterangan",
+       y = "Berapa banyak passenger yang:",
+       x = "timeline") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+ggarrange(p_1,p_2,nrow = 2) 
+```
+
+## Hasil _Tweak_ {.center}
+
+```{r}
+output %>% summarise(min_lane = min(lane),
+                     max_lane = max(lane),
+                     mean_lane = mean(lane),
+                     total_antri = sum(unprocessed)) %>% 
+  t()
+```
+
+# TERIMA KASIH
 
 
 
