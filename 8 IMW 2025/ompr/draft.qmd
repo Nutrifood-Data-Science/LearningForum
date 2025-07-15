@@ -1,0 +1,300 @@
+---
+title: "Optimisasi Antrian Security Check Bandara"
+subtitle: "Bahan Diskusi"
+author: "Ikang Fadhli"
+institute: ikanx101.com
+title-slide-attributes:
+  data-background-image: back.jpg
+  data-background-size: cover
+  data-background-opacity: "0.25"
+format: 
+  revealjs:
+    theme: beige
+    slide-number: true
+    footer: Industrial Math Week 2025
+    incremental: false
+    show-slide-number: all
+    transition: convex
+    width: 1440
+    height: 1080
+    highlight-style: arrow-dark
+    output-location: column
+    code-overflow: scroll
+    scrollable: true
+    fig-dpi: 650
+    fig-format: svg
+    fig-align: center
+editor: visual
+execute: 
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+#| include: false
+
+library(ggtext)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(ggpubr)
+library(ompr)
+library(gt)
+library(gtExtras)
+
+setwd("~/LearningForum/8 IMW 2025/ompr")
+
+# plot.caption = element_markdown()
+# "Sig: __Upper > Middle__ pada <span style='color:blue;'>**Ya**</span>"
+```
+
+
+# ILUSTRASI {background-image="IMG_1062.jpeg" background-opacity=".4"}
+
+## _Propose_ {.center}
+
+Mengubah _point of view_ dari permasalahan yang dihadapi.
+
+_Radically..._
+
+## Ilustrasi {.center .smaller}
+
+![](IMG_1061.jpeg)
+
+Perhatikan bahwa _lane planning_ di atas masih bisa kita optimisasi lebih lanjut.
+
+## Model Optimisasi {.center .smaller}
+
+### _Decision Variables_
+
+Definisikan:
+
+::::: columns
+::: {.column width="50%"}
+- $i \in \mathbb{Z}^+, 1 \leq i \leq 12$ menandakan rentang waktu satu jam yang dibagi per 5 menit sehingga ada 12 belas kelas.
+- $l_i \in \mathbb{Z}^+, 1 \leq i \leq 17$ menandakan berapa banyak _lane_ dibuka pada waktu $i$.
+- $sr_i \in \mathbb{Z}^+$ menandakan _mean service rate_ semua _lane_ pada waktu $i$. 
+    - Artinya: __rata-rata banyaknya penumpang yang bisa diperiksa oleh satu orang petugas selama rentang waktu 5 menit__. 
+    - _Service rate_ ini akan dicari dari data yang diberikan.
+- $N_i \in \mathbb{Z}^+$ menandakan berapa banyak penumpang yang datang ke _security check_ pada waktu $i$.
+:::
+
+::: {.column width="50%"}
+- $p_i \in \mathbb{Z}^+$ menandakan berapa banyak penumpang yang __bisa dan selesai diproses__ pada waktu $i$.
+- $u_i \in \mathbb{Z}^+$ menandakan berapa banyak penumpang yang __tidak bisa diproses__ pada waktu $i$.
+    - Akibatnya jika $u_i > 0$ akan menambahkan banyaknya penumpang pada $i+1$.
+- $\hat{N}_i \in \mathbb{Z}^+$ pada $i \in [2,12]$ menandakan banyaknya penumpang _real_ yang dilayani pada waktu $i$.
+    - Perhatikan bahwa saat $i=1$ kita dapatkan $\hat{N}_1 = N_1$.
+    - Sedangkan pada $i \in [2,12]$, jika $u_{i-1}>0$ maka $\hat{N}_i = N_i + u_{i-1}$.
+:::
+:::::
+
+## Tujuan Optimisasi {.center}
+
+Tujuan dari model optimisasi ini adalah __meminimalkan *lane* yang dibuka dan *unprocessed passengers*__.
+
+Kelak akan dicoba beberapa _objective functions_ dan akan dibandingkan hasilnya.
+
+## _Constraints_ {.center}
+
+Maksimal _lane_ yang bisa dibuka setiap waktu $i$ adalah 17.
+
+$$l_i \leq 17, \space \forall i \in [1,12]$$
+
+Banyaknya _processed passengers_ bisa jadi __kurang dari atau setara dengan__ _service rate_ dikalikan dengan _lane_ yang dibuka.
+
+$$p_i \leq sr_i \times l_i, \space \forall i \in [1,12]$$
+
+## _Solving the Model_ {.center}
+
+Pencarian solusi optimal dari model menggunakan __R__ dengan metode _simplex_ di `library(ompr)`:
+
+```{r}
+#| echo: false
+citation("ompr")
+```
+
+
+## Pencarian $sr_i$ {.center}
+
+Salah satu pertanyaan terbesar pada masalah ini adalah bagaimana mendekati nilai $sr_i$. 
+
+- Apakah $sr_i$ tergantung dari berapa banyak orang _passengers_ yang datang?
+- Apakah $sr_i$ tergantung dari jam berapa petugas _lane_ bekerja?
+
+## Sebaran _Service Rate_ {.center}
+
+```{r}
+rm(list=ls())
+load("~/LearningForum/8 IMW 2025/draft/data.rda")
+
+df %>% 
+  ggplot(aes(x = hari,
+             y = service_rate)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Sebaran Service Rate per Day",
+       subtitle = "Hitungan dalam menit") +
+  theme(axis.title = element_blank())
+```
+
+## Hubungan Antara _Service Rate_ dan Total _Passengers_ yang Masuk {.center}
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+#| fig-height: 15
+
+df %>% 
+  ggplot(aes(x = time,
+             y = service_rate)) +
+  geom_boxplot() +
+  coord_flip() +
+  theme_minimal() +
+  labs(title = "Sebaran Service Rate per 5 Menit",
+       subtitle = "Hitungan dalam menit") +
+  theme(axis.title = element_blank())
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| fig-height: 15
+
+df %>% 
+  ggplot(aes(x = time,
+             y = total_in)) +
+  geom_boxplot() +
+  coord_flip() +
+  theme_minimal() +
+  labs(title = "Sebaran Passengers yang Masuk per 5 Menit",
+       subtitle = "Hitungan dalam orang") +
+  theme(axis.title = element_blank())
+```
+:::
+:::::
+
+## Hubungan _Service Rate_ dengan _Total Passengers_ {.center .smaller}
+
+```{r}
+df %>% 
+  filter(total_in > 0) %>% 
+  ggplot(aes(x = total_in,
+             y = service_rate)) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Sebaran Service Rate per 5 menit",
+       subtitle = "Hitungan dalam menit") +
+  theme(axis.title = element_blank()) +
+  theme_minimal() +
+  geom_smooth(method = "loess") +
+  labs(title = "Service Rate vs Total Passengers In",
+       x = "passengers_in") 
+```
+
+::: {style="font-size: 70%;"}
+
+Dari semua grafik yang ditampilkan, kita melihat bahwa ada pola yang mirip antara _service rate_ dengan _total passengers_ jika disajikan dalam _timeline_ yang sama. Dari sini kita bisa mengeliminasi faktor _timeline_ dan bisa menghubungkan langsung antara _service rate_ dan _total passengers_.
+
+> Saat _passengers_ yang masuk antrian membludak, para petugas _lane_ akan "terpaksa" mempercepat pekerjaannya (meningkatkan _service rate_-nya). Namun _service rate_ akan __mentok__ di suatu nilai tertentu dan tak akan bisa naik lagi (manusiawi).
+:::
+
+## Model Hubungan _Service Rate_ dengan _Total Passengers_ {.center}
+
+```{r}
+df_temp = df %>% filter(total_in > 0)
+model = 
+  lm(service_rate ~ poly(total_in,degree = 15,raw = T),
+     data = df_temp)
+
+sr_pred = predict(model,df_temp)
+
+mae = MLmetrics::MAE(df_temp$service_rate,sr_pred)
+
+save(model,file = "model_sr.rda")
+
+df_temp %>% 
+  mutate(pred = sr_pred) %>% 
+  filter(total_in <= 600) %>% 
+  ggplot(aes(x = total_in,
+             y = pred)) +
+  geom_line(color = "darkblue") +
+  theme_minimal() +
+  labs(y = "service rate",
+       x = "passengers in") 
+```
+
+Model ini menghasilkan _mean absolute error_ sebesar `r mae`.
+
+## Beberapa _Objective Functions_ yang Dicoba {.center}
+
+::::: columns
+::: {.column width="50%"}
+_Security manager_ berkata:
+
+> Jangan sampai ada antrian yang panjang. Atur saja berapa _lane_ yang dibuka atau tutup!
+
+$$\min{\sum_{i=1}^{12}{ u_i }}$$
+:::
+
+::: {.column width="50%"}
+_Security manager_ berkata:
+
+> Dengan petugas seminimal mungkin, __pokoknya__ saya tidak mau ada antrian yang panjang!
+
+$$\min{\sum_{i=1}^{12}{ (u_i + 12 \times l_i) }}$$
+
+Nilai 12 diasumsikan sebagai bobot: __seorang petugas *lane* setara dengan 12 orang *passengers* dalam selang waktu $i$__.
+:::
+:::::
+
+## Hasil Model {.center}
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+rm(list=ls())
+load("ompr_1.rda")
+
+output %>% 
+  gt() %>%
+  tab_header(title = md("*Optimized Lane Planning*"),
+             subtitle = md("*Objective function I*")) %>% 
+  gt_theme_espn()
+
+output %>% summarise(min_lane = min(lane),
+                     max_lane = max(lane),
+                     mean_lane = mean(lane),
+                     total_antri = sum(unprocessed)) %>% 
+  t()
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+rm(list=ls())
+load("ompr_2.rda")
+
+output %>% 
+  gt() %>%
+  tab_header(title = md("*Optimized Lane Planning*"),
+             subtitle = md("*Objective function II*")) %>% 
+  gt_theme_espn()
+
+output %>% summarise(min_lane = min(lane),
+                     max_lane = max(lane),
+                     mean_lane = mean(lane),
+                     total_antri = sum(unprocessed)) %>% 
+  t()
+```
+
+:::
+:::::
+
+
+
+
+
+
+

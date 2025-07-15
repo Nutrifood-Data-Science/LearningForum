@@ -1,6 +1,6 @@
 ---
-title: "Bahan Diskusi"
-subtitle: "xxxx"
+title: "Exploratory Data Analysis"
+subtitle: "Bahan Diskusi"
 author: "xxxx"
 institute: xxxx
 title-slide-attributes:
@@ -9,7 +9,7 @@ title-slide-attributes:
   data-background-opacity: "0.25"
 format: 
   revealjs:
-    theme: solarized
+    theme: beige
     slide-number: true
     footer: Industrial Math Week 2025
     incremental: false
@@ -38,30 +38,232 @@ library(ggtext)
 library(ggplot2)
 library(dplyr)
 library(tidyr)
+library(ggpubr)
+library(expss)
+
+load("data.rda")
 
 # plot.caption = element_markdown()
 # "Sig: __Upper > Middle__ pada <span style='color:blue;'>**Ya**</span>"
 ```
 
-## Quarto
+# *Exploratory Data Analysis* {background-image="back.jpg" background-opacity=".4"}
 
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
-
-## Bullets
-
-When you click the **Render** button a document will be generated that includes:
-
--   Content authored with markdown
--   Output from executable code
-
-1. lalala
-1. hehehe
-1. wkwkwkw
-
-## Code
-
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+## *Per Day* {.center}
 
 ```{r}
-1 + 1
+p1 = 
+  df %>% 
+  ggplot(aes(x = hari,
+             y = queue_time)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Queue Time") +
+  theme(axis.title = element_blank())
+
+p2 = 
+  df %>% 
+  ggplot(aes(x = hari,
+             y = queue_length)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Queue Length") +
+  theme(axis.title = element_blank())
+
+p3 = 
+  df %>% 
+  ggplot(aes(x = hari,
+             y = people_processed)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "People Processed") +
+  theme(axis.title = element_blank())
+
+p4 = 
+  df %>% 
+  ggplot(aes(x = hari,
+             y = lane_count)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Lane Count") +
+  theme(axis.title = element_blank())
+
+ggarrange(p1,p2,p3,p4,ncol = 2,nrow = 2)
+```
+
+## *Per Day* {.center}
+
+### Queue Length
+
+```{r}
+df %>% 
+  tab_cells(queue_length) %>% 
+  tab_cols(hari) %>% 
+  tab_stat_mean_sd_n() %>% 
+  tab_last_sig_means() %>% 
+  tab_pivot()
+
+```
+
+## *Per Day* {.center}
+
+### Queue Time
+
+```{r}
+df %>% 
+  tab_cells(queue_time) %>% 
+  tab_cols(hari) %>% 
+  tab_stat_mean_sd_n() %>% 
+  tab_last_sig_means() %>% 
+  tab_pivot()
+
+```
+
+## *Per Day* {.center}
+
+People Processed
+
+```{r}
+df %>% 
+  tab_cells(people_processed) %>% 
+  tab_cols(hari) %>% 
+  tab_stat_mean_sd_n() %>% 
+  tab_last_sig_means() %>% 
+  tab_pivot()
+
+```
+
+## *Per Day* {.center}
+
+### Lane Count
+
+```{r}
+df %>% 
+  tab_cells(lane_count) %>% 
+  tab_cols(hari) %>% 
+  tab_stat_mean_sd_n() %>% 
+  tab_last_sig_means() %>% 
+  tab_pivot()
+
+```
+
+------------------------------------------------------------------------
+
+```{r}
+library(ggridges)
+df %>% 
+  filter(lane_count > 10) %>% 
+  ggplot(aes(y = hari,
+             x = people_processed)) +
+  geom_boxplot()
+
+df %>% 
+  filter(lane_count > 10) %>% 
+  ggplot(aes(y = hari,
+             x = queue_time)) +
+  geom_boxplot()
+```
+
+------------------------------------------------------------------------
+
+```{r}
+df %>% 
+  ggplot(aes(x = lane_count,
+             y = queue_time)) +
+  geom_point()
+
+df %>% 
+  ggplot(aes(x = lane_count,
+             y = queue_length)) +
+  geom_point()
+```
+
+------------------------------------------------------------------------
+
+```{r}
+df %>% group_by(date) %>% 
+  summarise(qtime = mean(queue_time),
+            qleng = mean(queue_length),
+            lane = mean(lane_count),
+            people = mean(people_processed)) %>% 
+  ungroup() %>% 
+  ggplot(aes(x = lane,
+             y = qtime)) +
+  geom_point()
+
+df %>% group_by(date) %>% 
+  summarise(qtime = mean(queue_time),
+            qleng = mean(queue_length),
+            lane = mean(lane_count),
+            people = mean(people_processed)) %>% 
+  ungroup() %>% 
+  ggplot(aes(x = lane,
+             y = qleng)) +
+  geom_point()
+
+```
+
+------------------------------------------------------------------------
+
+```{r}
+df %>% 
+  mutate(id = 1:nrow(df)) %>% 
+  ggplot(aes(x = id,
+             y = queue_time)) +
+  geom_line(group = 1)
+
+```
+
+```{r}
+df %>% 
+  mutate(id = 1:nrow(df)) %>% 
+  ggplot(aes(x = id,
+             y = queue_length)) +
+  geom_line(group = 1)
+
+```
+
+```{r}
+
+df %>% filter(queue_length > 300)
+
+df %>% filter(lane_count > 15)
+
+```
+
+------------------------------------------------------------------------
+
+```{r}
+df %>% 
+  ggplot(aes(x = hari,
+             y = service_rate)) +
+  geom_boxplot()
+
+
+```
+
+------------------------------------------------------------------------
+
+```{r}
+df %>% 
+  tab_cells(service_rate) %>% 
+  tab_cols(hari) %>% 
+  tab_stat_mean_sd_n() %>% 
+  tab_last_sig_means() %>% 
+  tab_pivot()
+
+```
+
+------------------------------------------------------------------------
+
+```{r}
+df %>% filter(queue_length > 200) %>% DT::datatable()
+
+```
+
+------------------------------------------------------------------------
+
+```{r}
+df %>% 
+  filter(service_rate > 3)
 ```
