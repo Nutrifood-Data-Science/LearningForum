@@ -49,14 +49,13 @@ setwd("~/LearningForum/8 IMW 2025/ompr")
 # "Sig: __Upper > Middle__ pada <span style='color:blue;'>**Ya**</span>"
 ```
 
-
-# ILUSTRASI {background-image="IMG_1062.jpeg" background-opacity=".4"}
-
-## _Propose_ {.center}
+## _Propose Another Method_ {.center}
 
 Mengubah _point of view_ dari permasalahan yang dihadapi.
 
 _Radically..._
+
+# I L U S T R A S I {background-image="IMG_1062.jpeg" background-opacity=".4"}
 
 ## Ilustrasi {.center .smaller}
 
@@ -105,16 +104,6 @@ $$l_i \leq 17, \space \forall i \in [1,12]$$
 Banyaknya _processed passengers_ bisa jadi __kurang dari atau setara dengan__ _service rate_ dikalikan dengan _lane_ yang dibuka.
 
 $$p_i \leq sr_i \times l_i, \space \forall i \in [1,12]$$
-
-## _Solving the Model_ {.center}
-
-Pencarian solusi optimal dari model menggunakan __R__ dengan metode _simplex_ di `library(ompr)`:
-
-```{r}
-#| echo: false
-citation("ompr")
-```
-
 
 ## Pencarian $sr_i$ {.center}
 
@@ -178,7 +167,7 @@ df %>%
 ## Hubungan _Service Rate_ dengan _Total Passengers_ {.center .smaller}
 
 ::::: columns
-::: {.column width="60%"}
+::: {.column width="50%"}
 ```{r}
 df %>% 
   filter(total_in > 0) %>% 
@@ -196,9 +185,9 @@ df %>%
 ```
 :::
 
-::: {.column width="40%"}
+::: {.column width="50%"}
 
-::: {style="font-size: 80%;"}
+::: {style="font-size: 90%;"}
 
 Dari semua grafik yang ditampilkan, kita melihat bahwa ada pola yang mirip antara _service rate_ dengan _total passengers_ jika disajikan dalam _timeline_ yang sama. Dari sini kita bisa mengeliminasi faktor _timeline_ dan bisa menghubungkan langsung antara _service rate_ dan _total passengers_.
 
@@ -237,13 +226,14 @@ df_temp %>%
 
 Model ini menghasilkan _mean absolute error_ sebesar `r mae`.
 
+
 ## Beberapa _Objective Functions_ yang Dicoba {.center .smaller}
 
 ::::: columns
 ::: {.column width="50%"}
 _Security manager_ berkata:
 
-> Jangan sampai ada antrian yang panjang. Atur saja berapa _lane_ yang dibuka atau tutup!
+> Jangan sampai ada antrian yang panjang. ___Atur saja___ berapa _lane_ yang dibuka atau ditutup!
 
 $$\min{\sum_{i=1}^{12}{ u_i }}$$
 :::
@@ -251,16 +241,29 @@ $$\min{\sum_{i=1}^{12}{ u_i }}$$
 ::: {.column width="50%"}
 _Security manager_ berkata:
 
-> Dengan petugas seminimal mungkin, __pokoknya__ saya tidak mau ada antrian yang panjang!
+> Dengan petugas seminimal mungkin, ___pokoknya saya tidak mau tahu___, antrian yang ada tidak boleh panjang!
 
 $$\min{\sum_{i=1}^{12}{ (u_i + 11 \times l_i) }}$$
+
+::: {style="font-size: 90%;"}
 
 Nilai 11 adalah bobot: __seorang petugas *lane* setara dengan 11 orang *passengers* dalam selang waktu $i$__.
 
 Nilai ini diambil dari _expected service rate_ data.
+:::
 
 :::
 :::::
+
+## _Solving the Model_ {.center}
+
+Pencarian solusi optimal dari model menggunakan __R__ dengan metode _simplex_ di `library(ompr)`:
+
+```{r}
+#| echo: false
+citation("ompr")
+```
+
 
 ## Hasil Model {.center}
 
@@ -305,19 +308,11 @@ output %>% summarise(min_lane = min(lane),
 :::
 :::::
 
-## _Sensitivity Analysis_ {.center}
-
-Dari model di atas, kita bisa melakukan _sensitivity analysis_ untuk beberapa variabel yang bisa diatur oleh sang _security manager_.
-
-1. Menurunkan atau menaikkan berapa __maksimal *lane*__ agar didapatkan nilai optimal secara bisnis.
-    - Contoh: tak semua hari petugas yang bertugas bisa lengkap 17 _lanes_. Barangkali ada yang cuti atau izin bekerja sehingga $\leq 17$ orang.
-1. Menyeragamkan atau membuat standar nilai _service rate_ sehingga lebih seragam dan "tinggi".
-
 ```{r}
 rm(list = ls())
 ```
 
-## _Fit_ dengan Data pada Rentang Waktu Terbatas {.center}
+## _Fit_ dengan _Existing Data_ pada Rentang Waktu Terbatas {.center}
 
 ```{r}
 #| echo: false
@@ -339,6 +334,7 @@ p_2 =
   output %>% 
   mutate(id = 1:nrow(output)) %>% 
   select(id,n_total,processed,unprocessed) %>% 
+  rename(pass_in = n_total) %>% 
   reshape2::melt(id.vars = "id") %>% 
   ggplot(aes(x = id,y = value,group = variable)) +
   geom_line(aes(color = variable)) +
@@ -371,11 +367,11 @@ asli =
   t()
 ```
 
-## _Findings_ {.center}
+## _Comparison Findings_ {.center}
 
 ::::: columns
 ::: {.column width="50%"}
-### Data
+### _Existing Data_
 
 ```{r}
 asli
@@ -394,7 +390,9 @@ ompr
 - Jika dibandingkan, data saat ini menghasilkan utilisasi _lane_ terendah dibandingkan dengan hasil model optimisasi.
 - Hal ini wajar karena model optimisasi meminimumkan banyaknya _unprocessed_ di setiap _range_.
 
-## _Fit_ dengan Data {.center}
+## _Fit_ dengan _Existing Data_ {.center}
+
+Kita lakukan _tweak_ pada model dengan mengubah _objective function_.
 
 ```{r}
 #| echo: false
@@ -416,6 +414,7 @@ p_2 =
   output %>% 
   mutate(id = 1:nrow(output)) %>% 
   select(id,n_total,processed,unprocessed) %>% 
+  rename(pass_in = n_total) %>% 
   reshape2::melt(id.vars = "id") %>% 
   ggplot(aes(x = id,y = value,group = variable)) +
   geom_line(aes(color = variable)) +
@@ -438,7 +437,22 @@ output %>% summarise(min_lane = min(lane),
   t()
 ```
 
-# TERIMA KASIH
+Ada penurunan banyaknya _lane_ yang digunakan namun berakibat naiknya antrian.
+
+## _Further Discussion_: _Sensitivity Analysis_ {.center}
+
+Dari paparan model di atas, kita bisa melakukan _sensitivity analysis_ untuk beberapa variabel yang bisa diatur oleh sang _security manager_.
+
+1. Menurunkan atau menaikkan berapa __maksimal *lane*__ agar didapatkan nilai optimal secara bisnis.
+    - Contoh: tak semua hari petugas yang bertugas bisa lengkap 17 _lanes_. Barangkali ada yang cuti atau izin bekerja sehingga $\leq 17$ orang.
+1. Menyeragamkan atau membuat standar _range_ nilai _service rate_ sehingga lebih seragam dan "tinggi".
+1. Definisikan berapa banyak _unprocessed_ yang masih diperbolehkan sehingga _lane_ yang digunakan bisa lebih "sedikit".
+
+# T E R I M A  K A S I H {background-image="IMG_1062.jpeg" background-opacity=".2"}
+
+---
+
+_proposed by [ikanx101.com](https://ikanx101.com)_
 
 
 

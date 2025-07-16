@@ -342,17 +342,17 @@ Tim Security
 </div>
 
 </section>
-<section>
-<section id="ilustrasi" class="title-slide slide level1 center" data-background-image="IMG_1062.jpeg" data-background-opacity=".4">
-<h1>ILUSTRASI</h1>
-
-</section>
-<section id="propose" class="slide level2 center">
-<h2><em>Propose</em></h2>
+<section id="propose-another-method" class="slide level2 center">
+<h2><em>Propose Another Method</em></h2>
 <p>Mengubah <em>point of view</em> dari permasalahan yang dihadapi.</p>
 <p><em>Radically…</em></p>
 </section>
-<section id="ilustrasi-1" class="slide level2 center smaller">
+<section>
+<section id="i-l-u-s-t-r-a-s-i" class="title-slide slide level1 center" data-background-image="IMG_1062.jpeg" data-background-opacity=".4">
+<h1>I L U S T R A S I</h1>
+
+</section>
+<section id="ilustrasi" class="slide level2 center smaller">
 <h2>Ilustrasi</h2>
 
 <img data-src="IMG_1061.jpeg" class="r-stretch"><p>Perhatikan bahwa <em>lane planning</em> di atas masih bisa kita optimisasi lebih lanjut.</p>
@@ -400,6 +400,91 @@ Tim Security
 <p>Banyaknya <em>processed passengers</em> bisa jadi <strong>kurang dari atau setara dengan</strong> <em>service rate</em> dikalikan dengan <em>lane</em> yang dibuka.</p>
 <p><span class="math display">\[p_i \leq sr_i \times l_i, \space \forall i \in [1,12]\]</span></p>
 </section>
+<section id="pencarian-sr_i" class="slide level2 center">
+<h2>Pencarian <span class="math inline">\(sr_i\)</span></h2>
+<p>Salah satu pertanyaan terbesar pada masalah ini adalah bagaimana mendekati nilai <span class="math inline">\(sr_i\)</span>.</p>
+<ul>
+<li>Apakah <span class="math inline">\(sr_i\)</span> tergantung dari jam berapa petugas <em>lane</em> bekerja?</li>
+<li>Apakah <span class="math inline">\(sr_i\)</span> tergantung dari berapa banyak orang <em>passengers</em> yang datang?</li>
+</ul>
+</section>
+<section id="sebaran-service-rate" class="slide level2 center">
+<h2>Sebaran <em>Service Rate</em></h2>
+
+<img data-src="draft_files/figure-revealjs/unnamed-chunk-2-1.svg" class="r-stretch"></section>
+<section id="hubungan-antara-service-rate-dan-total-passengers-yang-masuk" class="slide level2 center">
+<h2>Hubungan Antara <em>Service Rate</em> dan Total <em>Passengers</em> yang Masuk</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="draft_files/figure-revealjs/unnamed-chunk-3-1.svg"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="draft_files/figure-revealjs/unnamed-chunk-4-1.svg"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="hubungan-service-rate-dengan-total-passengers" class="slide level2 center smaller">
+<h2>Hubungan <em>Service Rate</em> dengan <em>Total Passengers</em></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="draft_files/figure-revealjs/unnamed-chunk-5-1.svg"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div style="font-size: 90%;">
+<p>Dari semua grafik yang ditampilkan, kita melihat bahwa ada pola yang mirip antara <em>service rate</em> dengan <em>total passengers</em> jika disajikan dalam <em>timeline</em> yang sama. Dari sini kita bisa mengeliminasi faktor <em>timeline</em> dan bisa menghubungkan langsung antara <em>service rate</em> dan <em>total passengers</em>.</p>
+<blockquote>
+<p>Saat <em>passengers</em> yang masuk antrian membludak, <em>security manager</em> akan memaksa para petugas <em>lane</em> “mempercepat” pekerjaannya (meningkatkan <em>service rate</em>-nya). Namun <em>service rate</em> akan <strong>mentok</strong> di suatu nilai tertentu dan tak akan bisa naik lagi (manusiawi).</p>
+</blockquote>
+</div>
+</div></div>
+</section>
+<section id="model-hubungan-service-rate-dengan-total-passengers" class="slide level2 center smaller">
+<h2>Model Hubungan <em>Service Rate</em> dengan <em>Total Passengers</em></h2>
+
+<img data-src="draft_files/figure-revealjs/unnamed-chunk-6-1.svg" class="r-stretch"><p>Model ini menghasilkan <em>mean absolute error</em> sebesar 0.409766.</p>
+</section>
+<section id="beberapa-objective-functions-yang-dicoba" class="slide level2 center smaller">
+<h2>Beberapa <em>Objective Functions</em> yang Dicoba</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><em>Security manager</em> berkata:</p>
+<blockquote>
+<p>Jangan sampai ada antrian yang panjang. <strong><em>Atur saja</em></strong> berapa <em>lane</em> yang dibuka atau ditutup!</p>
+</blockquote>
+<p><span class="math display">\[\min{\sum_{i=1}^{12}{ u_i }}\]</span></p>
+</div><div class="column" style="width:50%;">
+<p><em>Security manager</em> berkata:</p>
+<blockquote>
+<p>Dengan petugas seminimal mungkin, <strong><em>pokoknya saya tidak mau tahu</em></strong>, antrian yang ada tidak boleh panjang!</p>
+</blockquote>
+<p><span class="math display">\[\min{\sum_{i=1}^{12}{ (u_i + 11 \times l_i) }}\]</span></p>
+<div style="font-size: 90%;">
+<p>Nilai 11 adalah bobot: <strong>seorang petugas <em>lane</em> setara dengan 11 orang <em>passengers</em> dalam selang waktu <span class="math inline">\(i\)</span></strong>.</p>
+<p>Nilai ini diambil dari <em>expected service rate</em> data.</p>
+</div>
+</div></div>
+</section>
 <section id="solving-the-model" class="slide level2 center">
 <h2><em>Solving the Model</em></h2>
 <p>Pencarian solusi optimal dari model menggunakan <strong>R</strong> dengan metode <em>simplex</em> di <code>library(ompr)</code>:</p>
@@ -423,113 +508,30 @@ A BibTeX entry for LaTeX users is
 </div>
 </div>
 </section>
-<section id="pencarian-sr_i" class="slide level2 center">
-<h2>Pencarian <span class="math inline">\(sr_i\)</span></h2>
-<p>Salah satu pertanyaan terbesar pada masalah ini adalah bagaimana mendekati nilai <span class="math inline">\(sr_i\)</span>.</p>
-<ul>
-<li>Apakah <span class="math inline">\(sr_i\)</span> tergantung dari jam berapa petugas <em>lane</em> bekerja?</li>
-<li>Apakah <span class="math inline">\(sr_i\)</span> tergantung dari berapa banyak orang <em>passengers</em> yang datang?</li>
-</ul>
-</section>
-<section id="sebaran-service-rate" class="slide level2 center">
-<h2>Sebaran <em>Service Rate</em></h2>
-
-<img data-src="draft_files/figure-revealjs/unnamed-chunk-3-1.svg" class="r-stretch"></section>
-<section id="hubungan-antara-service-rate-dan-total-passengers-yang-masuk" class="slide level2 center">
-<h2>Hubungan Antara <em>Service Rate</em> dan Total <em>Passengers</em> yang Masuk</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="draft_files/figure-revealjs/unnamed-chunk-4-1.svg"></p>
-</figure>
-</div>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="draft_files/figure-revealjs/unnamed-chunk-5-1.svg"></p>
-</figure>
-</div>
-</div>
-</div>
-</div></div>
-</section>
-<section id="hubungan-service-rate-dengan-total-passengers" class="slide level2 center smaller">
-<h2>Hubungan <em>Service Rate</em> dengan <em>Total Passengers</em></h2>
-<div class="columns">
-<div class="column" style="width:60%;">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="draft_files/figure-revealjs/unnamed-chunk-6-1.svg"></p>
-</figure>
-</div>
-</div>
-</div>
-</div><div class="column" style="width:40%;">
-<div style="font-size: 80%;">
-<p>Dari semua grafik yang ditampilkan, kita melihat bahwa ada pola yang mirip antara <em>service rate</em> dengan <em>total passengers</em> jika disajikan dalam <em>timeline</em> yang sama. Dari sini kita bisa mengeliminasi faktor <em>timeline</em> dan bisa menghubungkan langsung antara <em>service rate</em> dan <em>total passengers</em>.</p>
-<blockquote>
-<p>Saat <em>passengers</em> yang masuk antrian membludak, <em>security manager</em> akan memaksa para petugas <em>lane</em> “mempercepat” pekerjaannya (meningkatkan <em>service rate</em>-nya). Namun <em>service rate</em> akan <strong>mentok</strong> di suatu nilai tertentu dan tak akan bisa naik lagi (manusiawi).</p>
-</blockquote>
-</div>
-</div></div>
-</section>
-<section id="model-hubungan-service-rate-dengan-total-passengers" class="slide level2 center smaller">
-<h2>Model Hubungan <em>Service Rate</em> dengan <em>Total Passengers</em></h2>
-
-<img data-src="draft_files/figure-revealjs/unnamed-chunk-7-1.svg" class="r-stretch"><p>Model ini menghasilkan <em>mean absolute error</em> sebesar 0.409766.</p>
-</section>
-<section id="beberapa-objective-functions-yang-dicoba" class="slide level2 center smaller">
-<h2>Beberapa <em>Objective Functions</em> yang Dicoba</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><em>Security manager</em> berkata:</p>
-<blockquote>
-<p>Jangan sampai ada antrian yang panjang. Atur saja berapa <em>lane</em> yang dibuka atau tutup!</p>
-</blockquote>
-<p><span class="math display">\[\min{\sum_{i=1}^{12}{ u_i }}\]</span></p>
-</div><div class="column" style="width:50%;">
-<p><em>Security manager</em> berkata:</p>
-<blockquote>
-<p>Dengan petugas seminimal mungkin, <strong>pokoknya</strong> saya tidak mau ada antrian yang panjang!</p>
-</blockquote>
-<p><span class="math display">\[\min{\sum_{i=1}^{12}{ (u_i + 11 \times l_i) }}\]</span></p>
-<p>Nilai 11 adalah bobot: <strong>seorang petugas <em>lane</em> setara dengan 11 orang <em>passengers</em> dalam selang waktu <span class="math inline">\(i\)</span></strong>.</p>
-<p>Nilai ini diambil dari <em>expected service rate</em> data.</p>
-</div></div>
-</section>
 <section id="hasil-model" class="slide level2 center">
 <h2>Hasil Model</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<div id="cyhtlrxipg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="mzckahlpsi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#cyhtlrxipg table {
+#mzckahlpsi table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#cyhtlrxipg thead, #cyhtlrxipg tbody, #cyhtlrxipg tfoot, #cyhtlrxipg tr, #cyhtlrxipg td, #cyhtlrxipg th {
+#mzckahlpsi thead, #mzckahlpsi tbody, #mzckahlpsi tfoot, #mzckahlpsi tr, #mzckahlpsi td, #mzckahlpsi th {
   border-style: none;
 }
 
-#cyhtlrxipg p {
+#mzckahlpsi p {
   margin: 0;
   padding: 0;
 }
 
-#cyhtlrxipg .gt_table {
+#mzckahlpsi .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -555,12 +557,12 @@ A BibTeX entry for LaTeX users is
   border-left-color: #D3D3D3;
 }
 
-#cyhtlrxipg .gt_caption {
+#mzckahlpsi .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#cyhtlrxipg .gt_title {
+#mzckahlpsi .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -572,7 +574,7 @@ A BibTeX entry for LaTeX users is
   border-bottom-width: 0;
 }
 
-#cyhtlrxipg .gt_subtitle {
+#mzckahlpsi .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -584,7 +586,7 @@ A BibTeX entry for LaTeX users is
   border-top-width: 0;
 }
 
-#cyhtlrxipg .gt_heading {
+#mzckahlpsi .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -596,13 +598,13 @@ A BibTeX entry for LaTeX users is
   border-right-color: #D3D3D3;
 }
 
-#cyhtlrxipg .gt_bottom_border {
+#mzckahlpsi .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#cyhtlrxipg .gt_col_headings {
+#mzckahlpsi .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -617,7 +619,7 @@ A BibTeX entry for LaTeX users is
   border-right-color: #D3D3D3;
 }
 
-#cyhtlrxipg .gt_col_heading {
+#mzckahlpsi .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -637,7 +639,7 @@ A BibTeX entry for LaTeX users is
   overflow-x: hidden;
 }
 
-#cyhtlrxipg .gt_column_spanner_outer {
+#mzckahlpsi .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -649,15 +651,15 @@ A BibTeX entry for LaTeX users is
   padding-right: 4px;
 }
 
-#cyhtlrxipg .gt_column_spanner_outer:first-child {
+#mzckahlpsi .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#cyhtlrxipg .gt_column_spanner_outer:last-child {
+#mzckahlpsi .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#cyhtlrxipg .gt_column_spanner {
+#mzckahlpsi .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -669,11 +671,11 @@ A BibTeX entry for LaTeX users is
   width: 100%;
 }
 
-#cyhtlrxipg .gt_spanner_row {
+#mzckahlpsi .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#cyhtlrxipg .gt_group_heading {
+#mzckahlpsi .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -699,7 +701,7 @@ A BibTeX entry for LaTeX users is
   text-align: left;
 }
 
-#cyhtlrxipg .gt_empty_group_heading {
+#mzckahlpsi .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -714,15 +716,15 @@ A BibTeX entry for LaTeX users is
   vertical-align: middle;
 }
 
-#cyhtlrxipg .gt_from_md > :first-child {
+#mzckahlpsi .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#cyhtlrxipg .gt_from_md > :last-child {
+#mzckahlpsi .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#cyhtlrxipg .gt_row {
+#mzckahlpsi .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -741,7 +743,7 @@ A BibTeX entry for LaTeX users is
   overflow-x: hidden;
 }
 
-#cyhtlrxipg .gt_stub {
+#mzckahlpsi .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -754,7 +756,7 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#cyhtlrxipg .gt_stub_row_group {
+#mzckahlpsi .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -768,15 +770,15 @@ A BibTeX entry for LaTeX users is
   vertical-align: top;
 }
 
-#cyhtlrxipg .gt_row_group_first td {
+#mzckahlpsi .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#cyhtlrxipg .gt_row_group_first th {
+#mzckahlpsi .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#cyhtlrxipg .gt_summary_row {
+#mzckahlpsi .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -786,16 +788,16 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#cyhtlrxipg .gt_first_summary_row {
+#mzckahlpsi .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#cyhtlrxipg .gt_first_summary_row.thick {
+#mzckahlpsi .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#cyhtlrxipg .gt_last_summary_row {
+#mzckahlpsi .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -805,7 +807,7 @@ A BibTeX entry for LaTeX users is
   border-bottom-color: #D3D3D3;
 }
 
-#cyhtlrxipg .gt_grand_summary_row {
+#mzckahlpsi .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -815,7 +817,7 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#cyhtlrxipg .gt_first_grand_summary_row {
+#mzckahlpsi .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -825,7 +827,7 @@ A BibTeX entry for LaTeX users is
   border-top-color: #D3D3D3;
 }
 
-#cyhtlrxipg .gt_last_grand_summary_row_top {
+#mzckahlpsi .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -835,11 +837,11 @@ A BibTeX entry for LaTeX users is
   border-bottom-color: #D3D3D3;
 }
 
-#cyhtlrxipg .gt_striped {
+#mzckahlpsi .gt_striped {
   background-color: #FAFAFA;
 }
 
-#cyhtlrxipg .gt_table_body {
+#mzckahlpsi .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -848,7 +850,7 @@ A BibTeX entry for LaTeX users is
   border-bottom-color: #D3D3D3;
 }
 
-#cyhtlrxipg .gt_footnotes {
+#mzckahlpsi .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -862,7 +864,7 @@ A BibTeX entry for LaTeX users is
   border-right-color: #D3D3D3;
 }
 
-#cyhtlrxipg .gt_footnote {
+#mzckahlpsi .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -871,7 +873,7 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#cyhtlrxipg .gt_sourcenotes {
+#mzckahlpsi .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -885,7 +887,7 @@ A BibTeX entry for LaTeX users is
   border-right-color: #D3D3D3;
 }
 
-#cyhtlrxipg .gt_sourcenote {
+#mzckahlpsi .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -893,72 +895,72 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#cyhtlrxipg .gt_left {
+#mzckahlpsi .gt_left {
   text-align: left;
 }
 
-#cyhtlrxipg .gt_center {
+#mzckahlpsi .gt_center {
   text-align: center;
 }
 
-#cyhtlrxipg .gt_right {
+#mzckahlpsi .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#cyhtlrxipg .gt_font_normal {
+#mzckahlpsi .gt_font_normal {
   font-weight: normal;
 }
 
-#cyhtlrxipg .gt_font_bold {
+#mzckahlpsi .gt_font_bold {
   font-weight: bold;
 }
 
-#cyhtlrxipg .gt_font_italic {
+#mzckahlpsi .gt_font_italic {
   font-style: italic;
 }
 
-#cyhtlrxipg .gt_super {
+#mzckahlpsi .gt_super {
   font-size: 65%;
 }
 
-#cyhtlrxipg .gt_footnote_marks {
+#mzckahlpsi .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#cyhtlrxipg .gt_asterisk {
+#mzckahlpsi .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#cyhtlrxipg .gt_indent_1 {
+#mzckahlpsi .gt_indent_1 {
   text-indent: 5px;
 }
 
-#cyhtlrxipg .gt_indent_2 {
+#mzckahlpsi .gt_indent_2 {
   text-indent: 10px;
 }
 
-#cyhtlrxipg .gt_indent_3 {
+#mzckahlpsi .gt_indent_3 {
   text-indent: 15px;
 }
 
-#cyhtlrxipg .gt_indent_4 {
+#mzckahlpsi .gt_indent_4 {
   text-indent: 20px;
 }
 
-#cyhtlrxipg .gt_indent_5 {
+#mzckahlpsi .gt_indent_5 {
   text-indent: 25px;
 }
 
-#cyhtlrxipg .katex-display {
+#mzckahlpsi .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#cyhtlrxipg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#mzckahlpsi div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1093,24 +1095,24 @@ total_antri  0.000000</code></pre>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<div id="ihulauopob" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="skdaggzkia" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#ihulauopob table {
+#skdaggzkia table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ihulauopob thead, #ihulauopob tbody, #ihulauopob tfoot, #ihulauopob tr, #ihulauopob td, #ihulauopob th {
+#skdaggzkia thead, #skdaggzkia tbody, #skdaggzkia tfoot, #skdaggzkia tr, #skdaggzkia td, #skdaggzkia th {
   border-style: none;
 }
 
-#ihulauopob p {
+#skdaggzkia p {
   margin: 0;
   padding: 0;
 }
 
-#ihulauopob .gt_table {
+#skdaggzkia .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1136,12 +1138,12 @@ total_antri  0.000000</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#ihulauopob .gt_caption {
+#skdaggzkia .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ihulauopob .gt_title {
+#skdaggzkia .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -1153,7 +1155,7 @@ total_antri  0.000000</code></pre>
   border-bottom-width: 0;
 }
 
-#ihulauopob .gt_subtitle {
+#skdaggzkia .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1165,7 +1167,7 @@ total_antri  0.000000</code></pre>
   border-top-width: 0;
 }
 
-#ihulauopob .gt_heading {
+#skdaggzkia .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -1177,13 +1179,13 @@ total_antri  0.000000</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ihulauopob .gt_bottom_border {
+#skdaggzkia .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ihulauopob .gt_col_headings {
+#skdaggzkia .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1198,7 +1200,7 @@ total_antri  0.000000</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ihulauopob .gt_col_heading {
+#skdaggzkia .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -1218,7 +1220,7 @@ total_antri  0.000000</code></pre>
   overflow-x: hidden;
 }
 
-#ihulauopob .gt_column_spanner_outer {
+#skdaggzkia .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -1230,15 +1232,15 @@ total_antri  0.000000</code></pre>
   padding-right: 4px;
 }
 
-#ihulauopob .gt_column_spanner_outer:first-child {
+#skdaggzkia .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ihulauopob .gt_column_spanner_outer:last-child {
+#skdaggzkia .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ihulauopob .gt_column_spanner {
+#skdaggzkia .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1250,11 +1252,11 @@ total_antri  0.000000</code></pre>
   width: 100%;
 }
 
-#ihulauopob .gt_spanner_row {
+#skdaggzkia .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ihulauopob .gt_group_heading {
+#skdaggzkia .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1280,7 +1282,7 @@ total_antri  0.000000</code></pre>
   text-align: left;
 }
 
-#ihulauopob .gt_empty_group_heading {
+#skdaggzkia .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1295,15 +1297,15 @@ total_antri  0.000000</code></pre>
   vertical-align: middle;
 }
 
-#ihulauopob .gt_from_md > :first-child {
+#skdaggzkia .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ihulauopob .gt_from_md > :last-child {
+#skdaggzkia .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ihulauopob .gt_row {
+#skdaggzkia .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -1322,7 +1324,7 @@ total_antri  0.000000</code></pre>
   overflow-x: hidden;
 }
 
-#ihulauopob .gt_stub {
+#skdaggzkia .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -1335,7 +1337,7 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#ihulauopob .gt_stub_row_group {
+#skdaggzkia .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1349,15 +1351,15 @@ total_antri  0.000000</code></pre>
   vertical-align: top;
 }
 
-#ihulauopob .gt_row_group_first td {
+#skdaggzkia .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ihulauopob .gt_row_group_first th {
+#skdaggzkia .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ihulauopob .gt_summary_row {
+#skdaggzkia .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1367,16 +1369,16 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#ihulauopob .gt_first_summary_row {
+#skdaggzkia .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ihulauopob .gt_first_summary_row.thick {
+#skdaggzkia .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ihulauopob .gt_last_summary_row {
+#skdaggzkia .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1386,7 +1388,7 @@ total_antri  0.000000</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#ihulauopob .gt_grand_summary_row {
+#skdaggzkia .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1396,7 +1398,7 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#ihulauopob .gt_first_grand_summary_row {
+#skdaggzkia .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1406,7 +1408,7 @@ total_antri  0.000000</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#ihulauopob .gt_last_grand_summary_row_top {
+#skdaggzkia .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1416,11 +1418,11 @@ total_antri  0.000000</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#ihulauopob .gt_striped {
+#skdaggzkia .gt_striped {
   background-color: #FAFAFA;
 }
 
-#ihulauopob .gt_table_body {
+#skdaggzkia .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1429,7 +1431,7 @@ total_antri  0.000000</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#ihulauopob .gt_footnotes {
+#skdaggzkia .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1443,7 +1445,7 @@ total_antri  0.000000</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ihulauopob .gt_footnote {
+#skdaggzkia .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1452,7 +1454,7 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#ihulauopob .gt_sourcenotes {
+#skdaggzkia .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1466,7 +1468,7 @@ total_antri  0.000000</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ihulauopob .gt_sourcenote {
+#skdaggzkia .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1474,72 +1476,72 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#ihulauopob .gt_left {
+#skdaggzkia .gt_left {
   text-align: left;
 }
 
-#ihulauopob .gt_center {
+#skdaggzkia .gt_center {
   text-align: center;
 }
 
-#ihulauopob .gt_right {
+#skdaggzkia .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ihulauopob .gt_font_normal {
+#skdaggzkia .gt_font_normal {
   font-weight: normal;
 }
 
-#ihulauopob .gt_font_bold {
+#skdaggzkia .gt_font_bold {
   font-weight: bold;
 }
 
-#ihulauopob .gt_font_italic {
+#skdaggzkia .gt_font_italic {
   font-style: italic;
 }
 
-#ihulauopob .gt_super {
+#skdaggzkia .gt_super {
   font-size: 65%;
 }
 
-#ihulauopob .gt_footnote_marks {
+#skdaggzkia .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ihulauopob .gt_asterisk {
+#skdaggzkia .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ihulauopob .gt_indent_1 {
+#skdaggzkia .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ihulauopob .gt_indent_2 {
+#skdaggzkia .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ihulauopob .gt_indent_3 {
+#skdaggzkia .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ihulauopob .gt_indent_4 {
+#skdaggzkia .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ihulauopob .gt_indent_5 {
+#skdaggzkia .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ihulauopob .katex-display {
+#skdaggzkia .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ihulauopob div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#skdaggzkia div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1673,19 +1675,8 @@ total_antri 66.00</code></pre>
 </div>
 </div></div>
 </section>
-<section id="sensitivity-analysis" class="slide level2 center scrollable">
-<h2><em>Sensitivity Analysis</em></h2>
-<p>Dari model di atas, kita bisa melakukan <em>sensitivity analysis</em> untuk beberapa variabel yang bisa diatur oleh sang <em>security manager</em>.</p>
-<ol type="1">
-<li>Menurunkan atau menaikkan berapa <strong>maksimal <em>lane</em></strong> agar didapatkan nilai optimal secara bisnis.
-<ul>
-<li>Contoh: tak semua hari petugas yang bertugas bisa lengkap 17 <em>lanes</em>. Barangkali ada yang cuti atau izin bekerja sehingga <span class="math inline">\(\leq 17\)</span> orang.</li>
-</ul></li>
-<li>Menyeragamkan atau membuat standar nilai <em>service rate</em> sehingga lebih seragam dan “tinggi”.</li>
-</ol>
-</section>
-<section id="fit-dengan-data-pada-rentang-waktu-terbatas" class="slide level2 center">
-<h2><em>Fit</em> dengan Data pada Rentang Waktu Terbatas</h2>
+<section id="fit-dengan-existing-data-pada-rentang-waktu-terbatas" class="slide level2 center">
+<h2><em>Fit</em> dengan <em>Existing Data</em> pada Rentang Waktu Terbatas</h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>$x
@@ -1697,11 +1688,11 @@ attr(,"class")
 
 </div>
 <img data-src="draft_files/figure-revealjs/unnamed-chunk-11-1.svg" class="r-stretch"></section>
-<section id="findings" class="slide level2 center">
-<h2><em>Findings</em></h2>
+<section id="comparison-findings" class="slide level2 center">
+<h2><em>Comparison Findings</em></h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<h3 id="data">Data</h3>
+<h3 id="existing-data"><em>Existing Data</em></h3>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>              [,1]
@@ -1728,8 +1719,9 @@ total_antri 67.0</code></pre>
 <li>Hal ini wajar karena model optimisasi meminimumkan banyaknya <em>unprocessed</em> di setiap <em>range</em>.</li>
 </ul>
 </section>
-<section id="fit-dengan-data" class="slide level2 center">
-<h2><em>Fit</em> dengan Data</h2>
+<section id="fit-dengan-existing-data" class="slide level2 center">
+<h2><em>Fit</em> dengan <em>Existing Data</em></h2>
+<p>Kita lakukan <em>tweak</em> pada model dengan mengubah <em>objective function</em>.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>$x
@@ -1752,15 +1744,34 @@ mean_lane     8.68
 total_antri 232.00</code></pre>
 </div>
 </div>
+<p>Ada penurunan banyaknya <em>lane</em> yang digunakan namun berakibat naiknya antrian.</p>
+</section>
+<section id="further-discussion-sensitivity-analysis" class="slide level2 center scrollable">
+<h2><em>Further Discussion</em>: <em>Sensitivity Analysis</em></h2>
+<p>Dari paparan model di atas, kita bisa melakukan <em>sensitivity analysis</em> untuk beberapa variabel yang bisa diatur oleh sang <em>security manager</em>.</p>
+<ol type="1">
+<li>Menurunkan atau menaikkan berapa <strong>maksimal <em>lane</em></strong> agar didapatkan nilai optimal secara bisnis.
+<ul>
+<li>Contoh: tak semua hari petugas yang bertugas bisa lengkap 17 <em>lanes</em>. Barangkali ada yang cuti atau izin bekerja sehingga <span class="math inline">\(\leq 17\)</span> orang.</li>
+</ul></li>
+<li>Menyeragamkan atau membuat standar <em>range</em> nilai <em>service rate</em> sehingga lebih seragam dan “tinggi”.</li>
+<li>Definisikan berapa banyak <em>unprocessed</em> yang masih diperbolehkan sehingga <em>lane</em> yang digunakan bisa lebih “sedikit”.</li>
+</ol>
 </section></section>
-<section id="terima-kasih" class="title-slide slide level1 center">
-<h1>TERIMA KASIH</h1>
+<section>
+<section id="t-e-r-i-m-a-k-a-s-i-h" class="title-slide slide level1 center" data-background-image="IMG_1062.jpeg" data-background-opacity=".2">
+<h1>T E R I M A K A S I H</h1>
+
+</section>
+<section class="slide level2">
+
+<p><em>proposed by <a href="https://ikanx101.com">ikanx101.com</a></em></p>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 <p>Industrial Math Week 2025</p>
 </div>
 </div>
-</section>
+</section></section>
     </div>
   </div>
 
