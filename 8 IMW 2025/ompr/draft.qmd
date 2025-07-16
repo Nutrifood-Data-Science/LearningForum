@@ -9,7 +9,7 @@ title-slide-attributes:
   data-background-opacity: "0.25"
 format: 
   revealjs:
-    theme: beige
+    theme: league
     slide-number: true
     footer: Industrial Math Week 2025
     incremental: false
@@ -142,8 +142,10 @@ df %>%
   coord_flip() +
   theme_minimal() +
   labs(title = "Sebaran Service Rate per 5 Menit",
-       subtitle = "Hitungan dalam menit") +
-  theme(axis.title = element_blank())
+       subtitle = "Hitungan dalam menit",
+       y = "Jam"
+       ) +
+  theme(axis.title.x = element_blank())
 ```
 :::
 
@@ -158,8 +160,9 @@ df %>%
   coord_flip() +
   theme_minimal() +
   labs(title = "Sebaran Passengers yang Masuk per 5 Menit",
-       subtitle = "Hitungan dalam orang") +
-  theme(axis.title = element_blank())
+       subtitle = "Hitungan dalam orang",
+       y = "Jam") +
+  theme(axis.title.x = element_blank())
 ```
 :::
 :::::
@@ -227,7 +230,9 @@ df_temp %>%
 Model ini menghasilkan _mean absolute error_ sebesar `r mae`.
 
 
-## Beberapa _Objective Functions_ yang Dicoba {.center .smaller}
+## Dua _Objective Functions_ yang Dicoba {.center .smaller}
+
+Ada dua skenario yang mungkin terjadi:
 
 ::::: columns
 ::: {.column width="50%"}
@@ -254,6 +259,14 @@ Nilai ini diambil dari _expected service rate_ data.
 
 :::
 :::::
+
+_subject to_
+
+$$l_i \leq 17, \space \forall i \in [1,12]$$
+
+$$p_i \leq sr_i \times l_i, \space \forall i \in [1,12]$$
+
+
 
 ## _Solving the Model_ {.center}
 
@@ -327,7 +340,7 @@ p_1 =
   ggplot(aes(x = id,
              y = lane)) +
   geom_line(group = 1,color = "darkblue") +
-  theme_minimal()
+  theme_minimal() +
   labs(x = "timeline")
 
 p_2 = 
@@ -407,7 +420,7 @@ p_1 =
   ggplot(aes(x = id,
              y = lane)) +
   geom_line(group = 1,color = "darkblue") +
-  theme_minimal()
+  theme_minimal() +
   labs(x = "timeline")
 
 p_2 = 
