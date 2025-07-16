@@ -447,6 +447,7 @@ Dari paparan model di atas, kita bisa melakukan _sensitivity analysis_ untuk beb
     - Contoh: tak semua hari petugas yang bertugas bisa lengkap 17 _lanes_. Barangkali ada yang cuti atau izin bekerja sehingga $\leq 17$ orang.
 1. Menyeragamkan atau membuat standar _range_ nilai _service rate_ sehingga lebih seragam dan "tinggi".
 1. Definisikan berapa banyak _unprocessed_ yang masih diperbolehkan sehingga _lane_ yang digunakan bisa lebih "sedikit".
+1. Menambahkan _multi objective optimization_ sehingga menemukan _balance_ antara _lane_ dan _unprocessed_.
 
 # T E R I M A  K A S I H {background-image="IMG_1062.jpeg" background-opacity=".2"}
 
