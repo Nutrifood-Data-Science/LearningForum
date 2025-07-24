@@ -10,8 +10,8 @@
 <link href="draft_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.5.57">
 
-  <meta name="author" content="Tim Security">
-  <title>Optimisasi Antrian Security Check Bandara</title>
+  <meta name="author" content="Tim Security Management">
+  <title>Optimisasi Antrian Lane Security Checking di Bandara</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -327,13 +327,13 @@
     <div class="slides">
 
 <section id="title-slide" data-background-image="back.jpg" data-background-opacity="0.25" data-background-size="cover" class="quarto-title-block center">
-  <h1 class="title">Optimisasi Antrian Security Check Bandara</h1>
+  <h1 class="title">Optimisasi Antrian Lane Security Checking di Bandara</h1>
   <p class="subtitle">Bahan Diskusi</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Tim Security 
+Tim Security Management 
 </div>
         <p class="quarto-title-affiliation">
             Institut Teknologi Bandung
@@ -393,12 +393,14 @@ Tim Security
 <p>Tujuan dari model optimisasi ini adalah <strong>meminimalkan <em>lane</em> yang dibuka dan <em>unprocessed passengers</em></strong>.</p>
 <p>Kelak akan dicoba beberapa <em>objective functions</em> dan akan dibandingkan hasilnya.</p>
 </section>
-<section id="constraints" class="slide level2 center">
+<section id="constraints" class="slide level2 center smaller">
 <h2><em>Constraints</em></h2>
 <p>Maksimal <em>lane</em> yang bisa dibuka setiap waktu <span class="math inline">\(i\)</span> adalah 17.</p>
 <p><span class="math display">\[l_i \leq 17, \space \forall i \in [1,12]\]</span></p>
 <p>Banyaknya <em>processed passengers</em> bisa jadi <strong>kurang dari atau setara dengan</strong> <em>service rate</em> dikalikan dengan <em>lane</em> yang dibuka.</p>
 <p><span class="math display">\[p_i \leq sr_i \times l_i, \space \forall i \in [1,12]\]</span></p>
+<p>Banyaknya <em>unprocessed passengers</em> itu adalah banyaknya <em>passengers</em> masuk dikurangi dengan <em>processed passengers</em>.</p>
+<p><span class="math display">\[u_i = \hat{N}_i - p_i , \space \forall i \in [1,12]\]</span></p>
 </section>
 <section id="pencarian-sr_i" class="slide level2 center">
 <h2>Pencarian <span class="math inline">\(sr_i\)</span></h2>
@@ -518,24 +520,24 @@ A BibTeX entry for LaTeX users is
 <div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<div id="cmqpnjlzge" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="irnuzglqpx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#cmqpnjlzge table {
+#irnuzglqpx table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#cmqpnjlzge thead, #cmqpnjlzge tbody, #cmqpnjlzge tfoot, #cmqpnjlzge tr, #cmqpnjlzge td, #cmqpnjlzge th {
+#irnuzglqpx thead, #irnuzglqpx tbody, #irnuzglqpx tfoot, #irnuzglqpx tr, #irnuzglqpx td, #irnuzglqpx th {
   border-style: none;
 }
 
-#cmqpnjlzge p {
+#irnuzglqpx p {
   margin: 0;
   padding: 0;
 }
 
-#cmqpnjlzge .gt_table {
+#irnuzglqpx .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -561,12 +563,12 @@ A BibTeX entry for LaTeX users is
   border-left-color: #D3D3D3;
 }
 
-#cmqpnjlzge .gt_caption {
+#irnuzglqpx .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#cmqpnjlzge .gt_title {
+#irnuzglqpx .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -578,7 +580,7 @@ A BibTeX entry for LaTeX users is
   border-bottom-width: 0;
 }
 
-#cmqpnjlzge .gt_subtitle {
+#irnuzglqpx .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -590,7 +592,7 @@ A BibTeX entry for LaTeX users is
   border-top-width: 0;
 }
 
-#cmqpnjlzge .gt_heading {
+#irnuzglqpx .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -602,13 +604,13 @@ A BibTeX entry for LaTeX users is
   border-right-color: #D3D3D3;
 }
 
-#cmqpnjlzge .gt_bottom_border {
+#irnuzglqpx .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#cmqpnjlzge .gt_col_headings {
+#irnuzglqpx .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -623,7 +625,7 @@ A BibTeX entry for LaTeX users is
   border-right-color: #D3D3D3;
 }
 
-#cmqpnjlzge .gt_col_heading {
+#irnuzglqpx .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -643,7 +645,7 @@ A BibTeX entry for LaTeX users is
   overflow-x: hidden;
 }
 
-#cmqpnjlzge .gt_column_spanner_outer {
+#irnuzglqpx .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -655,15 +657,15 @@ A BibTeX entry for LaTeX users is
   padding-right: 4px;
 }
 
-#cmqpnjlzge .gt_column_spanner_outer:first-child {
+#irnuzglqpx .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#cmqpnjlzge .gt_column_spanner_outer:last-child {
+#irnuzglqpx .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#cmqpnjlzge .gt_column_spanner {
+#irnuzglqpx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -675,11 +677,11 @@ A BibTeX entry for LaTeX users is
   width: 100%;
 }
 
-#cmqpnjlzge .gt_spanner_row {
+#irnuzglqpx .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#cmqpnjlzge .gt_group_heading {
+#irnuzglqpx .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -705,7 +707,7 @@ A BibTeX entry for LaTeX users is
   text-align: left;
 }
 
-#cmqpnjlzge .gt_empty_group_heading {
+#irnuzglqpx .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -720,15 +722,15 @@ A BibTeX entry for LaTeX users is
   vertical-align: middle;
 }
 
-#cmqpnjlzge .gt_from_md > :first-child {
+#irnuzglqpx .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#cmqpnjlzge .gt_from_md > :last-child {
+#irnuzglqpx .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#cmqpnjlzge .gt_row {
+#irnuzglqpx .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -747,7 +749,7 @@ A BibTeX entry for LaTeX users is
   overflow-x: hidden;
 }
 
-#cmqpnjlzge .gt_stub {
+#irnuzglqpx .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -760,7 +762,7 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#cmqpnjlzge .gt_stub_row_group {
+#irnuzglqpx .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -774,15 +776,15 @@ A BibTeX entry for LaTeX users is
   vertical-align: top;
 }
 
-#cmqpnjlzge .gt_row_group_first td {
+#irnuzglqpx .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#cmqpnjlzge .gt_row_group_first th {
+#irnuzglqpx .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#cmqpnjlzge .gt_summary_row {
+#irnuzglqpx .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -792,16 +794,16 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#cmqpnjlzge .gt_first_summary_row {
+#irnuzglqpx .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#cmqpnjlzge .gt_first_summary_row.thick {
+#irnuzglqpx .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#cmqpnjlzge .gt_last_summary_row {
+#irnuzglqpx .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -811,7 +813,7 @@ A BibTeX entry for LaTeX users is
   border-bottom-color: #D3D3D3;
 }
 
-#cmqpnjlzge .gt_grand_summary_row {
+#irnuzglqpx .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -821,7 +823,7 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#cmqpnjlzge .gt_first_grand_summary_row {
+#irnuzglqpx .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -831,7 +833,7 @@ A BibTeX entry for LaTeX users is
   border-top-color: #D3D3D3;
 }
 
-#cmqpnjlzge .gt_last_grand_summary_row_top {
+#irnuzglqpx .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -841,11 +843,11 @@ A BibTeX entry for LaTeX users is
   border-bottom-color: #D3D3D3;
 }
 
-#cmqpnjlzge .gt_striped {
+#irnuzglqpx .gt_striped {
   background-color: #FAFAFA;
 }
 
-#cmqpnjlzge .gt_table_body {
+#irnuzglqpx .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -854,7 +856,7 @@ A BibTeX entry for LaTeX users is
   border-bottom-color: #D3D3D3;
 }
 
-#cmqpnjlzge .gt_footnotes {
+#irnuzglqpx .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -868,7 +870,7 @@ A BibTeX entry for LaTeX users is
   border-right-color: #D3D3D3;
 }
 
-#cmqpnjlzge .gt_footnote {
+#irnuzglqpx .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -877,7 +879,7 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#cmqpnjlzge .gt_sourcenotes {
+#irnuzglqpx .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -891,7 +893,7 @@ A BibTeX entry for LaTeX users is
   border-right-color: #D3D3D3;
 }
 
-#cmqpnjlzge .gt_sourcenote {
+#irnuzglqpx .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -899,72 +901,72 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#cmqpnjlzge .gt_left {
+#irnuzglqpx .gt_left {
   text-align: left;
 }
 
-#cmqpnjlzge .gt_center {
+#irnuzglqpx .gt_center {
   text-align: center;
 }
 
-#cmqpnjlzge .gt_right {
+#irnuzglqpx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#cmqpnjlzge .gt_font_normal {
+#irnuzglqpx .gt_font_normal {
   font-weight: normal;
 }
 
-#cmqpnjlzge .gt_font_bold {
+#irnuzglqpx .gt_font_bold {
   font-weight: bold;
 }
 
-#cmqpnjlzge .gt_font_italic {
+#irnuzglqpx .gt_font_italic {
   font-style: italic;
 }
 
-#cmqpnjlzge .gt_super {
+#irnuzglqpx .gt_super {
   font-size: 65%;
 }
 
-#cmqpnjlzge .gt_footnote_marks {
+#irnuzglqpx .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#cmqpnjlzge .gt_asterisk {
+#irnuzglqpx .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#cmqpnjlzge .gt_indent_1 {
+#irnuzglqpx .gt_indent_1 {
   text-indent: 5px;
 }
 
-#cmqpnjlzge .gt_indent_2 {
+#irnuzglqpx .gt_indent_2 {
   text-indent: 10px;
 }
 
-#cmqpnjlzge .gt_indent_3 {
+#irnuzglqpx .gt_indent_3 {
   text-indent: 15px;
 }
 
-#cmqpnjlzge .gt_indent_4 {
+#irnuzglqpx .gt_indent_4 {
   text-indent: 20px;
 }
 
-#cmqpnjlzge .gt_indent_5 {
+#irnuzglqpx .gt_indent_5 {
   text-indent: 25px;
 }
 
-#cmqpnjlzge .katex-display {
+#irnuzglqpx .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#cmqpnjlzge div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#irnuzglqpx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1099,24 +1101,24 @@ total_antri  0.000000</code></pre>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<div id="ocnkroktjo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="kpmvsotgzi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#ocnkroktjo table {
+#kpmvsotgzi table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ocnkroktjo thead, #ocnkroktjo tbody, #ocnkroktjo tfoot, #ocnkroktjo tr, #ocnkroktjo td, #ocnkroktjo th {
+#kpmvsotgzi thead, #kpmvsotgzi tbody, #kpmvsotgzi tfoot, #kpmvsotgzi tr, #kpmvsotgzi td, #kpmvsotgzi th {
   border-style: none;
 }
 
-#ocnkroktjo p {
+#kpmvsotgzi p {
   margin: 0;
   padding: 0;
 }
 
-#ocnkroktjo .gt_table {
+#kpmvsotgzi .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1142,12 +1144,12 @@ total_antri  0.000000</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#ocnkroktjo .gt_caption {
+#kpmvsotgzi .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ocnkroktjo .gt_title {
+#kpmvsotgzi .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -1159,7 +1161,7 @@ total_antri  0.000000</code></pre>
   border-bottom-width: 0;
 }
 
-#ocnkroktjo .gt_subtitle {
+#kpmvsotgzi .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1171,7 +1173,7 @@ total_antri  0.000000</code></pre>
   border-top-width: 0;
 }
 
-#ocnkroktjo .gt_heading {
+#kpmvsotgzi .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -1183,13 +1185,13 @@ total_antri  0.000000</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ocnkroktjo .gt_bottom_border {
+#kpmvsotgzi .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ocnkroktjo .gt_col_headings {
+#kpmvsotgzi .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1204,7 +1206,7 @@ total_antri  0.000000</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ocnkroktjo .gt_col_heading {
+#kpmvsotgzi .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -1224,7 +1226,7 @@ total_antri  0.000000</code></pre>
   overflow-x: hidden;
 }
 
-#ocnkroktjo .gt_column_spanner_outer {
+#kpmvsotgzi .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -1236,15 +1238,15 @@ total_antri  0.000000</code></pre>
   padding-right: 4px;
 }
 
-#ocnkroktjo .gt_column_spanner_outer:first-child {
+#kpmvsotgzi .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ocnkroktjo .gt_column_spanner_outer:last-child {
+#kpmvsotgzi .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ocnkroktjo .gt_column_spanner {
+#kpmvsotgzi .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1256,11 +1258,11 @@ total_antri  0.000000</code></pre>
   width: 100%;
 }
 
-#ocnkroktjo .gt_spanner_row {
+#kpmvsotgzi .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ocnkroktjo .gt_group_heading {
+#kpmvsotgzi .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1286,7 +1288,7 @@ total_antri  0.000000</code></pre>
   text-align: left;
 }
 
-#ocnkroktjo .gt_empty_group_heading {
+#kpmvsotgzi .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1301,15 +1303,15 @@ total_antri  0.000000</code></pre>
   vertical-align: middle;
 }
 
-#ocnkroktjo .gt_from_md > :first-child {
+#kpmvsotgzi .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ocnkroktjo .gt_from_md > :last-child {
+#kpmvsotgzi .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ocnkroktjo .gt_row {
+#kpmvsotgzi .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -1328,7 +1330,7 @@ total_antri  0.000000</code></pre>
   overflow-x: hidden;
 }
 
-#ocnkroktjo .gt_stub {
+#kpmvsotgzi .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -1341,7 +1343,7 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#ocnkroktjo .gt_stub_row_group {
+#kpmvsotgzi .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1355,15 +1357,15 @@ total_antri  0.000000</code></pre>
   vertical-align: top;
 }
 
-#ocnkroktjo .gt_row_group_first td {
+#kpmvsotgzi .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ocnkroktjo .gt_row_group_first th {
+#kpmvsotgzi .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ocnkroktjo .gt_summary_row {
+#kpmvsotgzi .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1373,16 +1375,16 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#ocnkroktjo .gt_first_summary_row {
+#kpmvsotgzi .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ocnkroktjo .gt_first_summary_row.thick {
+#kpmvsotgzi .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ocnkroktjo .gt_last_summary_row {
+#kpmvsotgzi .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1392,7 +1394,7 @@ total_antri  0.000000</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#ocnkroktjo .gt_grand_summary_row {
+#kpmvsotgzi .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1402,7 +1404,7 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#ocnkroktjo .gt_first_grand_summary_row {
+#kpmvsotgzi .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1412,7 +1414,7 @@ total_antri  0.000000</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#ocnkroktjo .gt_last_grand_summary_row_top {
+#kpmvsotgzi .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1422,11 +1424,11 @@ total_antri  0.000000</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#ocnkroktjo .gt_striped {
+#kpmvsotgzi .gt_striped {
   background-color: #FAFAFA;
 }
 
-#ocnkroktjo .gt_table_body {
+#kpmvsotgzi .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1435,7 +1437,7 @@ total_antri  0.000000</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#ocnkroktjo .gt_footnotes {
+#kpmvsotgzi .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1449,7 +1451,7 @@ total_antri  0.000000</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ocnkroktjo .gt_footnote {
+#kpmvsotgzi .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1458,7 +1460,7 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#ocnkroktjo .gt_sourcenotes {
+#kpmvsotgzi .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1472,7 +1474,7 @@ total_antri  0.000000</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ocnkroktjo .gt_sourcenote {
+#kpmvsotgzi .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1480,72 +1482,72 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#ocnkroktjo .gt_left {
+#kpmvsotgzi .gt_left {
   text-align: left;
 }
 
-#ocnkroktjo .gt_center {
+#kpmvsotgzi .gt_center {
   text-align: center;
 }
 
-#ocnkroktjo .gt_right {
+#kpmvsotgzi .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ocnkroktjo .gt_font_normal {
+#kpmvsotgzi .gt_font_normal {
   font-weight: normal;
 }
 
-#ocnkroktjo .gt_font_bold {
+#kpmvsotgzi .gt_font_bold {
   font-weight: bold;
 }
 
-#ocnkroktjo .gt_font_italic {
+#kpmvsotgzi .gt_font_italic {
   font-style: italic;
 }
 
-#ocnkroktjo .gt_super {
+#kpmvsotgzi .gt_super {
   font-size: 65%;
 }
 
-#ocnkroktjo .gt_footnote_marks {
+#kpmvsotgzi .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ocnkroktjo .gt_asterisk {
+#kpmvsotgzi .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ocnkroktjo .gt_indent_1 {
+#kpmvsotgzi .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ocnkroktjo .gt_indent_2 {
+#kpmvsotgzi .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ocnkroktjo .gt_indent_3 {
+#kpmvsotgzi .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ocnkroktjo .gt_indent_4 {
+#kpmvsotgzi .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ocnkroktjo .gt_indent_5 {
+#kpmvsotgzi .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ocnkroktjo .katex-display {
+#kpmvsotgzi .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ocnkroktjo div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#kpmvsotgzi div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1732,18 +1734,21 @@ total_antri 232.00</code></pre>
 </div>
 <p>Ada penurunan banyaknya <em>lane</em> yang digunakan namun berakibat naiknya antrian.</p>
 </section>
-<section id="further-discussion-sensitivity-analysis" class="slide level2 center scrollable">
-<h2><em>Further Discussion</em>: <em>Sensitivity Analysis</em></h2>
+<section id="further-discussion-sensitivity-analysis" class="slide level2 center smaller">
+<h2><em>Further Discussion: Sensitivity Analysis</em></h2>
 <p>Dari paparan model di atas, kita bisa melakukan <em>sensitivity analysis</em> untuk beberapa variabel yang bisa diatur oleh sang <em>security manager</em>.</p>
-<ol type="1">
+<ul>
 <li>Menurunkan atau menaikkan berapa <strong>maksimal <em>lane</em></strong> agar didapatkan nilai optimal secara bisnis.
 <ul>
 <li>Contoh: tak semua hari petugas yang bertugas bisa lengkap 17 <em>lanes</em>. Barangkali ada yang cuti atau izin bekerja sehingga <span class="math inline">\(\leq 17\)</span> orang.</li>
 </ul></li>
 <li>Menyeragamkan atau membuat standar <em>range</em> nilai <em>service rate</em> sehingga lebih seragam dan “tinggi”.</li>
 <li>Definisikan berapa banyak <em>unprocessed</em> yang masih diperbolehkan sehingga <em>lane</em> yang digunakan bisa lebih “sedikit”.</li>
-<li>Menambahkan <em>multi objective optimization</em> sehingga menemukan <em>balance</em> antara <em>lane</em> dan <em>unprocessed</em>.</li>
-</ol>
+<li>Menambahkan <em>multi objective optimization</em> sehingga menemukan <em>balance</em> antara <em>lane</em> dan <em>unprocessed</em>.
+<ul>
+<li>Misalkan mengubah <em>minimize lane</em> menjadi <span class="math inline">\(\epsilon - constraint\)</span>.</li>
+</ul></li>
+</ul>
 </section></section>
 <section>
 <section id="t-e-r-i-m-a-k-a-s-i-h" class="title-slide slide level1 center" data-background-image="IMG_1062.jpeg" data-background-opacity=".2">

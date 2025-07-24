@@ -1,7 +1,7 @@
 ---
-title: "Optimisasi Antrian Security Check Bandara"
+title: "Optimisasi Antrian Lane Security Checking di Bandara"
 subtitle: "Bahan Diskusi"
-author: "Tim Security"
+author: "Tim Security Management"
 institute: Institut Teknologi Bandung
 title-slide-attributes:
   data-background-image: back.jpg
@@ -95,7 +95,7 @@ Tujuan dari model optimisasi ini adalah __meminimalkan *lane* yang dibuka dan *u
 
 Kelak akan dicoba beberapa _objective functions_ dan akan dibandingkan hasilnya.
 
-## _Constraints_ {.center}
+## _Constraints_ {.center .smaller}
 
 Maksimal _lane_ yang bisa dibuka setiap waktu $i$ adalah 17.
 
@@ -104,6 +104,10 @@ $$l_i \leq 17, \space \forall i \in [1,12]$$
 Banyaknya _processed passengers_ bisa jadi __kurang dari atau setara dengan__ _service rate_ dikalikan dengan _lane_ yang dibuka.
 
 $$p_i \leq sr_i \times l_i, \space \forall i \in [1,12]$$
+
+Banyaknya _unprocessed passengers_ itu adalah banyaknya _passengers_ masuk dikurangi dengan _processed passengers_.
+
+$$u_i = \hat{N}_i - p_i , \space \forall i \in [1,12]$$
 
 ## Pencarian $sr_i$ {.center}
 
@@ -200,7 +204,6 @@ Dari semua grafik yang ditampilkan, kita melihat bahwa ada pola yang mirip antar
 :::
 :::::
 
-
 ## Model Hubungan _Service Rate_ dengan _Total Passengers_ {.center .smaller}
 
 ```{r}
@@ -266,7 +269,7 @@ $$l_i \leq 17, \space \forall i \in [1,12]$$
 
 $$p_i \leq sr_i \times l_i, \space \forall i \in [1,12]$$
 
-
+$$u_i = \hat{N}_i - p_i , \space \forall i \in [1,12]$$
 
 ## _Solving the Model_ {.center}
 
@@ -452,15 +455,16 @@ output %>% summarise(min_lane = min(lane),
 
 Ada penurunan banyaknya _lane_ yang digunakan namun berakibat naiknya antrian.
 
-## _Further Discussion_: _Sensitivity Analysis_ {.center}
+## _Further Discussion: Sensitivity Analysis_ {.center .smaller}
 
 Dari paparan model di atas, kita bisa melakukan _sensitivity analysis_ untuk beberapa variabel yang bisa diatur oleh sang _security manager_.
 
-1. Menurunkan atau menaikkan berapa __maksimal *lane*__ agar didapatkan nilai optimal secara bisnis.
+- Menurunkan atau menaikkan berapa __maksimal *lane*__ agar didapatkan nilai optimal secara bisnis.
     - Contoh: tak semua hari petugas yang bertugas bisa lengkap 17 _lanes_. Barangkali ada yang cuti atau izin bekerja sehingga $\leq 17$ orang.
-1. Menyeragamkan atau membuat standar _range_ nilai _service rate_ sehingga lebih seragam dan "tinggi".
-1. Definisikan berapa banyak _unprocessed_ yang masih diperbolehkan sehingga _lane_ yang digunakan bisa lebih "sedikit".
-1. Menambahkan _multi objective optimization_ sehingga menemukan _balance_ antara _lane_ dan _unprocessed_.
+- Menyeragamkan atau membuat standar _range_ nilai _service rate_ sehingga lebih seragam dan "tinggi".
+- Definisikan berapa banyak _unprocessed_ yang masih diperbolehkan sehingga _lane_ yang digunakan bisa lebih "sedikit".
+- Menambahkan _multi objective optimization_ sehingga menemukan _balance_ antara _lane_ dan _unprocessed_.
+    - Misalkan mengubah _minimize lane_ menjadi $\epsilon - constraint$.
 
 # T E R I M A  K A S I H {background-image="IMG_1062.jpeg" background-opacity=".2"}
 
