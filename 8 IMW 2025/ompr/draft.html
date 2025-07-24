@@ -359,7 +359,7 @@ Tim Security Management
 </section>
 <section id="model-optimisasi" class="slide level2 center smaller">
 <h2>Model Optimisasi</h2>
-<h3 id="decision-variables"><em>Decision Variables</em></h3>
+<h3 id="decision-variables-and-parameters"><em>Decision Variables and Parameters</em></h3>
 <p>Definisikan:</p>
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -490,6 +490,7 @@ Tim Security Management
 <p><em>subject to</em></p>
 <p><span class="math display">\[l_i \leq 17, \space \forall i \in [1,12]\]</span></p>
 <p><span class="math display">\[p_i \leq sr_i \times l_i, \space \forall i \in [1,12]\]</span></p>
+<p><span class="math display">\[u_i = \hat{N}_i - p_i , \space \forall i \in [1,12]\]</span></p>
 </section>
 <section id="solving-the-model" class="slide level2 center">
 <h2><em>Solving the Model</em></h2>
@@ -520,24 +521,24 @@ A BibTeX entry for LaTeX users is
 <div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<div id="irnuzglqpx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="betrkcsann" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#irnuzglqpx table {
+#betrkcsann table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#irnuzglqpx thead, #irnuzglqpx tbody, #irnuzglqpx tfoot, #irnuzglqpx tr, #irnuzglqpx td, #irnuzglqpx th {
+#betrkcsann thead, #betrkcsann tbody, #betrkcsann tfoot, #betrkcsann tr, #betrkcsann td, #betrkcsann th {
   border-style: none;
 }
 
-#irnuzglqpx p {
+#betrkcsann p {
   margin: 0;
   padding: 0;
 }
 
-#irnuzglqpx .gt_table {
+#betrkcsann .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -563,12 +564,12 @@ A BibTeX entry for LaTeX users is
   border-left-color: #D3D3D3;
 }
 
-#irnuzglqpx .gt_caption {
+#betrkcsann .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#irnuzglqpx .gt_title {
+#betrkcsann .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -580,7 +581,7 @@ A BibTeX entry for LaTeX users is
   border-bottom-width: 0;
 }
 
-#irnuzglqpx .gt_subtitle {
+#betrkcsann .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -592,7 +593,7 @@ A BibTeX entry for LaTeX users is
   border-top-width: 0;
 }
 
-#irnuzglqpx .gt_heading {
+#betrkcsann .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -604,13 +605,13 @@ A BibTeX entry for LaTeX users is
   border-right-color: #D3D3D3;
 }
 
-#irnuzglqpx .gt_bottom_border {
+#betrkcsann .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#irnuzglqpx .gt_col_headings {
+#betrkcsann .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -625,7 +626,7 @@ A BibTeX entry for LaTeX users is
   border-right-color: #D3D3D3;
 }
 
-#irnuzglqpx .gt_col_heading {
+#betrkcsann .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -645,7 +646,7 @@ A BibTeX entry for LaTeX users is
   overflow-x: hidden;
 }
 
-#irnuzglqpx .gt_column_spanner_outer {
+#betrkcsann .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -657,15 +658,15 @@ A BibTeX entry for LaTeX users is
   padding-right: 4px;
 }
 
-#irnuzglqpx .gt_column_spanner_outer:first-child {
+#betrkcsann .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#irnuzglqpx .gt_column_spanner_outer:last-child {
+#betrkcsann .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#irnuzglqpx .gt_column_spanner {
+#betrkcsann .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -677,11 +678,11 @@ A BibTeX entry for LaTeX users is
   width: 100%;
 }
 
-#irnuzglqpx .gt_spanner_row {
+#betrkcsann .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#irnuzglqpx .gt_group_heading {
+#betrkcsann .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -707,7 +708,7 @@ A BibTeX entry for LaTeX users is
   text-align: left;
 }
 
-#irnuzglqpx .gt_empty_group_heading {
+#betrkcsann .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -722,15 +723,15 @@ A BibTeX entry for LaTeX users is
   vertical-align: middle;
 }
 
-#irnuzglqpx .gt_from_md > :first-child {
+#betrkcsann .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#irnuzglqpx .gt_from_md > :last-child {
+#betrkcsann .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#irnuzglqpx .gt_row {
+#betrkcsann .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -749,7 +750,7 @@ A BibTeX entry for LaTeX users is
   overflow-x: hidden;
 }
 
-#irnuzglqpx .gt_stub {
+#betrkcsann .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -762,7 +763,7 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#irnuzglqpx .gt_stub_row_group {
+#betrkcsann .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -776,15 +777,15 @@ A BibTeX entry for LaTeX users is
   vertical-align: top;
 }
 
-#irnuzglqpx .gt_row_group_first td {
+#betrkcsann .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#irnuzglqpx .gt_row_group_first th {
+#betrkcsann .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#irnuzglqpx .gt_summary_row {
+#betrkcsann .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -794,16 +795,16 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#irnuzglqpx .gt_first_summary_row {
+#betrkcsann .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#irnuzglqpx .gt_first_summary_row.thick {
+#betrkcsann .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#irnuzglqpx .gt_last_summary_row {
+#betrkcsann .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -813,7 +814,7 @@ A BibTeX entry for LaTeX users is
   border-bottom-color: #D3D3D3;
 }
 
-#irnuzglqpx .gt_grand_summary_row {
+#betrkcsann .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -823,7 +824,7 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#irnuzglqpx .gt_first_grand_summary_row {
+#betrkcsann .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -833,7 +834,7 @@ A BibTeX entry for LaTeX users is
   border-top-color: #D3D3D3;
 }
 
-#irnuzglqpx .gt_last_grand_summary_row_top {
+#betrkcsann .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -843,11 +844,11 @@ A BibTeX entry for LaTeX users is
   border-bottom-color: #D3D3D3;
 }
 
-#irnuzglqpx .gt_striped {
+#betrkcsann .gt_striped {
   background-color: #FAFAFA;
 }
 
-#irnuzglqpx .gt_table_body {
+#betrkcsann .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -856,7 +857,7 @@ A BibTeX entry for LaTeX users is
   border-bottom-color: #D3D3D3;
 }
 
-#irnuzglqpx .gt_footnotes {
+#betrkcsann .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -870,7 +871,7 @@ A BibTeX entry for LaTeX users is
   border-right-color: #D3D3D3;
 }
 
-#irnuzglqpx .gt_footnote {
+#betrkcsann .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -879,7 +880,7 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#irnuzglqpx .gt_sourcenotes {
+#betrkcsann .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -893,7 +894,7 @@ A BibTeX entry for LaTeX users is
   border-right-color: #D3D3D3;
 }
 
-#irnuzglqpx .gt_sourcenote {
+#betrkcsann .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -901,72 +902,72 @@ A BibTeX entry for LaTeX users is
   padding-right: 5px;
 }
 
-#irnuzglqpx .gt_left {
+#betrkcsann .gt_left {
   text-align: left;
 }
 
-#irnuzglqpx .gt_center {
+#betrkcsann .gt_center {
   text-align: center;
 }
 
-#irnuzglqpx .gt_right {
+#betrkcsann .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#irnuzglqpx .gt_font_normal {
+#betrkcsann .gt_font_normal {
   font-weight: normal;
 }
 
-#irnuzglqpx .gt_font_bold {
+#betrkcsann .gt_font_bold {
   font-weight: bold;
 }
 
-#irnuzglqpx .gt_font_italic {
+#betrkcsann .gt_font_italic {
   font-style: italic;
 }
 
-#irnuzglqpx .gt_super {
+#betrkcsann .gt_super {
   font-size: 65%;
 }
 
-#irnuzglqpx .gt_footnote_marks {
+#betrkcsann .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#irnuzglqpx .gt_asterisk {
+#betrkcsann .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#irnuzglqpx .gt_indent_1 {
+#betrkcsann .gt_indent_1 {
   text-indent: 5px;
 }
 
-#irnuzglqpx .gt_indent_2 {
+#betrkcsann .gt_indent_2 {
   text-indent: 10px;
 }
 
-#irnuzglqpx .gt_indent_3 {
+#betrkcsann .gt_indent_3 {
   text-indent: 15px;
 }
 
-#irnuzglqpx .gt_indent_4 {
+#betrkcsann .gt_indent_4 {
   text-indent: 20px;
 }
 
-#irnuzglqpx .gt_indent_5 {
+#betrkcsann .gt_indent_5 {
   text-indent: 25px;
 }
 
-#irnuzglqpx .katex-display {
+#betrkcsann .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#irnuzglqpx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#betrkcsann div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1101,24 +1102,24 @@ total_antri  0.000000</code></pre>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<div id="kpmvsotgzi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="bdzpwqesiu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#kpmvsotgzi table {
+#bdzpwqesiu table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#kpmvsotgzi thead, #kpmvsotgzi tbody, #kpmvsotgzi tfoot, #kpmvsotgzi tr, #kpmvsotgzi td, #kpmvsotgzi th {
+#bdzpwqesiu thead, #bdzpwqesiu tbody, #bdzpwqesiu tfoot, #bdzpwqesiu tr, #bdzpwqesiu td, #bdzpwqesiu th {
   border-style: none;
 }
 
-#kpmvsotgzi p {
+#bdzpwqesiu p {
   margin: 0;
   padding: 0;
 }
 
-#kpmvsotgzi .gt_table {
+#bdzpwqesiu .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1144,12 +1145,12 @@ total_antri  0.000000</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#kpmvsotgzi .gt_caption {
+#bdzpwqesiu .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#kpmvsotgzi .gt_title {
+#bdzpwqesiu .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -1161,7 +1162,7 @@ total_antri  0.000000</code></pre>
   border-bottom-width: 0;
 }
 
-#kpmvsotgzi .gt_subtitle {
+#bdzpwqesiu .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1173,7 +1174,7 @@ total_antri  0.000000</code></pre>
   border-top-width: 0;
 }
 
-#kpmvsotgzi .gt_heading {
+#bdzpwqesiu .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -1185,13 +1186,13 @@ total_antri  0.000000</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#kpmvsotgzi .gt_bottom_border {
+#bdzpwqesiu .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#kpmvsotgzi .gt_col_headings {
+#bdzpwqesiu .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1206,7 +1207,7 @@ total_antri  0.000000</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#kpmvsotgzi .gt_col_heading {
+#bdzpwqesiu .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -1226,7 +1227,7 @@ total_antri  0.000000</code></pre>
   overflow-x: hidden;
 }
 
-#kpmvsotgzi .gt_column_spanner_outer {
+#bdzpwqesiu .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -1238,15 +1239,15 @@ total_antri  0.000000</code></pre>
   padding-right: 4px;
 }
 
-#kpmvsotgzi .gt_column_spanner_outer:first-child {
+#bdzpwqesiu .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kpmvsotgzi .gt_column_spanner_outer:last-child {
+#bdzpwqesiu .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kpmvsotgzi .gt_column_spanner {
+#bdzpwqesiu .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1258,11 +1259,11 @@ total_antri  0.000000</code></pre>
   width: 100%;
 }
 
-#kpmvsotgzi .gt_spanner_row {
+#bdzpwqesiu .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#kpmvsotgzi .gt_group_heading {
+#bdzpwqesiu .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1288,7 +1289,7 @@ total_antri  0.000000</code></pre>
   text-align: left;
 }
 
-#kpmvsotgzi .gt_empty_group_heading {
+#bdzpwqesiu .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1303,15 +1304,15 @@ total_antri  0.000000</code></pre>
   vertical-align: middle;
 }
 
-#kpmvsotgzi .gt_from_md > :first-child {
+#bdzpwqesiu .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kpmvsotgzi .gt_from_md > :last-child {
+#bdzpwqesiu .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kpmvsotgzi .gt_row {
+#bdzpwqesiu .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -1330,7 +1331,7 @@ total_antri  0.000000</code></pre>
   overflow-x: hidden;
 }
 
-#kpmvsotgzi .gt_stub {
+#bdzpwqesiu .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -1343,7 +1344,7 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#kpmvsotgzi .gt_stub_row_group {
+#bdzpwqesiu .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1357,15 +1358,15 @@ total_antri  0.000000</code></pre>
   vertical-align: top;
 }
 
-#kpmvsotgzi .gt_row_group_first td {
+#bdzpwqesiu .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#kpmvsotgzi .gt_row_group_first th {
+#bdzpwqesiu .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#kpmvsotgzi .gt_summary_row {
+#bdzpwqesiu .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1375,16 +1376,16 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#kpmvsotgzi .gt_first_summary_row {
+#bdzpwqesiu .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#kpmvsotgzi .gt_first_summary_row.thick {
+#bdzpwqesiu .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#kpmvsotgzi .gt_last_summary_row {
+#bdzpwqesiu .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1394,7 +1395,7 @@ total_antri  0.000000</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#kpmvsotgzi .gt_grand_summary_row {
+#bdzpwqesiu .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1404,7 +1405,7 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#kpmvsotgzi .gt_first_grand_summary_row {
+#bdzpwqesiu .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1414,7 +1415,7 @@ total_antri  0.000000</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#kpmvsotgzi .gt_last_grand_summary_row_top {
+#bdzpwqesiu .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1424,11 +1425,11 @@ total_antri  0.000000</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#kpmvsotgzi .gt_striped {
+#bdzpwqesiu .gt_striped {
   background-color: #FAFAFA;
 }
 
-#kpmvsotgzi .gt_table_body {
+#bdzpwqesiu .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1437,7 +1438,7 @@ total_antri  0.000000</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#kpmvsotgzi .gt_footnotes {
+#bdzpwqesiu .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1451,7 +1452,7 @@ total_antri  0.000000</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#kpmvsotgzi .gt_footnote {
+#bdzpwqesiu .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1460,7 +1461,7 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#kpmvsotgzi .gt_sourcenotes {
+#bdzpwqesiu .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1474,7 +1475,7 @@ total_antri  0.000000</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#kpmvsotgzi .gt_sourcenote {
+#bdzpwqesiu .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1482,72 +1483,72 @@ total_antri  0.000000</code></pre>
   padding-right: 5px;
 }
 
-#kpmvsotgzi .gt_left {
+#bdzpwqesiu .gt_left {
   text-align: left;
 }
 
-#kpmvsotgzi .gt_center {
+#bdzpwqesiu .gt_center {
   text-align: center;
 }
 
-#kpmvsotgzi .gt_right {
+#bdzpwqesiu .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kpmvsotgzi .gt_font_normal {
+#bdzpwqesiu .gt_font_normal {
   font-weight: normal;
 }
 
-#kpmvsotgzi .gt_font_bold {
+#bdzpwqesiu .gt_font_bold {
   font-weight: bold;
 }
 
-#kpmvsotgzi .gt_font_italic {
+#bdzpwqesiu .gt_font_italic {
   font-style: italic;
 }
 
-#kpmvsotgzi .gt_super {
+#bdzpwqesiu .gt_super {
   font-size: 65%;
 }
 
-#kpmvsotgzi .gt_footnote_marks {
+#bdzpwqesiu .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#kpmvsotgzi .gt_asterisk {
+#bdzpwqesiu .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#kpmvsotgzi .gt_indent_1 {
+#bdzpwqesiu .gt_indent_1 {
   text-indent: 5px;
 }
 
-#kpmvsotgzi .gt_indent_2 {
+#bdzpwqesiu .gt_indent_2 {
   text-indent: 10px;
 }
 
-#kpmvsotgzi .gt_indent_3 {
+#bdzpwqesiu .gt_indent_3 {
   text-indent: 15px;
 }
 
-#kpmvsotgzi .gt_indent_4 {
+#bdzpwqesiu .gt_indent_4 {
   text-indent: 20px;
 }
 
-#kpmvsotgzi .gt_indent_5 {
+#bdzpwqesiu .gt_indent_5 {
   text-indent: 25px;
 }
 
-#kpmvsotgzi .katex-display {
+#bdzpwqesiu .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#kpmvsotgzi div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#bdzpwqesiu div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>

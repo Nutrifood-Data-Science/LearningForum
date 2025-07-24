@@ -65,7 +65,7 @@ Perhatikan bahwa _lane planning_ di atas masih bisa kita optimisasi lebih lanjut
 
 ## Model Optimisasi {.center .smaller}
 
-### _Decision Variables_
+### _Decision Variables and Parameters_
 
 Definisikan:
 
