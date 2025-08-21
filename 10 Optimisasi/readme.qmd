@@ -1,19 +1,29 @@
 ---
-title: "Optimisasi dalam Industri"
-subtitle: "Sebuah Catatan"
+title: "PENGANTAR OPTIMISASI DALAM INDUSTRI"
 format:
   gfm:
     html-math-method: webtex
     toc: true
     toc-depth: 4
-fig-dpi: 500
-fig-width: 8
-fig-height: 4.5
+fig-dpi: 350
+fig-width: 7
+fig-height: 4
 editor: source
 execute:
   warning: false
 error: false
 ---
+
+```{r}
+#| include: false
+
+rm(list=ls())
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(ggpubr)
+```
 
 # SEJARAH
 
@@ -118,6 +128,1250 @@ Selain itu, kita juga bisa membagi masalah optimisasi berdasarkan **kepastian ni
 [^7]: Pengantar Riset Operasi dan Optimisasi, KampusX: PO101
 
 
+# JENIS OPTIMISASI
+
+## _Linear Programming_
+
+_Linear programming_ adalah bentuk metode optimisasi sederhana yang memanfaatkan relasi linear (semua fungsi dan _constraints_ merupakan fungsi linear).
+
+### Contoh Masalah _Linear Programming_
+
+Saya memiliki area parkir seluas 1.960 $m^2$. Luas rata-rata untuk mobil berukuran kecil adalah 4 $m^2$ dan mobil besar adalah 20 $m^2$. Daya tampung maksimum hanya 250 kendaraan, biaya parkir mobil kecil adalah Rp 7.000 per jam dan mobil besar adalah Rp 12.000 per jam. Jika dalam 1 jam area parkir saya terisi penuh dan tidak ada kendaraan yang pergi dan datang, maka berapa pendapatan maksimum yang bisa saya dapatkan dari tempat parkir itu?
+
+Dari kasus di atas kita bisa tuliskan model matematikanya sebagai berikut:
+
+Misal $x_1$ adalah mobil kecil dan $x_2$ adalah mobil besar.
+
+$$max(7000x_1 + 12000x_2)$$
+
+Dengan _constraints_: 
+
+$$4 x_1 + 20 x_2 \leq 1960$$
+
+dan
+
+$$x_1 + x_2 \leq 250$$
+
+serta $x_1 \geq 0, x_2 \geq 0$.
+
+## _Integer Programming_
+
+_Integer programming_ adalah bentuk metode optimisasi di mana variabel yang terlibat merupakan bilangan bulat (_integer_). Jika fungsi-fungsi yang terkait merupakan _linear_, maka disebut dengan _integer linear programming_.
+
+Sebagai contoh, variabel yang merupakan bilangan bulat adalah banyak orang.
+
+### Contoh _Integer Programming_
+
+#### Jadwal Kebutuhan Tenaga Kesehatan {-}
+
+Suatu rumah sakit membutuhkan tenaga kesehatan setiap harinya dengan spesifikasi berikut:
+
+```{r,echo=FALSE}
+rm(list=ls())
+
+nakes = data.frame(
+  hari = c('Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'),
+  min = c(24,22,23,11,16,20,12),
+  max = c(29,27,28,16,21,25,17)
+)
+
+nakes %>%
+  rename("Min Nakes Required" = min,
+	 "Max Nakes Required" = max) %>%
+  knitr::kable("simple",align = "c",caption = "Tabel Kebutuhan Nakes Harian")
+```
+
+Di rumah sakit tersebut berlaku kondisi sebagai berikut:
+
+1. Setiap nakes hanya diperbolehkan bekerja selama 5 hari berturut-turut dan harus libur selama 2 hari berturut-turut.
+1. Tidak ada pemberlakuan _shift_ bagi nakes.
+
+Berapa banyak nakes yang harus dipekerjakan oleh rumah sakit tersebut? Bagaimana konfigurasi penjadwalannya?
+
+Untuk memudahkan dalam mencari solusi permasalahan di atas, kita bisa membuat tabel ilustrasi berikut:
+
+```{r,echo=FALSE}
+nakes %>%
+  mutate(x1 = c('x','x','x','x','x','' , ''),
+	 x2 = c('' ,'x','x','x','x','x', ''),
+	 x3 = c('' , '','x','x','x','x','x'),
+	 x4 = c('x', '', '','x','x','x','x'),
+	 x5 = c('x','x', '', '','x','x','x'),
+	 x6 = c('x','x','x', '', '','x','x'),
+	 x7 = c('x','x','x','x', '', '','x')) %>%
+  rename("Min Nakes Required" = min,
+	 "Max Nakes Required" = max) %>%
+  knitr::kable("simple",align = "c",caption = "Konfigurasi Penjadwalan Nakes")
+```
+
+Kolom $x_i, i =1,2,3,4,5,6,7$ menandakan kelompok nakes yang perlu dipekerjaan pada hari-hari tertentu. Setiap nilai $x_i$ tersebut merupakan __bilangan bulat positif__ $x \geq 0, x \in \mathbb{Z}$.
+
+Dari ilustrasi di atas, kita bisa membuat model optimisasinya sebagai berikut:
+
+___Objective Function___
+
+$$\min{ \sum_{i=1}^7 x_i}$$
+
+___Constraints___
+
+- Hari Senin: $24 \leq \sum x_i \leq 29, i \in \{1,4,5,6,7\}$.
+- Hari Selasa: $22 \leq \sum x_i \leq 27, i \in \{1,2,5,6,7\}$.
+- Hari Rabu: $23 \leq \sum x_i \leq 28, i \in \{1,2,3,6,7\}$.
+- Hari Kamis: $11 \leq \sum x_i \leq 16, i \in \{1,2,3,4,7\}$.
+- Hari Jumat: $16 \leq \sum x_i \leq 21, i \in \{1,2,3,4,5\}$.
+- Hari Sabtu: $20 \leq \sum x_i \leq 25, i \in \{2,3,4,5,6\}$.
+- Hari Minggu: $12 \leq \sum x_i \leq 17, i \in \{3,4,5,6,7\}$.
+
+Kita juga perlu perhatikan bahwa $x_i \geq 0, i \in \{1,2,3,4,5,6,7\}$.
+
+## _Binary Programming_
+
+_Binary programming_ adalah bentuk metode optimisasi di mana variabel yang terlibat merupakan bilangan biner (0,1). Biasanya metode ini dipakai dalam masalah penjadwalan yang memerlukan prinsip _matching_ antar kondisi yang ada.
+
+### Contoh _Binary Programming_
+
+#### Jadwal Tatap Muka Terbatas Sekolah {-}
+
+Beberapa minggu ke belakang, kasus harian Covid semakin menurun. Pemerintah mulai melonggarkan aturan PPKM yang mengakibatkan sekolah-sekolah mulai menggelar pengajaran tatap muka terbatas (PTMT) untuk siswanya secara _offline_. 
+
+Suatu sekolah memiliki kelas berisi 20 orang siswa. Mereka hendak menggelar PTMT dengana aturan sebagai berikut:
+
+1. PTMT digelar dari Senin hingga Jumat (5 hari).
+1. Dalam sehari, siswa yang boleh hadir dibatasi 4-8 orang saja.
+1. Dalam seminggu, diharapkan siswa bisa hadir 2-3 kali.
+1. Siswa yang hadir di selang sehari baru bisa hadir kembali.
+
+Dari uraian di atas, kita bisa membuat model optimisasinya sebagai berikut:
+
+Saya definisikan $x_{i,j} \in (0,1)$ sebagai bilangan biner di mana $i \in \{1,2,..,20\}$ menandakan siswa dan $j \in \{1,2,..,5\}$ menandakan hari. Berlaku:
+
+$$x_{i,j} = \left\{\begin{matrix}
+0, \text{ siswa i tidak masuk di hari j}\\ 
+1, \text{ siswa i masuk di hari j}
+\end{matrix}\right.$$
+
+___Objective Function___
+
+Tujuan utama kita adalah memaksimalkan siswa yang hadir.
+
+$$\max{\sum_{j=1}^5 \sum_{i=1}^{20} x_{i,j} }$$
+
+___Constraints___
+
+Dalam sehari, ada pembatasan jumlah siswa yang hadir.
+
+$$4 \leq \sum_i x_{i,j} \leq 8, j \in \{1,2,..,5\}$$
+
+Dalam seminggu, siswa hadir dalam frekuensi tertentu.
+
+$$2 \leq \sum_j x_{i,j} \leq 3, i \in \{1,2,..,20\}$$
+
+Ada jeda sehari agar siswa bisa masuk kembali.
+
+$$x_{i,j} + x_{i,j+1} \leq 1$$
+
+Jangan lupa bahwa $x_{i,j} \geq 0$.
+
+## _Mixed Integer Linear Programming_
+
+Pada bagian sebelumnya, kita telah membahas masalah optimisasi dengan variabel berupa diskrit dan kontinu. Permasalahan _real_ yang ada di kehidupan sehari-hari biasanya merupakan memiliki variabel yang _mixed_ antara keduanya. Oleh karena itu, ada metode yang disebut dengan _mixed integer linear programming_. Pada masalah optimisasi tipe ini, _decision variables_ yang terlibat bisa saja berupa _binary_, _integer_, dan _continuous_ sekaligus.
+
+### Menyelesaikan _MILP_
+
+_MILP_ secara eksak bisa diselesaikan dengan metode _simplex_ dengan dikombinasikan dengan teknik _branch and bound_. Penjelasan terkait ini akan dibahas pada bab `6`.
+
+### Contoh _MILP_
+
+#### Pemilihan dan Penentuan Item Produksi {-}
+
+Suatu pabrik makanan dan minuman berencana untuk membuat tiga produk baru yang bisa diproduksi di dua _plants_ yang berbeda.
+
+```{r,echo=FALSE}
+rm(list=ls())
+
+runtime = data.frame(Produk = c("Item 1","Item 2","Item 3"),
+		     run1 = c(3,4,2),
+		     run2 = c(4,6,2)
+		    )
+runtime %>%
+  rename("Runtime Plant 1" = run1,
+	 "Runtime Plant 2" = run2) %>%
+  knitr::kable("simple",caption = "Tabel Runtime Item Produk per Plant (harian - dalam jam)")
+```
+
+__Plant 1__ memiliki maksimum _working hours_ sebesar 30 jam perhari.
+
+__Plant 2__ memiliki maksimum _working hours_ sebesar 40 jam perhari.
+
+```{r,echo=FALSE}
+profit = data.frame(Produk = c("Item 1","Item 2","Item 3"),
+		    profit = c(5,7,3),
+		    sales = c(7,5,9)
+			)
+
+profit %>%
+  rename("Profit per ton" = profit,
+	 "Sales potential per ton" = sales) %>%
+  knitr::kable("simple",caption = "Tabel Profit dan Potensi Sales Item Produk")
+```
+
+Masalah timbul saat mereka harus memilih __dua dari tiga__ produk baru tersebut yang harus di produksi. Selain itu, mereka juga harus memilih __satu dari dua__ _plants_ yang memproduksi _items_ tersebut.
+
+Misalkan saya definisikan:
+
+- $x_i \geq 0, i = 1,2,3$ sebagai `berapa ton` yang harus diproduksi dari item $i$.
+- $y_i \in [0,1], i = 1,2,3$ sebagai _binary_.
+	- Jika bernilai 0, maka produk $i$ tidak dipilih.
+	- Jika bernilai 1, maka produk $i$ dipilih.
+- $z \in [0,1]$ sebagai _binary_.
+	- Jika bernilai 0, maka _plant_ pertama dipilih.
+	- Jika bernilai 1, maka _plant_ kedua dipilih.
+
+Saya akan mendefinisikan suatu variabel _dummy_ $M = 99999$ berisi suatu nilai yang besar. Kelak variabel ini akan berguna untuk _reinforce model_ (metode pemberian _penalty_) agar bisa memilih _items_ dan _plants_ secara bersamaan.
+
+___Objective function___ dari masalah ini adalah memaksimalkan _profit_.
+
+$$\max{ \sum_{i=1}^3 x_i \times \text{profit}_i }$$
+
+___Constraints___ dari masalah ini adalah:
+
+Tonase produksi tidak boleh melebihi angka _sales potential_ per items.
+
+$$x_i \leq \text{sales potential}_i, i = 1,2,3$$
+
+Kita akan memilih dua produk sekaligus menghitung tonase. Jika produk tersebut __dipilih__, maka akan ada angka tonase produksinya. Sebaliknya, jika produk tersebut __tidak dipilih__, maka tidak ada angka tonase produksinya.
+
+$$x_i - y_i \times M \leq 0, i = 1,2,3$$
+
+$$\sum_{i=1}^3 y_i \leq 2$$
+
+Kita akan memilih _plant_ dari waktu produksinya.
+
+$$3x_1 + 4x_2 + 2x_3 - M \times z \leq 30$$
+
+$$4x_1 + 6x_2 + 2x_3 + M \times z \leq 40 + M$$
+
+
+# ALGORITMA PENYELESAIAN OPTIMISASI
+
+Pada bagian ini kita akan membahas macam-macam algoritma yang digunakan untuk menyelesaikan masalah optimisasi.
+
+![](resource_3.png){fig-align="center" width="650"}
+
+Secara garis besar ada dua kelompok besar algoritma optimisasi, yakni:
+
+1. _Exact method_,
+1. _Approximate method_.
+
+Perbedaan keduanya adalah pada __konsep atau pendekatan apa yang digunakan__ untuk menyelesaikan masalah optimisasi. Kita akan bahas satu-persatu pada bagian selanjutnya.
+
+Dalam beberapa kasus, kita bisa mendapatkan _exact method_ bisa untuk menyelesaikan masalah optimisasi dengan efisien. Namun di kasus lain yang lebih kompleks tidak demikian. Kelemahan utama metode _exact_ adalah pada waktu komputasinya yang relatif lebih lama.
+
+## _Exact Method_
+
+Ciri khas dari _exact method_ adalah metode ini menjamin penyelesaian yang optimal karena menggunakan pendekatan analitis [@franz]. Salah satu contoh metode eksak adalah _Simplex Method_.
+
+## _Approximate Method_
+
+Ciri khas dari _approximate method_ adalah metode ini tidak menjamin penyelesaian yang optimal karena bersifat _aproksimasi_ atau pendekatan atau hampiran. Oleh karena itu kita perlu melakukan definisi di awal __seberapa dekat__ nilai __hampiran__ tersebut bisa kita terima.
+
+Metode ini bisa dibagi menjadi dua berdasarkan keterkaitannya dengan suatu masalah, yakni:
+
+1. _Heuristic_, metode ini bersifat _problem dependent_. Artinya metode tersebut hanya bisa dipakai untuk jenis permasalahan tertentu.
+    - Contoh: metode _nearest neighborhood_ hanya bisa dipakai untuk menyelesaikan masalah dalam lingkup _travelling salesperson problem_ (__TSP__).
+1. _Meta heuristic_, metode ini bersifat _problem independent_. Artinya metode tersebut tidak tergantung dari jenis permasalahan tertentu. Contoh: 
+    - _Genetic algorithm_.
+    - _Simulated annealing_.
+    - _Spiral optimization_ untuk menyelesaikan masalah _mixed integer non linear programming_.
+    - _Artifical bee colony algorithm_.
+    
+Namun demikian kedua metode ini bisa saling melengkapi dalam prakteknya.
+
+# __R__ UNTUK OPTIMISASI 
+
+Untuk menyelesaikan masalah optimisasi menggunakan __R__, ada beberapa cara yang bisa digunakan, yakni:
+
+1. Menggunakan `ompr` _packages_.
+1. Membuat algoritma _dynamic spiral_.
+1. Menggunakan Google OR Tools^[https://developers.google.com/optimization].
+
+## `ompr` _Packages_ di __R__ 
+
+Ada satu _packages_ lain di __R__ yang bisa digunakan untuk menyelesaikan masalah optimisasi, yakni bernama `ompr`. _Packages_ `ompr` dibuat oleh __Dirk Schumacher__ pada 2018^[https://www.r-orms.org/].
+
+Salah satu keuntungan dari _library_ ini adalah pengunaan operator _pipe_ ` %>% ` pada perumusan algoritmanya. Sehingga bagi _user_ yang biasa menggunakan prinsip `tidyverse` akan merasa sangat terbantu.
+
+### `ompr` _Modelling_
+
+_Framework_ untuk menuliskan model optimisasi menggunakan `ompr` adalah sebagai berikut:
+
+```
+# mulai membangun model
+MIPModel() %>% 
+  
+  # menambah variabel
+  add_variable() %>% 
+  
+  # set objective
+  set_objective() %>% 
+  
+  # menambah constraints
+  add_constraint()
+```
+
+#### _Decision Variable_ {-} 
+
+harus didefinisikan sejak awal. Ada berapa dan tipenya seperti apa. Kita bisa menggunakan _indexed variables_ untuk menghemat notasi. Berikut adalah contohnya:
+
+```
+MIPModel() %>% 
+
+  # menambah variabel integer
+  add_variable(x, type = "integer") %>% 
+  
+  # menambah variabel kontinu
+  add_variable(y, type = "continuous") %>% 
+  
+  # menambah variabel binary integer
+  add_variable(z, type = "binary") %>% 
+  
+  # menambah variabel dengan lower bound
+  add_variable(x, lb = 10) %>% 
+  
+  # menambah variabel dengan upper dan lower bounds
+  add_variable(y, lb = 5, ub = 10) %>% 
+  
+  # menambah 10 variabel berindeks
+  add_variable(p[i], i = 1:10)
+```
+
+#### _Objective Function_ dan _Constraints_ {-} 
+
+dalam `ompr` bisa dituliskan sebagai fungsi matematika biasa. Bahkan kita bisa menuliskan _summation_ ke dalam algoritmanya. Berikut adalah contohnya:
+
+
+Misal ada `3` variabel $x_1,x_2,x_3$, dengan _objective function_ $\sum_i x_i$ dengan _constraint_ $\sum_i x_i \leq 7$.
+
+```
+MIPModel() %>% 
+  add_variable(x[i], i = 1:3) %>% 
+  set_objective(sum_expr(x[i], i = 1:3)) %>% 
+  add_constraint(sum_expr(x[i], i = 1:3) <= 7)
+```
+
+#### Contoh Penyelesaian _Mixed Integer Linear Programming_ 
+
+$$\text{maximize: } 7x_1 + 3x_2 + x_3$$
+
+$$\text{subject to: } \begin{matrix}
+6x_1 + 4x_2  + 5x_3 \leq 60 \\ 8x_1 + x_2 + 2x_3 \leq 80 \\ 9x_1 + x_2 + 7x_3 \leq 70 \\ x_3 \geq 0 \\ x_1,x_2 \in \mathbb{Z}_{\geq 0}
+\end{matrix}$$
+
+Mari kita tuliskan dalam `ompr` _framework_ berikut:
+
+```{r,message=FALSE,warning=FALSE}
+rm(list=ls())
+
+# memanggil libraries
+library(dplyr)
+library(ompr)
+library(ompr.roi)
+library(ROI.plugin.glpk)
+
+# membuat model
+milp_new = 
+  MIPModel() %>% 
+  
+  # membuat 2 variabel integer
+  add_variable(x1,type = "integer",lb = 0) %>% 
+  add_variable(x2,type = "integer",lb = 0) %>% 
+  
+  # membuat 1 variabel kontinu
+  add_variable(x3,type = "continuous",lb = 0) %>% 
+  
+  # set obj function
+  set_objective(7*x1 + 3*x2 + x3,
+                "max") %>% 
+  
+  # menuliskan semua constraints
+  add_constraint(6*x1 + 4*x2  + 5*x3 <= 60) %>% 
+  add_constraint(8*x1 + x2 + 2*x3 <= 80) %>% 
+  add_constraint(9*x1 + x2 + 7*x3 <= 70) 
+
+milp_new
+```
+
+Mari kita _solve_ modelnya:
+
+```{r,message=FALSE,warning=FALSE}
+result = solve_model(milp_new, with_ROI(solver = "glpk", verbose = TRUE))
+result
+```
+
+Berikut adalah hasilnya:
+
+```{r}
+result %>% get_solution(x1)
+result %>% get_solution(x2)
+result %>% get_solution(x3)
+```
+
+#### _Conclusion_
+
+Salah satu ciri khas `ompr` adalah penulisannya yang mirip dengan notasi matematika sehingga saat kita memiliki suatu model dengan banyak variabel, kita tidak perlu menginputnya ke dalam bentuk matriks.
+
+### Penyelesaian Masalah __Jadwal Kebutuhan Tenaga Kesehatan__
+
+Dengan menggunakan `library(ompr)`
+
+```{r,warning=FALSE,message=FALSE}
+rm(list=ls())
+
+# memanggil libraries
+library(dplyr)
+library(ompr)
+library(ompr.roi)
+library(ROI.plugin.glpk)
+
+# membuat model
+integer_prog = 
+  MIPModel() %>% 
+  # membuat variabel
+  add_variable(x[i],
+               type = "integer",
+               lb = 0,
+               i = 1:7) %>% 
+  # set fungsi objective
+  set_objective(sum_expr(x[i],i = 1:7),"min") %>% 
+  # memasukkan constraints
+  # senin
+  add_constraint(sum_expr(x[i], i = c(1,4,5,6,7)) >= 24) %>% 
+  add_constraint(sum_expr(x[i], i = c(1,4,5,6,7)) <= 29) %>% 
+  # selasa
+  add_constraint(sum_expr(x[i], i = c(1,2,5,6,7)) >= 22) %>% 
+  add_constraint(sum_expr(x[i], i = c(1,2,5,6,7)) <= 27) %>% 
+  # rabu
+  add_constraint(sum_expr(x[i], i = c(1,2,3,6,7)) >= 23) %>% 
+  add_constraint(sum_expr(x[i], i = c(1,2,3,6,7)) <= 28) %>% 
+  # kamis
+  add_constraint(sum_expr(x[i], i = c(1,2,3,4,7)) >= 11) %>% 
+  add_constraint(sum_expr(x[i], i = c(1,2,3,4,7)) <= 16) %>% 
+  # jumat
+  add_constraint(sum_expr(x[i], i = 1:5) >= 16) %>% 
+  add_constraint(sum_expr(x[i], i = 1:5) <= 21) %>% 
+  # sabtu
+  add_constraint(sum_expr(x[i], i = 2:6) >= 20) %>% 
+  add_constraint(sum_expr(x[i], i = 2:6) <= 25) %>% 
+  # minggu
+  add_constraint(sum_expr(x[i], i = 3:7) >= 12) %>% 
+  add_constraint(sum_expr(x[i], i = 3:7) <= 17)
+
+integer_prog
+hasil = integer_prog %>% solve_model(with_ROI(solver = "glpk",verbose = T))
+# solusi yang dihasilkan
+hasil$solution
+```
+
+Kita telah mendapatkan konfigurasi jadwal nakes yang optimal perharinya. 
+
+### Penyelesaian Masalah __Jadwal Tatap Muka Terbatas Sekolah__
+
+Dengan menggunakan `library(ompr)`
+
+```{r}
+rm(list=ls())
+
+library(dplyr)
+library(ompr)
+library(ompr.roi)
+library(ROI.plugin.glpk)
+
+bin_prog = 
+  MIPModel() %>%
+  # menambah variabel
+  add_variable(x[i,j],
+	       i = 1:20,
+	       j = 1:5,
+	       type = "binary",
+	       lb = 0) %>%
+  # membuat objective function
+  set_objective(sum_expr(x[i,j],
+			 i = 1:20,
+			 j = 1:5),
+		"max") %>%
+  # menambah constraints
+  # max kapasitas kelas
+  add_constraint(sum_expr(x[i,j],i = 1:20) >= 4,
+		 j = 1:5) %>%
+  add_constraint(sum_expr(x[i,j],i = 1:20) <= 8,
+		 j = 1:5) %>%
+  # frek kunjungan siswa
+  add_constraint(sum_expr(x[i,j],j = 1:5) >= 2,
+		 i = 1:20) %>%
+  add_constraint(sum_expr(x[i,j],j = 1:5) <= 3,
+		 i = 1:20) %>%
+  # jeda sehari
+  add_constraint(x[i,j] + x[i,j+1] <= 1,
+		 i = 1:20,
+		 j = 1:4)
+
+bin_prog 
+```
+
+Berikut adalah hasilnya:
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+hasil = 
+  bin_prog %>%
+  solve_model(with_ROI(solver = "glpk",
+		       verbose = T))
+
+rekap = 
+  hasil %>% 
+  get_solution(x[i,j]) %>%
+  filter(value == 1) %>%
+  rename(siswa = i,
+         hari = j)
+
+rekap %>%
+  group_by(hari) %>%
+  summarise(presensi = paste(siswa,collapse = ",")) %>%
+  ungroup() %>%
+  knitr::kable("simple",caption = "Jadwal Kunjungan Siswa")
+
+rekap %>%
+  group_by(siswa) %>%
+  tally() %>%
+  ungroup() %>%
+  rename("jumlah kehadiran" = n) %>%
+  knitr::kable("simple",caption = "Rekap Presensi Siswa")
+```
+
+### Penyelesaian Masalah __Pemilihan dan Penentuan Item Produksi__
+
+Dengan menggunakan `library(ompr)`
+
+```{r}
+rm(list=ls())
+
+library(dplyr)
+library(ompr)
+library(ompr.roi)
+library(ROI.plugin.glpk)
+
+# data yang dibutuhkan
+profit = c(5,7,3)
+sales = c(7,5,9)
+M = 99999
+
+# membuat model
+mil_prog = 
+  MIPModel() %>%
+  # menambah variabel
+  # xi
+  add_variable(x[i],
+	       i = 1:3,
+	       type = "continuous",
+	       lb = 0) %>%
+  # yi
+  add_variable(y[i],
+	       i = 1:3,
+	       type = "binary",
+	       lb = 0) %>%
+  # z
+  add_variable(z,type = "binary",lb = 0) %>%
+  # membuat objective function
+  set_objective(sum_expr(x[i] * profit[i],
+			 i = 1:3),
+		"max") %>%
+  # menambah constraints
+  # max tonase
+  add_constraint(x[i] <= sales[i],
+		 i = 1:3) %>%
+  # memilih 2 produk
+  add_constraint(x[i] - y[i] * M <= 0,
+		 i = 1:3) %>%
+  add_constraint(sum_expr(y[i],
+		 i = 1:3) <= 2) %>%
+  # memilih 1 plant
+  add_constraint(3*x[1] + 4*x[2] + 2*x[3] - M * z <= 30) %>%
+  add_constraint(4*x[1] + 6*x[2] + 2*x[3] + M * z <= 40 + M) 
+
+mil_prog
+
+hasil = 
+  mil_prog %>%
+  solve_model(with_ROI(solver = "glpk",
+		       verbose = T))
+
+xi = 
+  hasil %>% 
+  get_solution(x[i])
+
+yi = 
+  hasil %>%
+  get_solution(y[i])
+
+zi = 
+  hasil %>%
+  get_solution(z)
+
+```
+
+Berikut adalah hasilnya:
+
+```{r,echo=FALSE}
+xi
+yi
+zi
+```
+
+Dari ketiga produk baru, perusahaan bisa memilih produk __1 dan 3__ sebanyak __5.5 dan 9 ton__ di _plant_ __2__. Maka _profit_ yang bisa diraih adalah sebesar __54.5__.
+
+
+## _Spiral Optimization Algorithm_
+
+_Spiral Optimization Algorithm_ adalah salah satu metode _meta heuristic_ yang digunakan untuk mencari minimum global dari suatu sistem persamaan. 
+
+Algoritmanya mudah dipahami dan intuitif tanpa harus memiliki latar keilmuan tertentu. Proses kerjanya adalah dengan melakukan _random number generating_ pada suatu selang dan melakukan rotasi sekaligus kontraksi dengan titik paling minimum pada setiap iterasi sebagai pusatnya.
+
+Berikut adalah algoritmanya:
+
+```
+INPUT
+  m >= 2 # jumlah titik
+  theta  # sudut rotasi (0 <= theta <= 2pi)
+  r      # konstraksi
+  k_max  # iterasi maksimum
+PROCESS
+  1 generate m buah titik secara acak
+      x_i
+  2 initial condition
+      k = 0 # untuk keperluan iterasi
+  3 cari x_* yang memenuhi
+      min(f(x_*))
+  
+  4 lakukan rotasi dan konstraksi semua x_i
+      x_* sebagai pusat rotasi
+      k = k + 1
+  5 ulangi proses 3 dan 4
+  6 hentikan proses saat k = k_max
+      output x_*
+```
+
+Berdasarkan algoritma di atas, salah satu proses yang penting adalah melakukan __rotasi__ dan __konstraksi__ terhadap semua titik yang telah di-_generate_.
+
+Agar memudahkan penjeasan, saya akan memberikan ilustrasi geometri beserta operasi matriks aljabar terkait kedua hal tersebut.
+
+Berikut adalah langkah-langkah yang ditempuh:
+
+1. __Pertama__ saya akan membuat program yang bisa merotasi suatu titik berdasarkan suatu $\theta$ tertentu.
+1. __Kedua__ saya akan memodifikasi program tersebut untuk melakukan rotasi sekaligus konstraksi dengan rasio $r$ tertentu.
+1. __Ketiga__ saya akan memodifikasi program tersebut untuk melakukan rotasi sekaligus konstraksi dengan __titik pusat rotasi tertentu__.
+
+### Ilustrasi Geometris
+
+#### Operasi Matriks Rotasi
+
+Misalkan saya memiliki titik $x \in \mathbb{R}^2$. Untuk melakukan rotasi sebesar $\theta$, saya bisa menggunakan suatu matriks $A_{2 \times 2}$ berisi fungsi-fungsi trigonometri sebagai berikut:
+
+$$\begin{bmatrix} x_1 (k+1) \\ x_2 (k+1) \end{bmatrix} = \begin{bmatrix} \cos{\theta} & -\sin{\theta} \\ \sin{\theta} & \cos{\theta} \end{bmatrix} \begin{bmatrix} x_1 (k) \\ x_2 (k) \end{bmatrix}$$
+
+Berdasarkan operasi matriks di atas, saya membuat __program__ di __R__ dengan beberapa modifikasi. Sebagai contoh, saya akan membuat program yang bertujuan untuk melakukan rotasi suatu titik $x \in \mathbb{R}$ sebanyak $n$ kali:
+
+
+```{r,include = FALSE}
+rm(list=ls())
+
+# function untuk random titik
+rand_titik = function(a,b){
+  runif(2,a,b)
+}
+```
+
+```{r}
+# mendefinisikan program
+rotasi_kan = function(x0,rot){
+  # menghitung theta
+  theta = 2*pi/rot
+  # definisi matriks rotasi
+  A = matrix(c(cos(theta),-sin(theta),
+             sin(theta),cos(theta)),
+           ncol = 2,byrow = T)
+  
+  # membuat template
+  temp = vector("list")
+  temp[[1]] = x0
+  # proses rotasi
+  for(i in 2:rot){
+    xk = A %*% x0
+    temp[[i]] = xk
+    x0 = xk
+  }
+  
+  # membuat template data frame
+  final = data.frame(x = rep(NA,rot),
+                     y = rep(NA,rot))
+  
+  # gabung data dari list
+  for(i in 1:rot){
+    tempura = temp[[i]]
+    final$x[i] = tempura[1]
+    final$y[i] = tempura[2]
+  }
+  # membuat plot
+  plot = 
+    ggplot() +
+    geom_point(aes(x,y),data = final) +
+    geom_point(aes(x[1],y[1]),
+               data = final,
+               color = "red") +
+    coord_equal() +
+    labs(title = "titik merah adalah titik initial") 
+  
+  # enrich dengan garis panah
+  panah = data.frame(
+    x_start = final$x[1:(rot-1)],
+    x_end = final$x[2:rot],
+    y_start = final$y[1:(rot-1)],
+    y_end = final$y[2:rot]
+  )
+  # menambahkan garis panah ke plot
+  plot = 
+    plot + 
+    geom_segment(aes(x = x_start,
+                 xend = x_end,
+                 y = y_start,
+                 yend = y_end),
+                 data = panah,
+                 arrow = arrow(length = unit(.3,"cm"))
+                 )
+  
+  # menyiapkan output
+  list("Grafik rotasi" = plot,
+       "Titik-titik rotasi" = final)
+  }
+```
+
+
+
+Berikut adalah uji coba dengan titik sembarang berikut ini:
+
+```{r,fig.align="center",fig.retina = 10}
+# uji coba
+rot = 12 # berapa banyak rotasi
+x0 = rand_titik(0,10) # generate random titik
+rotasi_kan(x0,rot)
+```
+
+
+
+Uji coba kembali dengan titik sembarang lainnya berikut ini:
+
+```{r,fig.align="center",fig.retina = 10,fig.caption = "Uji Coba Rotasi II"}
+# uji coba
+rot = 7 # berapa banyak rotasi
+x0 = rand_titik(0,10) # generate random titik
+rotasi_kan(x0,rot)
+```
+
+
+
+#### Operasi Matriks Rotasi dan Kontraksi
+
+Jika pada sebelumnya saya __hanya melakukan rotasi__, kali ini saya akan memodifikasi operasi matriks agar melakukan rotasi dan konstraksi secara bersamaan. Untuk melakukan hal tersebut, saya akan definisikan $r,0<r<1$ dan melakukan operasi matriks sebagai berikut:
+
+$$\begin{bmatrix} x_1 (k+1) \\ x_2 (k+1) \end{bmatrix} = \begin{bmatrix} r \\ r \end{bmatrix} \begin{bmatrix} \cos{\theta} & -\sin{\theta} \\ \sin{\theta} & \cos{\theta} \end{bmatrix} \begin{bmatrix} x_1 (k) \\ x_2 (k) \end{bmatrix}$$
+
+Oleh karena itu saya akan modifikasi program __R__ sebelumnya menjadi sebagai berikut:
+
+```{r}
+# mendefinisikan program
+rotasi_konstraksi_kan = function(x0,rot,r){
+  # menghitung theta
+  theta = 2*pi/rot
+  # definisi matriks rotasi
+  A = matrix(c(cos(theta),-sin(theta),
+             sin(theta),cos(theta)),
+           ncol = 2,byrow = T)
+  
+  # membuat template
+  temp = vector("list")
+  temp[[1]] = x0
+  # proses rotasi dan konstraksi
+  for(i in 2:rot){
+    xk = A %*% x0
+    xk = r * xk
+    temp[[i]] = xk
+    x0 = xk
+  }
+  
+  # membuat template data frame
+  final = data.frame(x = rep(NA,rot),
+                     y = rep(NA,rot))
+  
+  # gabung data dari list
+  for(i in 1:rot){
+    tempura = temp[[i]]
+    final$x[i] = tempura[1]
+    final$y[i] = tempura[2]
+  }
+  # membuat plot
+  plot = 
+    ggplot() +
+    geom_point(aes(x,y),data = final) +
+    geom_point(aes(x[1],y[1]),
+               data = final,
+               color = "red") +
+    coord_equal() +
+    labs(title = "titik merah adalah titik initial") 
+  
+  # enrich dengan garis panah
+  panah = data.frame(
+    x_start = final$x[1:(rot-1)],
+    x_end = final$x[2:rot],
+    y_start = final$y[1:(rot-1)],
+    y_end = final$y[2:rot]
+  )
+  # menambahkan garis panah ke plot
+  plot = 
+    plot + 
+    geom_segment(aes(x = x_start,
+                 xend = x_end,
+                 y = y_start,
+                 yend = y_end),
+                 data = panah,
+                 arrow = arrow(length = unit(.3,"cm"))
+                 )
+  
+  # menyiapkan output
+  list("Grafik rotasi" = plot,
+       "Titik-titik rotasi" = final)
+  }
+```
+
+Berikutnya saya akan tunjukkan ilustrasi dari program ini.
+
+
+
+Saya akan uji coba untuk sembarang titik berikut ini:
+
+```{r,fig.align="center",fig.retina = 10,fig.caption = "Uji Coba Rotasi-Konstraksi I"}
+# uji coba
+rot = 40 # berapa banyak rotasi
+x0 = rand_titik(0,4) # generate random titik
+r = .9
+rotasi_konstraksi_kan(x0,rot,r)
+```
+
+
+
+Saya akan uji coba kembali untuk sembarang titik lainnya berikut ini:
+
+```{r,fig.align="center",fig.retina = 10}
+# uji coba
+rot = 6 # berapa banyak rotasi
+x0 = rand_titik(0,4) # generate random titik
+r = .7
+rotasi_konstraksi_kan(x0,rot,r)
+```
+
+__Catatan penting:__
+
+Terlihat bahwa semakin banyak rotasi dan konstraksi yang dilakukan akan membuat titik _initial_ __menuju pusat__ $(0,0)$.
+
+#### Operasi Matriks Rotasi dan Kontraksi dengan Titik $x^*$ Sebagai Pusatnya
+
+Salah satu prinsip utama dari _spiral optimization algorithm_ adalah menjadikan titik $x^*$ sebagai pusat rotasi di setiap iterasinya. Operasi matriksnya adalah sebagai berikut:
+
+$$\begin{bmatrix} x_1 (k+1) \\ x_2 (k+1) \end{bmatrix} = \begin{bmatrix} x_1^* \\ x_2^* \end{bmatrix} + \begin{bmatrix} r \\ r \end{bmatrix} \begin{bmatrix} \cos{\theta} & -\sin{\theta} \\ \sin{\theta} & \cos{\theta} \end{bmatrix} ( \begin{bmatrix} x_1 (k) \\ x_2 (k) \end{bmatrix} - \begin{bmatrix} x_1^* \\ x_2^* \end{bmatrix} )$$
+
+
+Oleh karena itu kita akan modifikasi program bagian sebelumnya menjadi seperti ini:
+
+```{r}
+# mendefinisikan program
+rotasi_konstraksi_pusat_kan = function(x0,rot,r,x_bin){
+  # pusat rotasi
+  pusat = x_bin
+  # menghitung theta
+  theta = 2*pi/rot
+  # definisi matriks rotasi
+  A = matrix(c(cos(theta),-sin(theta),
+             sin(theta),cos(theta)),
+           ncol = 2,byrow = T)
+  
+  # membuat template
+  temp = vector("list")
+  temp[[1]] = x0
+  # proses rotasi dan konstraksi
+  for(i in 2:rot){
+    xk = A %*% (x0-pusat) # diputar dengan x_bin sebagai pusat
+    xk = pusat + (r * xk)
+    temp[[i]] = xk
+    x0 = xk
+  }
+  
+  # membuat template data frame
+  final = data.frame(x = rep(NA,rot),
+                     y = rep(NA,rot))
+  
+  # gabung data dari list
+  for(i in 1:rot){
+    tempura = temp[[i]]
+    final$x[i] = tempura[1]
+    final$y[i] = tempura[2]
+  }
+  # membuat plot
+  plot = 
+    ggplot() +
+    geom_point(aes(x,y),data = final) +
+    geom_point(aes(x[1],y[1]),
+               data = final,
+               color = "red") +
+    geom_point(aes(x = pusat[1],
+		   y = pusat[2]),
+	       color = "blue") +
+    labs(title = "titik merah adalah titik initial\ntitik biru adalah pusat rotasi") 
+  
+  # enrich dengan garis panah
+  panah = data.frame(
+    x_start = final$x[1:(rot-1)],
+    x_end = final$x[2:rot],
+    y_start = final$y[1:(rot-1)],
+    y_end = final$y[2:rot]
+  )
+  # menambahkan garis panah ke plot
+  plot = 
+    plot + 
+    geom_segment(aes(x = x_start,
+                 xend = x_end,
+                 y = y_start,
+                 yend = y_end),
+                 data = panah,
+                 arrow = arrow(length = unit(.3,"cm"))
+                 )
+  
+  # menyiapkan output
+  list("Grafik rotasi" = plot,
+       "Titik-titik rotasi" = final)
+  }
+```
+
+Berikutnya saya akan tunjukkan ilustrasi dari program ini.
+
+Saya akan coba dengan sembarang titik berikut:
+
+```{r,fig.align="center",fig.retina = 10,fig.caption = "Uji Coba Rotasi-Konstraksi Terhadap x* I"}
+# uji coba
+rot = 10 # berapa banyak rotasi
+x0 = rand_titik(0,4) # generate random titik
+x_bintang = c(0,1) # contoh pusat rotasi
+r = .6
+rotasi_konstraksi_pusat_kan(x0,rot,r,x_bintang)
+```
+
+
+
+Saya akan coba kembali dengan sembarang titik lainnya:
+
+```{r,fig.align="center",fig.retina = 10,fig.caption = "Uji Coba Rotasi-Konstraksi Terhadap x* II"}
+# uji coba
+rot = 45 # berapa banyak rotasi
+x0 = rand_titik(0,10) # generate random titik
+x_bintang = c(2,3) # contoh pusat rotasi
+r = .87
+rotasi_konstraksi_pusat_kan(x0,rot,r,x_bintang)
+```
+
+
+
+### Program _Spiral Optimization Algorithm_
+
+Berbekal program yang telah dituliskan di bagian sebelumnya, kita akan sempurnakan program untuk melakukan _spiral optimization_ sebagai berikut:
+
+```{r}
+soa_mrf = function(N,	  # banyak titik
+		   x1_d,  # batas bawah x1
+		   x1_u,  # batas atas x1
+		   x2_d,  # batas bawah x2
+		   x2_u,  # batas atas x2
+		   rot,	  # berapa banyak rotasi
+		   k_max, # iterasi maks
+		   r){	  # berapa rate konstraksi
+		   
+# N pasang titik random di selang [a,b] di R2
+x1 = runif(N,x1_d,x1_u)
+x2 = runif(N,x2_d,x2_u)
+# hitung theta
+theta = 2*pi / rot
+# definisi matriks rotasi
+A = matrix(c(cos(theta),-sin(theta),
+             sin(theta),cos(theta)),
+           ncol = 2,byrow = T)
+# bikin data frame
+temp = data.frame(x1,x2) %>% mutate(f = f(x1,x2))
+# proses iterasi
+for(i in 1:k_max){
+  # mencari titik x* dengan min(f)
+  f_min = 
+	temp %>% 
+	filter(f == min(f))
+  pusat = c(f_min$x1,f_min$x2)
+  for(j in 1:N){
+	# kita akan ambil titiknya satu persatu
+	x0 = c(temp$x1[j],temp$x2[j])
+	
+	# proses rotasi dan konstraksi terhadap pusat x*
+	xk = A %*% (x0-pusat) # diputar dengan x_bin sebagai pusat
+        xk = pusat + (r * xk)
+	
+	# proses mengembalikan nilai ke temp
+	temp$x1[j] = xk[1]
+	temp$x2[j] = xk[2]
+	}
+    
+    # hitung kembali nilai f(x1,x2)
+    temp = temp %>% mutate(f = f(x1,x2))
+    }
+# proses output hasil
+output = temp %>% filter(f == min(f))
+return(output)
+}
+```
+
+
+#### Contoh Penggunaan Program
+
+Kita akan coba performa program tersebut untuk menyelesaikan fungsi berikut:
+
+$$f(x_1,x_2) = \frac{x_1^4 - 16 x_1^2 + 5 x_1}{2} + \frac{x_2^4 - 16 x_2^2 + 5 x_2}{2}$$
+
+$$-4 \leq x_1,x_2 \leq 4$$
+
+Dengan $r = 0.8, N = 50, rot = 20, k_{max} = 60$.
+
+```{r}
+# definisi
+N = 50
+a = -4 # x1 dan x2 punya batas bawah yang sama
+b = 4  # x1 dan x2 punya batas atas yang sama
+k_max = 70
+r = .75
+rot = 30
+f = function(x1,x2){
+	((x1^4 - 16 * x1^2 + 5 * x1)/2) + ((x2^4 - 16 * x2^2 + 5* x2)/2)
+	}
+# solving
+soa_mrf(N,a,b,a,b,rot,k_max,r)
+```
+
+__Catatan__
+
+Pada algoritma ini, penentuan $\theta, r, x$ menjadi penentu hasil perhitungan.
+
+### Matriks Rotasi untuk n-Dimensi
+
+SOA relatif mudah untuk dituliskan dalam bentuk algoritma bahasa pemrograman manapun. Tapi ada satu hal yang bisa menjadi batu ganjalan dalam menuliskan algoritmanya. Apa itu? Yaitu pendefinisian matriks rotasi untuk masalah dengan n-dimensi.
+
+Bentuk umum dari matriks rotasi adalah sebagai berikut:
+
+$$R^{(n)} (\theta_{1,2},\theta_{1,3},..,\theta_{n,n-1}) = \prod_{i=1}^{n-1} \left ( \prod_{j=1}^i R^{(n)}_{n-i,n+1-j} (\theta_{n-i,n+1-j}) \right )$$
+
+Perhatikan bahwa perkalian matriks rotasi yang dilakukan adalah _cross product_.
+
+Alasan: Rotasi tidak mengubah _norm_ suatu vektor.
+
+### _Function_ Matriks Rotasi
+
+Berikut adalah _function_ yang digunakan untuk membuat rotation matrix:
+
+```{r}
+buat_rot_mat = function(theta,n){
+  # buat template sebuah matriks identitas
+  temp_mat = matrix(0,ncol = n,nrow = n)
+  diag(temp_mat) = 1
+  
+  # buat matriks identitas terlebih dahulu
+  mat_rot = temp_mat
+
+  for(i in 1:(n-1)){
+    for(j in 1:i){
+      temp = temp_mat
+      idx = n-i
+      idy = n+1-j
+      # print(paste0("Matriks rotasi untuk ",idx," - ",idy,": DONE"))
+      temp[idx,idx] = cos(theta)
+      temp[idx,idy] = -sin(theta)
+      temp[idy,idx] = sin(theta)
+      temp[idy,idy] = cos(theta)
+      # assign(paste0("M",idx,idy),temp)
+      mat_rot = mat_rot %*% temp
+      mat_rot = mat_rot 
+    }
+  }
+  
+  return(mat_rot)
+}
+```
+
+### _MILP_ dengan _Dynamic Spiral Optimization Algorithm_
+
+Salah satu trik yang bisa dilakukan agar SOA bisa menyelesaikan _mixed integer programming_ adalah dengan mengubah _constrained optimization problem_ menjadi _unconstrained optimization problem_ kemudian memanfaatkan _penalty constant_.
+
+Misal suatu permasalahan MILP atau MINLP bisa ditulis secara umum sebagai berikut:
+
+$$\min_{x \in \mathbb{R}^n} f(x)$$
+
+$$\text{subject to: } g_i(x) = 0, i = 1,2,..,M$$
+
+$$\text{and } h_j(x) \leq 0,i = 1,2,..,N$$
+
+$$x = (x_1,x_2,...,x_n)^T \in \mathbb{N}$$
+
+Bentuk di atas bisa kita ubah menjadi:
+
+$$F(x,\alpha,\beta) = f(x) + \sum_{i=1}^M \alpha_i g_i^2(x) + \sum_{j = 1}^N \beta_j (\max{(h_i(x),0)})^2$$
+
+dimana $\alpha,\beta$ merupakan _penalty constant_ yang bisa dibuat sangat besar.
+
+### Penyelesaian _MILP_ 
+
+Cari $x_1,x_2,x_3$ yang memaksimalkan $7x_1 + 3x_2 + x_3$, dengan _constraints_ sebagai berikut:
+
+$$6x_1 + 4x_2 + 5x_3 \leq 60 \\ 8x_1 + x_2 + 2x_3 \leq 80 \\ 9x_1 + x_2 + 7x_3 \leq 70 \\ x_3 \geq 0 \\ x_1,x_2 \in \mathbb{Z}^+$$
+
+Masalah di atas termasuk ke dalam _mixed integer linear programming_ karena ada dua variabel _integer_ dan satu kontinu.
+
+Berikut adalah modifikasi menjadi _unconstrained optimization problem_:
+
+```{r}
+rm(list=ls())
+
+f1 = function(x1,x2,x3){
+  7*x1 + 3*x2 + x3
+}
+
+h1 = function(x1,x2,x3){6*x1 + 4*x2 + 5*x3 - 60}
+h2 = function(x1,x2,x3){8*x1 + x2 + 2*x3 - 80}
+h3 = function(x1,x2,x3){9*x1 + x2 + 7*x3 - 70}
+
+beta = 10^15
+
+f = function(x1,x2,x3){
+  el_1 = - f1(x1,x2,x3) 
+  el_2 = beta * (max(h1(x1,x2,x3),0))^2
+  el_3 = beta * (max(h2(x1,x2,x3),0))^2
+  el_4 = beta * (max(h3(x1,x2,x3),0))^2
+  return(el_1 + el_2 + el_3 + el_4)
+}
+
+```
+
+Berikut adalah _function_ yang digunakan:
+
+```{r,message=FALSE,warning=FALSE}
+soa_mrf_ip_3_var = function(
+  N,	    # banyak titik
+  x1_d,  # batas bawah x1  
+  x1_u,  # batas atas x1
+  x2_d,  # batas bawah x2
+  x2_u,  # batas atas x2
+  x3_d,  # batas bawah x3
+  x3_u,  # batas atas x3
+  rot,	 # berapa banyak rotasi
+  k_max, # iterasi maks
+  r){	   # berapa rate konstraksi
+  
+  # N pasang titik random di selang [a,b] di R3
+  x1 = runif(N,x1_d,x1_u)
+  x2 = runif(N,x2_d,x2_u)
+  x3 = runif(N,x3_d,x3_u)
+  
+  # hitung theta
+  theta = 2*pi / rot
+  # definisi matriks rotasi
+  R12 = matrix(c(cos(theta),-sin(theta),0,
+                 sin(theta),cos(theta),0,
+                 0,0,1),
+               ncol = 3,byrow = T)
+  R13 = matrix(c(cos(theta),0,-sin(theta),
+                 0,1,0,
+                 sin(theta),0,cos(theta)),
+               ncol = 3,byrow = T)
+  R23 = matrix(c(1,0,0,
+                 0,cos(theta),-sin(theta),
+                 0,sin(theta),cos(theta)),
+               ncol = 3,byrow = T)
+  
+  
+  # bikin data frame
+  temp = 
+    data.frame(x1,x2,x3) %>% 
+    rowwise() %>% 
+    mutate(f = f(round(x1,0),
+                 round(x2,0),
+                 x3)) %>% 
+    ungroup()
+  
+  # proses iterasi
+  for(i in 1:k_max){
+    # mencari titik x* dengan max(f)
+    f_min = 
+      temp %>% 
+      # memastikan titik ada di D
+      filter(x1 >= x1_d & x1 <= x1_u) %>% 
+      filter(x2 >= x2_d & x2 <= x2_u) %>% 
+      filter(x3 >= x3_d & x3 <= x3_u) %>% 
+      # mencari titik max fungsi
+      filter(f == min(f))
+    # definisi pusat rotasi
+    pusat = c(f_min$x1[1],f_min$x2[1],f_min$x3[1])
+    for(j in 1:N){
+      # kita akan ambil titiknya satu persatu
+      x0 = c(temp$x1[j],temp$x2[j],temp$x3[j])
+      # proses rotasi dan konstraksi terhadap pusat x*
+      # diputar dengan x_bin sebagai pusat
+      xk = (R23 %*% (R13 %*% R12)) %*% (x0-pusat)
+      xk = pusat + (r * xk)
+      # proses mengembalikan nilai ke temp
+      temp$x1[j] = xk[1]
+      temp$x2[j] = xk[2]
+      temp$x3[j] = xk[3]
+    }
+    # hitung kembali nilai f(x1,x2,x3)
+    temp = 
+      temp %>% 
+      rowwise() %>% 
+      mutate(f = f(round(x1,0),round(x2,0),x3)) %>% 
+      ungroup()
+  }
+  # proses output hasil
+  output = 
+    temp[N,] %>% 
+    filter(f == max(f)) %>% 
+    mutate(x1 = round(x1,0),x2 = round(x2,0),x3 = x3,
+           f = f1(x1,x2,x3))
+  return(output)
+}
+```
+
+Berikut solusinya:
+
+```{r,message=FALSE,warning=FALSE}
+soa_mrf_ip_3_var(
+  20,	    # banyak titik
+  0,  # batas bawah x1  
+  20,  # batas atas x1
+  0,  # batas bawah x2
+  20,  # batas atas x2
+  0,  # batas bawah x3
+  20,  # batas atas x3
+  10,	  # berapa banyak rotasi
+  100, # iterasi maks
+  .9
+)
+```
 
 
 
