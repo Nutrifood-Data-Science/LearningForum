@@ -2,24 +2,29 @@ project:
   type: book
 
 book:
-  title: "OptimBook"
-  author: "Norah Jones"
-  date: "8/21/2025"
+  title: "Pengantar Optimisasi dalam Industri"
+  author: "Ikang Fadhli"
+  date: "8/22/2025"
+  downloads: [pdf]
+  sharing: [twitter, facebook]
   chapters:
     - index.qmd
-    - intro.qmd
-    - summary.qmd
-    - references.qmd
+    - pre_1.qmd
+    - pre_2.qmd
+    - pre_3.qmd
+    - pre_4.qmd
+    - pre_5.qmd
+    - pre_6.qmd
+    - pre_7.qmd
+    - pre_8.qmd
 
-bibliography: references.bib
+comments:
+  hypothesis: true
+  
+highlight-style: pygments
 
 format:
   html:
-    theme:
-      - cosmo
-      - brand
-  pdf:
-    documentclass: scrreprt
-
-
-
+    theme: united
+    code-copy: true
+    cover-image: optim.png

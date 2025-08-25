@@ -1,0 +1,102 @@
+# OPTIMISASI
+
+## Bahasan dalam Optimisasi
+
+Bahasan dalam optimisasi dapat dikategorikan menjadi:
+
+-   Pemodelan masalah nyata menjadi masalah optimisasi.
+-   Pembahasan karakteristik dari masalah optimisasi dan keberadaan solusi dari masalah optimisasi tersebut.
+-   Pengembangan dan penggunaan algoritma serta analisis numerik untuk mencari solusi dari masalah tersebut.
+
+## Masalah Optimisasi
+
+**Masalah optimisasi** adalah masalah matematika yang mewakili masalah nyata (*real*). Dari ekspresi matematika tersebut, ada beberapa hal yang perlu diketahui[^4], yakni:
+
+[^4]: Pengantar Riset Operasi dan Optimisasi, KampusX: PO101
+
+1.  **Variabel** adalah suatu simbol yang memiliki banyak nilai dan nilainya ingin kita ketahui. Setiap nilai yang mungkin dari suatu variabel muncul akibat suatu kondisi tertentu di sistem.
+2.  **Parameter** di suatu model matematika adalah suatu konstanta yang menggambarkan suatu karakteristik dari sistem yang sedang diteliti. Parameter bersifat *fixed* atau *given*.
+3.  ***Constraints*** (atau kendala) adalah kondisi atau batasan yang harus dipenuhi. Kendala-kendala ini dapat dituliskan menjadi suatu persamaan atau pertaksamaan. Suatu masalah optimisasi dapat memiliki hanya satu kendala atau banyak kendala.
+4.  ***Objective function*** adalah satu fungsi (pemetaan dari variabel-varibel keputusan ke suatu nilai di daerah *feasible*) yang nilainya akan kita minimumkan atau kita maksimumkan.
+
+Ekspresi matematika dari model optimisasi adalah sebagai berikut:
+
+> Cari $x$ yang meminimumkan $f(x)$ dengan kendala $g(x) = 0, h(x) \leq 0$ dan $x \in D$.
+
+Dari ekspresi tersebut, kita bisa membagi-bagi masalah optimisasi tergantung dari:
+
+1.  Tipe variabel yang terlibat.
+2.  Jenis fungsi yang ada (baik *objective function* ataupun *constraints*).
+
+## Jenis-Jenis Masalah Optimisasi
+
+Masalah optimisasi bisa dibagi dua menjadi dua kategori berdasarkan tipe *variables* yang terlibat[^5], yakni:
+
+[^5]: Optimization problem. https://en.wikipedia.org/wiki/Optimization_problem
+
+![](resource_1.png){fig-align="center" width="650"}
+
+1.  *Discrete Optimization*: merupakan masalah optimisasi di mana variabel yang terkait merupakan variabel diskrit, seperti *binary* atau *integer* (bilangan bulat). Namun pada masalah optimisasi berbentuk *mixed integer linear programming*, dimungkinkan suatu masalah optimisasi memiliki berbagai jeni variabel yang terlibat (integer dan kontinu sekaligus).
+2.  *Continuous Optimization*: merupakan masalah optimisasi di mana variabel yang terkait merupakan variabel kontinu (bilangan *real*). Pada masalah optimisasi jenis ini, fungsi-fungsi yang terlibat bisa diferensiabel atau tidak. Konsekuensinya adalah pada metode penyelesaiannya.
+
+Selain itu, kita juga bisa membagi masalah optimisasi berdasarkan **kepastian nilai** ***variable*** **dan parameter** yang dihadapi sebagai berikut:
+
+![](resource_2.png){fig-align="center" width="650"}
+
+1.  *Optimization under uncertainty*[^6]; Pada beberapa kasus di dunia *real*, data dari masalah tidak dapat diketahui secara akurat karena berbagai alasan. Hal ini mungkin terjadi akibat:
+    -   Kesalahan dalam pengukuran, atau
+    -   Data melibatkan sesuatu di masa depan yang belum terjadi atau tidak pasti. Contoh: *demand* produk, harga barang, dan sebagainya.
+2.  *Deterministic optimization*;
+    -   Model deterministik adalah model matematika di mana nilai dari semua parameter dan variabel yang terkandung di dalam model merupakan satu nilai pasti[^7].
+    -   Pendekatan deterministik memanfaatkan sifat analitik masalah untuk menghasilkan barisan titik yang konvergen ke solusi optimal.
+    -   Semua algoritma perhitungan mengikuti pendekatan matematis yang ketat.
+
+
+## Optimisasi Berdasarkan Seberapa Banyak _Objectives_-nya
+
+Suatu permasalahan optimisasi bisa dikategorikan menjadi dua jenis:
+
+1. _Single objective optimization_, adalah proses menemukan solusi terbaik untuk suatu masalah yang hanya memiliki satu tujuan atau kriteria yang ingin dimaksimalkan atau diminimalkan. Ini adalah bentuk optimisasi yang paling fundamental dan banyak digunakan dalam berbagai bidang seperti teknik, ekonomi, ilmu data, dan _machine learning_.
+1. _Multi objective optimization_, adalah proses mencari solusi optimal ketika terdapat beberapa tujuan (_objectives_) yang saling bertentangan (_conflicting_) yang harus dioptimalkan secara simultan. Tidak seperti _single objective_ yang memiliki satu solusi optimal, __MOO menghasilkan himpunan solusi optimal yang mewakili *trade-off* antara berbagai tujuan__.
+
+### Representasi Matematis _Single Objective_
+
+Secara formal, _single objective optimization_ dapat dinyatakan sebagai:
+
+Minimisasi: [ $\min_{x \in S} f(x)$ ] atau Maksimisasi: [ $\max_{x \in S} f(x)$ ].
+
+Di mana:
+
+1. $f(x)$ adalah fungsi objektif (_objective function_) yang ingin kita minimalkan atau maksimalkan.
+1. $x$ adalah vektor variabel keputusan (_decision variables_).
+1. $S$ adalah ruang pencarian atau himpunan solusi layak (_feasible region_) yang memenuhi semua kendala.
+
+
+### Representasi Matematis _Multi Objective_
+
+Masalah MOO dapat dinyatakan sebagai:
+
+$$\min_{x \in S} \mathbf{F}(x) = [f_1(x), f_2(x), ..., f_k(x)]^T$$
+
+Di mana:
+
+1. $\mathbf{F}(x)$ adalah vektor fungsi objektif (bukan skalar).
+1. $f_i(x)$ adalah fungsi objektif ke-i ($i = 1, 2, ..., k$).
+1. $x$ adalah vektor variabel keputusan.
+1. $S$ adalah ruang solusi layak yang memenuhi semua kendala.
+
+### Menyelesaikan MOO
+
+Ada beberapa cara menyelesaikan MOO:
+
+1. Metode ___Scalarization___ (__A Priori__): Mengkonversi _multi-objective_ menjadi _single objective_.
+        - __Weighted Sum Method__: ( $\min \sum w_i f_i(x)$ ) yakni dengan memberikan bobot untuk masing-masing _objective functions_ sesuai dengan kebutuhan.
+        - __ε-Constraint Method__: _Optimize_ satu _objective function_, dan menjadikan _objective function_ yang lain menjadi _constraint_ dengan batas suatu nilai __ε__.
+1. Metode __*Evolutionary*__ (__A Posteriori__): Menghasilkan seluruh _Pareto front_.
+        - __NSGA-II__ (_Non-dominated Sorting Genetic Algorithm_).
+        - __MOEA/D__ (_Multi-Objective Evolutionary Algorithm based on Decomposition_).
+        - __SPEA2__ (_Strength Pareto Evolutionary Algorithm_).
+
+[^6]: https://neos-guide.org/content/optimization-under-uncertainty
+
+[^7]: Pengantar Riset Operasi dan Optimisasi, KampusX: PO101

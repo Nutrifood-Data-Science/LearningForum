@@ -1,0 +1,34 @@
+# ALGORITMA PENYELESAIAN OPTIMISASI
+
+Pada bagian ini kita akan membahas macam-macam algoritma yang digunakan untuk menyelesaikan masalah optimisasi.
+
+![](resource_3.png){fig-align="center" width="650"}
+
+Secara garis besar ada dua kelompok besar algoritma optimisasi, yakni:
+
+1. _Exact method_,
+1. _Approximate method_.
+
+Perbedaan keduanya adalah pada __konsep atau pendekatan apa yang digunakan__ untuk menyelesaikan masalah optimisasi. Kita akan bahas satu-persatu pada bagian selanjutnya.
+
+Dalam beberapa kasus, kita bisa mendapatkan _exact method_ bisa untuk menyelesaikan masalah optimisasi dengan efisien. Namun di kasus lain yang lebih kompleks tidak demikian. Kelemahan utama metode _exact_ adalah pada waktu komputasinya yang relatif lebih lama.
+
+## _Exact Method_
+
+Ciri khas dari _exact method_ adalah metode ini menjamin penyelesaian yang optimal karena menggunakan pendekatan analitis [@franz]. Salah satu contoh metode eksak adalah _Simplex Method_.
+
+## _Approximate Method_
+
+Ciri khas dari _approximate method_ adalah metode ini tidak menjamin penyelesaian yang optimal karena bersifat _aproksimasi_ atau pendekatan atau hampiran. Oleh karena itu kita perlu melakukan definisi di awal __seberapa dekat__ nilai __hampiran__ tersebut bisa kita terima.
+
+Metode ini bisa dibagi menjadi dua berdasarkan keterkaitannya dengan suatu masalah, yakni:
+
+1. _Heuristic_, metode ini bersifat _problem dependent_. Artinya metode tersebut hanya bisa dipakai untuk jenis permasalahan tertentu.
+    - Contoh: metode _nearest neighborhood_ hanya bisa dipakai untuk menyelesaikan masalah dalam lingkup _travelling salesperson problem_ (__TSP__).
+1. _Meta heuristic_, metode ini bersifat _problem independent_. Artinya metode tersebut tidak tergantung dari jenis permasalahan tertentu. Contoh: 
+    - _Genetic algorithm_.
+    - _Simulated annealing_.
+    - _Spiral optimization_ untuk menyelesaikan masalah _mixed integer non linear programming_.
+    - _Artifical bee colony algorithm_.
+    
+Namun demikian kedua metode ini bisa saling melengkapi dalam prakteknya.

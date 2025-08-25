@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: 9ae012f7-3bc2-4d67-bbc5-311669e44f82
+      url: https://ikanx101.quarto.pub/pengantar-optim

@@ -1,0 +1,260 @@
+# PERMASALAHAN YANG BISA DIPANDANG SEBAGAI OPTIMISASI
+
+Ternyata beberapa masalah umum seperti _machine learning_ (baik _supervised_ atau _unsupervised_) bisa dipandang sebagai masalah optimisasi.
+
+## Regresi Linear
+
+Misalkan kita memiliki data sebagai berikut:
+
+```{r}
+rm(list=ls())
+
+library(dplyr)
+library(tidyr)
+library(gt)
+library(gtExtras)
+
+df = mtcars |> select(qsec,disp,mpg,wt,hp)
+
+df |> 
+  gt() %>%
+  gt_theme_538() |> 
+  tab_header(title = "Data Contoh untuk Regresi",
+             subtitle = "Diambil dari Data mcars")
+```
+
+Lalu kita mau membuat model regresi:
+
+$$qsec \simeq y_1 disp + y_2 mpg + y_3 wt + y_4 hp + y_5$$
+
+### `base` di __R__
+
+Jika ingin diselesaikan dengan `base` di __R__, kita bisa menggunakan skrip berikut ini:
+
+```{r}
+model = lm(qsec ~ .,data = df)
+model
+summary(model)
+```
+
+Kita bisa dapatkan $R^2 \simeq 0.6$.
+
+### _Custom Function Spiral Dynamic Optimization Algorithm_
+
+Perhatikan bahwa saat kita membuat model regresi:
+
+$$qsec \simeq y_1 disp + y_2 mpg + y_3 wt + y_4 hp + y_5$$
+
+Definisikan:
+
+- $\hat{qsec}$ yang merupakan hasil prediksi dari nilai _actual_ $qsec$.
+- $\epsilon$ merupakan _error_ (selisih) antara _actual_ dan _predict_.
+
+Kita __sangat berharap__ bahwa: $\epsilon = |\hat{qsec} - qsec|$ __sangat kecil atau minimum__.
+
+Maka kita bisa pandang pencarian bobot regresi ($y_1,y_2,y_3,y_4,y_5$) sebagai masalah optimisasi (minimasi).
+
+Kita bisa tuliskan decision _variables_ sebagai berikut:
+
+1. $y_i,i = 1,..,5$ yang merupakan variabel bobot regresi.
+1. $t_j,j = 1,..,32$ sebagai _error_ yang dihasilkan antara _actual_ dan _predict_ di setiap baris data $j$.
+
+Maka model optimisasinya:
+
+$$\min{\sum_i^{32} t_j}$$
+
+Dengan _constraints_:
+
+$$$$
+
+```{r}
+library(parallel)
+library(ompr)
+library(ompr.roi)
+library(ROI.plugin.glpk)
+
+target = df$qsec
+x1 = df$disp
+x2 = df$mpg
+x3 = df$wt
+x4 = df$hp
+x5 = 1
+
+
+# Alternatif yang lebih compact
+model_compact <- MIPModel() %>%
+  add_variable(y[i],i = 1:5, type = "continuous") %>%
+  add_variable(t[j], j = 1:32, type = "continuous", lb = 0) %>%  # absolute error
+  
+  # Constraints: -t_i ≤ (y_i - (a*x1_i + b*x2_i + x3_i)) ≤ t_i
+  add_constraint(
+    y[1]*x1[j]+y[2]*x2[j]+y[3]*x3[j]+y[4]*x4[j]+y[5]*x5 - target[j] <= t[j],
+    j = 1:32
+  ) %>%
+  add_constraint(
+    y[1]*x1[j]+y[2]*x2[j]+y[3]*x3[j]+y[4]*x4[j]+y[5]*x5 - target[j] >= -t[j],
+    j = 1:32
+  ) %>%
+  
+  set_objective(sum_expr(t[i], i = 1:32), "min")
+
+result_compact <- solve_model(model_compact, with_ROI(solver = "glpk"))
+
+koef = result_compact %>% get_solution(y[i]) |> pull(value)
+
+koef
+
+df = 
+  df |> 
+  mutate(pred = disp * koef[1] + mpg * koef[2] + wt * koef[3] + hp * koef[4] + koef[5]) 
+  
+Metrics::mae(df$qsec,df$pred)
+caret::R2(df$qsec,df$pred)
+```
+
+
+## Clustering Analysis
+
+```{r}
+rm(list=ls())
+
+mtcars_scaled <- scale(mtcars)
+
+# K-means dengan optimasi jumlah cluster
+library(factoextra)
+fviz_nbclust(mtcars_scaled, kmeans, method = "wss") # Elbow method
+fviz_nbclust(mtcars_scaled, kmeans, method = "silhouette") # Silhouette method
+
+# Final k-means clustering
+set.seed(123)
+optimal_k <- 3  # Dari analisis di atas
+kmeans_result <- kmeans(mtcars_scaled, centers = optimal_k, nstart = 25)
+kmeans_result$centers
+kmeans_result$cluster |> table()
+```
+
+```{r}
+rm(list=ls())
+gc()
+
+library(dplyr)
+library(parallel)
+ncore = detectCores()
+
+# Data preparation
+data(mtcars)
+mtcars_scaled <- scale(mtcars) |> as.data.frame() |> mutate(cluster = 0)
+n <- nrow(mtcars_scaled)
+k <- 3  # Number of clusters
+
+# generate calon
+buat_bintang = function(){
+  sample(k,n,replace = T)
+}
+
+# Calculate distance matrix
+hitung_jarak = function(input){
+  dist(input,method = "euclidean") |> mean()
+}
+
+# objective function
+obj_func = function(bintang){
+  split_df = 
+    mtcars_scaled |> 
+    mutate(cluster = bintang) |> 
+    group_split(cluster)
+tot_jarak = lapply(split_df,hitung_jarak) |> unlist() |> sum()
+n_cal = bintang |> unique() |> length()
+skor = tot_jarak + (100/n_cal)
+return(skor)
+}
+
+# function matriks rotasi
+buat_rot_mat = function(theta,n){
+  # buat template sebuah matriks identitas
+  temp_mat = matrix(0,ncol = n,nrow = n)
+  diag(temp_mat) = 1
+  
+  # buat matriks identitas terlebih dahulu
+  mat_rot = temp_mat
+  
+  for(i in 1:(n-1)){
+    for(j in 1:i){
+      temp = temp_mat
+      idx = n-i
+      idy = n+1-j
+      # print(paste0("Matriks rotasi untuk ",idx," - ",idy,": DONE"))
+      temp[idx,idx] = cos(theta)
+      temp[idx,idy] = -sin(theta)
+      temp[idy,idx] = sin(theta)
+      temp[idy,idy] = cos(theta)
+      # assign(paste0("M",idx,idy),temp)
+      mat_rot = mat_rot %*% temp
+      mat_rot = mat_rot 
+    }
+  }
+  return(mat_rot)
+}
+
+# bikin matriks rotasinya
+A_rot = buat_rot_mat(2*pi/30,n)
+
+# kita mulai spiralnya
+N_spiral = 100
+id_calon = 1:N_spiral
+calon = vector("list",N_spiral)
+for(i in 1:N_spiral){
+  calon[[i]] = buat_bintang()
+}
+
+# hitung f nya
+f_hit = mcmapply(obj_func,calon,mc.cores = ncore)
+
+for(ikanx in 1:100){
+  # penentuan calon paling minimum
+  id_min = id_calon[which(f_hit == min(f_hit))] %>% min()
+  id_min = id_min[1]
+  pusat  = calon[[id_min]]
+  
+  loop = 1:N_spiral
+  loop = loop[-id_min]
+  # proses rotasi semua calon
+  for(i in loop){
+    Xt = calon[[i]]
+    X  = A_rot %*% (Xt - pusat)
+    X  = pusat + (.9 * X)
+    X  = ifelse(X >= 3,1,X)
+    X  = ifelse(X <= 1,3,X)
+    calon[[i]] = floor(X)
+    }
+  f_hit = mcmapply(obj_func,calon,mc.cores = ncore)
+
+}
+
+
+
+id_min = id_calon[which(f_hit == min(f_hit))] %>% min()
+cluster_ = calon[[id_min]] %>% floor()
+# tabulasi berapa banyak id per cluster
+table(cluster_)
+# totak jarak yang dihasilkan
+min(f_hit)
+
+mtcars_scaled |> 
+  mutate(cluster = cluster_) |> 
+  group_by(cluster) |> 
+  summarise_all(mean) |> 
+  ungroup()
+```
+
+
+
+
+
+
+
+
+
+
+
+

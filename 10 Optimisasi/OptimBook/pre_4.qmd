@@ -1,0 +1,17 @@
+# __R__ UNTUK OPTIMISASI 
+
+Untuk menyelesaikan masalah optimisasi menggunakan __R__, ada beberapa cara yang bisa digunakan, yakni:
+
+1. Menggunakan `ompr` _packages_.
+1. Membuat algoritma _dynamic spiral_.
+
+Keduanya merupakan algoritma penyelesaian _single objective optimization_.
+
+Selain __R__, kita juga bisa memanfaatkan _open source_ _libraries_ buatan:
+
+1. __Meta__ seperti __Nevergrad__^[https://facebookresearch.github.io/nevergrad/]. Digunakan untuk menyelesaikan _multi objective optimization_.
+1. __Google__ seperti __OR Tools__^[https://developers.google.com/optimization]. Digunakan untuk menyelesaikan _single objective optimization_.
+
+Keduanya ditulis dengan __Python__.
+
+Selain itu ada juga PyMoo^[https://pymoo.org/] yang digunakan untuk menyelesaikan _multi objective optimization_.

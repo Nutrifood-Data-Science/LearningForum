@@ -1,9 +1,50 @@
-# Preface {.unnumbered}
+# PENDAHULUAN {.unnumbered}
 
-This is a Quarto book.
+## Latar Belakang
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+Optimisasi menjadi hal yang krusial pada industri manufaktur. _Web-based-book_ ini disusun sedemikian sehingga mudah untuk dibaca dan diaplikasikan.
 
-```{r}
-1 + 1
-```
+Disusun oleh [Ikang Fadhli](https://ikanx101.com/).
+
+## Optimisasi
+
+Optimisasi adalah **proses mencari nilai yang optimal** dari suatu masalah tertentu. Dalam matematika, optimisasi merujuk pada pencarian nilai minimal atau maksimal dari suatu *fungsi real*[^1]. Notasi matematikanya dapat ditulis sebagai berikut:
+
+[^1]: https://id.wikipedia.org/wiki/Optimisasi
+
+Misalkan suatu fungsi $f$ yang memetakan dari himpunan $A$ ke bilangan *real*.
+
+$$f: A \rightarrow \mathbb{R}$$
+
+Cari suatu nilai $x_0 \in A$ sedemikian sehingga:
+
+-   $f(x_0) \leq f(x), \forall x \in A$ untuk proses **minimalisasi**.
+-   $f(x_0) \geq f(x), \forall x \in A$ untuk proses **maksimalisasi**.
+
+Di dalam kalkulus, kita mengetahui salah satu pendekatan optimisasi di fungsi satu variabel bisa didapatkan dari turunan pertama yang bernilai **nol** (bisa berupa nilai maksimum atau minimum dari fungsi tersebut).
+
+Nilai $x_0 \in [a,b]$ disebut minimum atau maksimum di $f$ unimodal saat memenuhi:
+
+$$\frac{d}{dx}f(x_0) = 0$$
+
+**Pierre De Fermat** dan **Joseph-Louis Lagrange** adalah orang-orang yang pertama kali menemukan formula kalkulus untuk mencari nilai optimal. Sementara **Isaac Newton** dan **Johann C. F.Gauss** mengusulkan metode iteratif untuk mencari nilai optimal[^2].
+
+[^2]: https://empowerops.com/en/blogs/2018/12/6/brief-history-of-optimization
+
+Salah satu bentuk optimisasi yakni *linear programming* dimulai oleh **Leonid Kantorovich** pada 1939. **Metode Simplex** merupakan salah satu metode penyelesaian optimisasi yang terkenal, pertama kali diperkenalkan pada 1947 oleh **George Dantzig** sementara di tahun yang sama *Theory of Duality* diperkenalkan oleh **John von Neumann**.
+
+## Riset Operasi
+
+**Riset operasi** adalah metode antar disiplin ilmu yang digunakan untuk menganalisa masalah nyata dan membuat keputusan untuk kegiatan operasional organisasi atau perusahaan[^3].
+
+[^3]: Pengantar Riset Operasi dan Optimisasi, KampusX: PO101
+
+Riset operasi dimulai pada era Perang Dunia II. Oleh karena peperangan, diperlukan suatu cara yang efektif untuk mengalokasikan *resources* yang ada sehingga pihak militer Inggris dan Amerika Serikat mengumpulkan ilmuwan-ilmuwan untuk mencari pendekatan yang saintifik dalam memecahkan masalah.
+
+Pada tahun 1940, sekelompok *researchers* yang dipimpin oleh **PMS Blackett** dari ***the University of Manchester*** melakukan studi tentang **Sistem Radar Baru Anti Pesawat Terbang**. Kelompok *researchers* ini sering dijuluki sebagai **Kelompok Sirkus Blackett** (*Blackett’s circus*). Julukan ini terjadi karena keberagaman latar belakang disiplin ilmu para *researchers* tersebut. Mereka terdiri dari disiplin ilmu fisiologi, matematika, astronomi, tentara, surveyor, dan fisika. Pada 1941, kelompok ini terlibat dalam penelitian radar deteksi kapal selam dan pesawat terbang. *Blackett* kemudian memimpin *Naval Operational Research* pada Angkatan Laut Kerajaan Inggris Raya. Prinsip-prinsip ilmiah yang digunakan untuk mengambil keputusan dalam suatu operasi dinamai sebagai **Riset Operasi**.
+
+Saat Amerika Serikat mulai terlibat pada Perang Dunia II, prinsip riset operasi juga digunakan untuk berbagai operasi militer mereka. Kelompok riset operasi AS bertugas untuk menganalisis serangan udara dan laut tentara NAZI Jerman.
+
+Selepas Perang Dunia II, penerapan riset operasi dinilai bisa diperluas ke dunia ekonomi, bisnis,*engineering*, dan sosial. Riset operasi banyak berkaitan dengan berbagai disiplin ilmu seperti matematika, statistika, *computer science*, dan lainnya. Tidak jarang beberapa pihak menganggap riset operasi itu *overlapping* dengan disiplin-disiplin ilmu tersebut.
+
+Oleh karena tujuan utama dari aplikasi riset operasi adalah tercapainya **hasil yang optimal** dari semua kemungkinan perencanaan yang dibuat. Maka **pemodelan matematika dan optimisasi** bisa dikatakan sebagai disiplin utama dari riset operasi.

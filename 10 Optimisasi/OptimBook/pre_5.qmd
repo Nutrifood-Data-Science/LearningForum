@@ -1,0 +1,404 @@
+# `ompr` _PACKAGES_ di __R__ 
+
+Ada satu _packages_ lain di __R__ yang bisa digunakan untuk menyelesaikan masalah optimisasi, yakni bernama `ompr`. _Packages_ `ompr` dibuat oleh __Dirk Schumacher__ pada 2018^[https://www.r-orms.org/].
+
+Salah satu keuntungan dari _library_ ini adalah pengunaan operator _pipe_ ` %>% ` pada perumusan algoritmanya. Sehingga bagi _user_ yang biasa menggunakan prinsip `tidyverse` akan merasa sangat terbantu.
+
+## `ompr` _Modelling_
+
+_Framework_ untuk menuliskan model optimisasi menggunakan `ompr` adalah sebagai berikut:
+
+```
+# mulai membangun model
+MIPModel() %>% 
+  
+  # menambah variabel
+  add_variable() %>% 
+  
+  # set objective
+  set_objective() %>% 
+  
+  # menambah constraints
+  add_constraint()
+```
+
+### _Decision Variable_ {-} 
+
+harus didefinisikan sejak awal. Ada berapa dan tipenya seperti apa. Kita bisa menggunakan _indexed variables_ untuk menghemat notasi. Berikut adalah contohnya:
+
+```
+MIPModel() %>% 
+
+  # menambah variabel integer
+  add_variable(x, type = "integer") %>% 
+  
+  # menambah variabel kontinu
+  add_variable(y, type = "continuous") %>% 
+  
+  # menambah variabel binary integer
+  add_variable(z, type = "binary") %>% 
+  
+  # menambah variabel dengan lower bound
+  add_variable(x, lb = 10) %>% 
+  
+  # menambah variabel dengan upper dan lower bounds
+  add_variable(y, lb = 5, ub = 10) %>% 
+  
+  # menambah 10 variabel berindeks
+  add_variable(p[i], i = 1:10)
+```
+
+### _Objective Function_ dan _Constraints_ {-} 
+
+dalam `ompr` bisa dituliskan sebagai fungsi matematika biasa. Bahkan kita bisa menuliskan _summation_ ke dalam algoritmanya. Berikut adalah contohnya:
+
+
+Misal ada `3` variabel $x_1,x_2,x_3$, dengan _objective function_ $\sum_i x_i$ dengan _constraint_ $\sum_i x_i \leq 7$.
+
+```
+MIPModel() %>% 
+  add_variable(x[i], i = 1:3) %>% 
+  set_objective(sum_expr(x[i], i = 1:3)) %>% 
+  add_constraint(sum_expr(x[i], i = 1:3) <= 7)
+```
+
+## Contoh Penyelesaian _Mixed Integer Linear Programming_ 
+
+$$\text{maximize: } 7x_1 + 3x_2 + x_3$$
+
+$$\text{subject to: } \begin{matrix}
+6x_1 + 4x_2  + 5x_3 \leq 60 \\ 8x_1 + x_2 + 2x_3 \leq 80 \\ 9x_1 + x_2 + 7x_3 \leq 70 \\ x_3 \geq 0 \\ x_1,x_2 \in \mathbb{Z}_{\geq 0}
+\end{matrix}$$
+
+Mari kita tuliskan dalam `ompr` _framework_ berikut:
+
+```{r,message=FALSE,warning=FALSE}
+rm(list=ls())
+
+# memanggil libraries
+library(dplyr)
+library(ompr)
+library(ompr.roi)
+library(ROI.plugin.glpk)
+
+# membuat model
+milp_new = 
+  MIPModel() %>% 
+  
+  # membuat 2 variabel integer
+  add_variable(x1,type = "integer",lb = 0) %>% 
+  add_variable(x2,type = "integer",lb = 0) %>% 
+  
+  # membuat 1 variabel kontinu
+  add_variable(x3,type = "continuous",lb = 0) %>% 
+  
+  # set obj function
+  set_objective(7*x1 + 3*x2 + x3,
+                "max") %>% 
+  
+  # menuliskan semua constraints
+  add_constraint(6*x1 + 4*x2  + 5*x3 <= 60) %>% 
+  add_constraint(8*x1 + x2 + 2*x3 <= 80) %>% 
+  add_constraint(9*x1 + x2 + 7*x3 <= 70) 
+
+milp_new
+```
+
+Mari kita _solve_ modelnya:
+
+```{r,message=FALSE,warning=FALSE}
+result = solve_model(milp_new, with_ROI(solver = "glpk", verbose = TRUE))
+result
+```
+
+Berikut adalah hasilnya:
+
+```{r}
+result %>% get_solution(x1)
+result %>% get_solution(x2)
+result %>% get_solution(x3)
+```
+
+### _Conclusion_
+
+Salah satu ciri khas `ompr` adalah penulisannya yang mirip dengan notasi matematika sehingga saat kita memiliki suatu model dengan banyak variabel, kita tidak perlu menginputnya ke dalam bentuk matriks.
+
+## Penyelesaian Masalah __Jadwal Kebutuhan Tenaga Kesehatan__
+
+Dengan menggunakan `library(ompr)`
+
+```{r,warning=FALSE,message=FALSE}
+rm(list=ls())
+
+# memanggil libraries
+library(dplyr)
+library(ompr)
+library(ompr.roi)
+library(ROI.plugin.glpk)
+
+# membuat model
+integer_prog = 
+  MIPModel() %>% 
+  # membuat variabel
+  add_variable(x[i],
+               type = "integer",
+               lb = 0,
+               i = 1:7) %>% 
+  # set fungsi objective
+  set_objective(sum_expr(x[i],i = 1:7),"min") %>% 
+  # memasukkan constraints
+  # senin
+  add_constraint(sum_expr(x[i], i = c(1,4,5,6,7)) >= 24) %>% 
+  add_constraint(sum_expr(x[i], i = c(1,4,5,6,7)) <= 29) %>% 
+  # selasa
+  add_constraint(sum_expr(x[i], i = c(1,2,5,6,7)) >= 22) %>% 
+  add_constraint(sum_expr(x[i], i = c(1,2,5,6,7)) <= 27) %>% 
+  # rabu
+  add_constraint(sum_expr(x[i], i = c(1,2,3,6,7)) >= 23) %>% 
+  add_constraint(sum_expr(x[i], i = c(1,2,3,6,7)) <= 28) %>% 
+  # kamis
+  add_constraint(sum_expr(x[i], i = c(1,2,3,4,7)) >= 11) %>% 
+  add_constraint(sum_expr(x[i], i = c(1,2,3,4,7)) <= 16) %>% 
+  # jumat
+  add_constraint(sum_expr(x[i], i = 1:5) >= 16) %>% 
+  add_constraint(sum_expr(x[i], i = 1:5) <= 21) %>% 
+  # sabtu
+  add_constraint(sum_expr(x[i], i = 2:6) >= 20) %>% 
+  add_constraint(sum_expr(x[i], i = 2:6) <= 25) %>% 
+  # minggu
+  add_constraint(sum_expr(x[i], i = 3:7) >= 12) %>% 
+  add_constraint(sum_expr(x[i], i = 3:7) <= 17)
+
+integer_prog
+hasil = integer_prog %>% solve_model(with_ROI(solver = "glpk",verbose = T))
+# solusi yang dihasilkan
+hasil$solution
+```
+
+Kita telah mendapatkan konfigurasi jadwal nakes yang optimal perharinya. 
+
+## Penyelesaian Masalah __Jadwal Tatap Muka Terbatas Sekolah__
+
+Dengan menggunakan `library(ompr)`
+
+```{r}
+rm(list=ls())
+
+library(dplyr)
+library(ompr)
+library(ompr.roi)
+library(ROI.plugin.glpk)
+
+bin_prog = 
+  MIPModel() %>%
+  # menambah variabel
+  add_variable(x[i,j],
+	       i = 1:20,
+	       j = 1:5,
+	       type = "binary",
+	       lb = 0) %>%
+  # membuat objective function
+  set_objective(sum_expr(x[i,j],
+			 i = 1:20,
+			 j = 1:5),
+		"max") %>%
+  # menambah constraints
+  # max kapasitas kelas
+  add_constraint(sum_expr(x[i,j],i = 1:20) >= 4,
+		 j = 1:5) %>%
+  add_constraint(sum_expr(x[i,j],i = 1:20) <= 8,
+		 j = 1:5) %>%
+  # frek kunjungan siswa
+  add_constraint(sum_expr(x[i,j],j = 1:5) >= 2,
+		 i = 1:20) %>%
+  add_constraint(sum_expr(x[i,j],j = 1:5) <= 3,
+		 i = 1:20) %>%
+  # jeda sehari
+  add_constraint(x[i,j] + x[i,j+1] <= 1,
+		 i = 1:20,
+		 j = 1:4)
+
+bin_prog 
+```
+
+Berikut adalah hasilnya:
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+hasil = 
+  bin_prog %>%
+  solve_model(with_ROI(solver = "glpk",
+		       verbose = T))
+
+rekap = 
+  hasil %>% 
+  get_solution(x[i,j]) %>%
+  filter(value == 1) %>%
+  rename(siswa = i,
+         hari = j)
+
+rekap %>%
+  group_by(hari) %>%
+  summarise(presensi = paste(siswa,collapse = ",")) %>%
+  ungroup() %>%
+  knitr::kable("simple",caption = "Jadwal Kunjungan Siswa")
+
+rekap %>%
+  group_by(siswa) %>%
+  tally() %>%
+  ungroup() %>%
+  rename("jumlah kehadiran" = n) %>%
+  knitr::kable("simple",caption = "Rekap Presensi Siswa")
+```
+
+## Penyelesaian Masalah __Pemilihan dan Penentuan Item Produksi__
+
+Dengan menggunakan `library(ompr)`
+
+```{r}
+rm(list=ls())
+
+library(dplyr)
+library(ggplot2)
+library(ompr)
+library(ompr.roi)
+library(ROI.plugin.glpk)
+
+# data yang dibutuhkan
+profit = c(5,7,3)
+sales = c(7,5,9)
+M = 99999
+
+# membuat model
+mil_prog = 
+  MIPModel() %>%
+  # menambah variabel
+  # xi
+  add_variable(x[i],
+	       i = 1:3,
+	       type = "continuous",
+	       lb = 0) %>%
+  # yi
+  add_variable(y[i],
+	       i = 1:3,
+	       type = "binary",
+	       lb = 0) %>%
+  # z
+  add_variable(z,type = "binary",lb = 0) %>%
+  # membuat objective function
+  set_objective(sum_expr(x[i] * profit[i],
+			 i = 1:3),
+		"max") %>%
+  # menambah constraints
+  # max tonase
+  add_constraint(x[i] <= sales[i],
+		 i = 1:3) %>%
+  # memilih 2 produk
+  add_constraint(x[i] - y[i] * M <= 0,
+		 i = 1:3) %>%
+  add_constraint(sum_expr(y[i],
+		 i = 1:3) <= 2) %>%
+  # memilih 1 plant
+  add_constraint(3*x[1] + 4*x[2] + 2*x[3] - M * z <= 30) %>%
+  add_constraint(4*x[1] + 6*x[2] + 2*x[3] + M * z <= 40 + M) 
+
+mil_prog
+
+hasil = 
+  mil_prog %>%
+  solve_model(with_ROI(solver = "glpk",
+		       verbose = T))
+
+xi = 
+  hasil %>% 
+  get_solution(x[i])
+
+yi = 
+  hasil %>%
+  get_solution(y[i])
+
+zi = 
+  hasil %>%
+  get_solution(z)
+
+```
+
+Berikut adalah hasilnya:
+
+```{r,echo=FALSE}
+xi
+yi
+zi
+```
+
+Dari ketiga produk baru, perusahaan bisa memilih produk __1 dan 3__ sebanyak __5.5 dan 9 ton__ di _plant_ __2__. Maka _profit_ yang bisa diraih adalah sebesar __54.5__.
+
+## Penyelesaian Masalah __*Knapsack Problem*__
+
+Dalam _knapsack problem_, Anda perlu mengemas sejumlah barang dengan nilai dan ukuran tertentu (seperti berat atau volume) ke dalam sebuah wadah yang memiliki kapasitas maksimum. Apabila total ukuran barang melebihi kapasitas wadah, tentu tidak semua barang dapat dimasukkan.
+
+Dalam situasi demikian, tantangannya adalah memilih subset barang yang memiliki total nilai tertinggi, namun masih dapat ditampung oleh wadah tersebut. Dengan kata lain, tujuan utamanya adalah mengoptimalkan nilai barang yang dibawa tanpa melampaui batas kapasitas yang tersedia.
+
+> Memaksimalkan _values_ dengan batasan _weights_.
+
+```{r}
+#| include: false
+rm(list=ls())
+library(gt)
+library(gtExtras)
+```
+
+```{r}
+values = c(
+  360, 83, 59, 130, 431, 67, 230, 52, 93, 125, 670, 892, 600, 38, 48, 147,
+  78, 256, 63, 17, 120, 164, 432, 35, 92, 110, 22, 42, 50, 323, 514, 28,
+  87, 73, 78, 15, 26, 78, 210, 36, 85, 189, 274, 43, 33, 10, 19, 389, 276,
+  312)
+weights = c(7, 0, 30, 22, 80, 94, 11, 81, 70, 64, 59, 18, 0, 36, 3, 8, 15, 42, 9, 0,
+            42, 47, 52, 32, 26, 48, 55, 6, 29, 84, 2, 4, 18, 56, 7, 29, 93, 44, 71,
+            3, 86, 66, 31, 65, 0, 79, 20, 65, 52, 13)
+
+df          = data.frame(values,weights)
+batas_berat = 850
+
+bin_prog = 
+  MIPModel() %>%
+  # menambah variabel
+  add_variable(x[i],i = 1:50,type = "binary") |> 
+  # objective function
+  set_objective(sum_expr(x[i] * values[i],i = 1:50),"max") |> 
+  # tambah constraints
+  add_constraint(sum_expr(x[i] * weights[i],i = 1:50) <= batas_berat)
+
+bin_prog 
+
+hasil = 
+  bin_prog %>%
+  solve_model(with_ROI(solver = "glpk",
+                       verbose = T))
+
+hasil
+
+hasil %>% 
+  get_solution(x[i]) |> 
+  gt() %>%
+  gt_theme_538() |> 
+  tab_header(title = "Konfigurasi Item yang Dipilih",
+             subtitle = "Solusi optimal dari ompr")
+
+x_i = 
+  hasil %>% 
+  get_solution(x[i]) |> 
+  pull(value)
+
+df |> 
+  mutate(x_i = x_i) |> 
+  group_by(x_i) |> 
+  reframe(berat = sum(weights),
+          nilai = sum(values)) |> 
+  filter(x_i == 1)
+```
+
+Kita dapatkan konfigurasi _item_ terpilih yang memaksimalkan _values_.
+
+
+
