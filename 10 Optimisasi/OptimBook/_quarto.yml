@@ -28,3 +28,5 @@ format:
     theme: united
     code-copy: true
     cover-image: optim.png
+    message: false
+    warning: false

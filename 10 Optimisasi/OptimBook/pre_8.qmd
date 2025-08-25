@@ -2,6 +2,8 @@
 
 Ternyata beberapa masalah umum seperti _machine learning_ (baik _supervised_ atau _unsupervised_) bisa dipandang sebagai masalah optimisasi.
 
+> Semua masalah yang melibatkan __minimisasi dan maksimisasi suatu fungsi__ bisa dipandang sebagai masalah optimisasi
+
 ## Regresi Linear
 
 Misalkan kita memiliki data sebagai berikut:
@@ -39,7 +41,7 @@ summary(model)
 
 Kita bisa dapatkan $R^2 \simeq 0.6$.
 
-### _Custom Function Spiral Dynamic Optimization Algorithm_
+### Mengubahnya Menjadi Optimisasi dengan `ompr`
 
 Perhatikan bahwa saat kita membuat model regresi:
 
@@ -65,7 +67,11 @@ $$\min{\sum_i^{32} t_j}$$
 
 Dengan _constraints_:
 
-$$$$
+$$y_1 disp_j + y_2 mpg_j + y_3 wt_j + y_4 hp_j + y_5 \le t_j$$
+
+$$y_1 disp_j + y_2 mpg_j + y_3 wt_j + y_4 hp_j + y_5 \ge -t_j$$
+
+Berikut ini adalah skripnya jika dituliskan dalam `ompr`:
 
 ```{r}
 library(parallel)
@@ -99,11 +105,24 @@ model_compact <- MIPModel() %>%
   set_objective(sum_expr(t[i], i = 1:32), "min")
 
 result_compact <- solve_model(model_compact, with_ROI(solver = "glpk"))
+```
 
+Berikut ini adalah koefisien regresi yang dihasilkan:
+
+```{r}
 koef = result_compact %>% get_solution(y[i]) |> pull(value)
 
-koef
+data.frame(variabel = paste0("x_",1:5),
+           koef) |> 
+  gt() %>% 
+  gt_theme_538() %>% 
+  tab_header(title = "Koefisien Regresi Hasil Optimisasi")
 
+```
+
+Saya akan hitung _mean absolute error_ dan $R^2$ yang dihasilkan:
+
+```{r}
 df = 
   df |> 
   mutate(pred = disp * koef[1] + mpg * koef[2] + wt * koef[3] + hp * koef[4] + koef[5]) 
@@ -112,8 +131,7 @@ Metrics::mae(df$qsec,df$pred)
 caret::R2(df$qsec,df$pred)
 ```
 
-
-## Clustering Analysis
+## _Clustering Analysis_
 
 ```{r}
 rm(list=ls())

@@ -4,6 +4,8 @@ __OR-Tools__ (___Operations Research Tools___) adalah _library_ _open-source_ bu
 
 Yang membuat __OR-Tools__ istimewa adalah dukungannya terhadap _multiple programming_ _languages_ (C++, Python, Java, C#), fleksibilitas dalam pemodelan masalah, dan kemampuan untuk menangani berbagai tipe masalah optimasi seperti _linear programming_, _constraint programming_, dan _mixed-integer programming_. _Library_ ini tidak hanya menyediakan _solver_ internal yang powerful tetapi juga dapat terintegrasi dengan _solver_ eksternal seperti `SCIP`, `GLPK`, dan `CP-SAT`, menjadikannya pilihan populer baik untuk penelitian akademis maupun aplikasi industri skala enterprise.
 
+## Instalasi `or tools`
+
 Jangan lupa untuk menginstall `ortools` di `terminal`:
 
 ```

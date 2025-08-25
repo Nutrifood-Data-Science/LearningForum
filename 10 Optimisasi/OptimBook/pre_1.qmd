@@ -89,13 +89,23 @@ Di mana:
 
 Ada beberapa cara menyelesaikan MOO:
 
-1. Metode ___Scalarization___ (__A Priori__): Mengkonversi _multi-objective_ menjadi _single objective_.
-        - __Weighted Sum Method__: ( $\min \sum w_i f_i(x)$ ) yakni dengan memberikan bobot untuk masing-masing _objective functions_ sesuai dengan kebutuhan.
-        - __ε-Constraint Method__: _Optimize_ satu _objective function_, dan menjadikan _objective function_ yang lain menjadi _constraint_ dengan batas suatu nilai __ε__.
-1. Metode __*Evolutionary*__ (__A Posteriori__): Menghasilkan seluruh _Pareto front_.
-        - __NSGA-II__ (_Non-dominated Sorting Genetic Algorithm_).
-        - __MOEA/D__ (_Multi-Objective Evolutionary Algorithm based on Decomposition_).
-        - __SPEA2__ (_Strength Pareto Evolutionary Algorithm_).
+1. Metode ___Scalarization___ (__A Priori__): Mengkonversi _multi-objective_ menjadi _single objective_. Caranya:
+        1. __Weighted Sum Method__: ( $\min \sum w_i f_i(x)$ ) yakni dengan memberikan bobot untuk masing-masing _objective functions_ sesuai dengan kebutuhan.
+        1. __ε-Constraint Method__: _Optimize_ satu _objective function_, dan menjadikan _objective function_ yang lain menjadi _constraint_ dengan batas suatu nilai __ε__.
+1. Metode __*Evolutionary*__ (__A Posteriori__): Menghasilkan seluruh _Pareto front_. Caranya:
+        1. __NSGA-II__ (_Non-dominated Sorting Genetic Algorithm_).
+        1. __MOEA/D__ (_Multi-Objective Evolutionary Algorithm based on Decomposition_).
+        1. __SPEA2__ (_Strength Pareto Evolutionary Algorithm_).
+
+
+## Optimisasi Berdasarkan Bentuk _Objectives Function_-nya
+
+Kita bisa membagi optimisasi berdasarkan bentuk _objective function_-nya, yakni:
+
+1. _Linear optimization_ adalah metode matematis untuk menemukan nilai maksimum atau minimum dari suatu fungsi tujuan (_objective function_) linear, dengan mematuhi serangkaian batasan (_constraints_) yang juga linear.
+1. _Non linear optimization_ adalah proses menemukan nilai maksimum atau minimum dari suatu fungsi tujuan (_objective function_) yang __non-linear__, dengan mematuhi serangkaian batasan (_constraints_) yang __juga bisa non-linear__.
+
+> __Inti perbedaannya dengan *Linear Optimization*__: Hubungan antara variabel-variabelnya tidak harus lurus. Fungsi tujuan atau batasannya dapat melibatkan kurva, polinomial, eksponensial, interaksi antar variabel, dan bentuk-bentuk kompleks lainnya.
 
 [^6]: https://neos-guide.org/content/optimization-under-uncertainty
 

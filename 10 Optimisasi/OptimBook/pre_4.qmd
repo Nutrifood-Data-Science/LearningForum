@@ -1,17 +1,33 @@
-# __R__ UNTUK OPTIMISASI 
+# *SOLVER* UNTUK OPTIMISASI
 
-Untuk menyelesaikan masalah optimisasi menggunakan __R__, ada beberapa cara yang bisa digunakan, yakni:
+## Menggunakan **R**
 
-1. Menggunakan `ompr` _packages_.
-1. Membuat algoritma _dynamic spiral_.
+Untuk menyelesaikan masalah optimisasi menggunakan **R**, ada beberapa cara yang bisa digunakan, yakni:
 
-Keduanya merupakan algoritma penyelesaian _single objective optimization_.
+1.  Menggunakan `ompr` *packages*.
+2.  Membuat algoritma *dynamic spiral*.
 
-Selain __R__, kita juga bisa memanfaatkan _open source_ _libraries_ buatan:
+| Algoritma        | Bentuk obj function   | Banyak obj function   |
+|------------------|-----------------------|-----------------------|
+| `ompr`           | Linear                | *Single obj function* |
+| *Dynamic spiral* | Linear dan non linear | *Single obj function* |
 
-1. __Meta__ seperti __Nevergrad__^[https://facebookresearch.github.io/nevergrad/]. Digunakan untuk menyelesaikan _multi objective optimization_.
-1. __Google__ seperti __OR Tools__^[https://developers.google.com/optimization]. Digunakan untuk menyelesaikan _single objective optimization_.
+## Menggunakan **Python**
 
-Keduanya ditulis dengan __Python__.
+Selain **R**, kita juga bisa memanfaatkan *open source* *libraries* buatan:
 
-Selain itu ada juga PyMoo^[https://pymoo.org/] yang digunakan untuk menyelesaikan _multi objective optimization_.
+1.  **Meta** seperti **Nevergrad**[^pre_4-1]. Digunakan untuk menyelesaikan *multi objective optimization*.
+2.  **Google** seperti **OR Tools**[^pre_4-2]. Digunakan untuk menyelesaikan *single objective optimization*.
+3. __PyMoo__[^pre_4-3] yang digunakan untuk menyelesaikan *multi objective optimization*.
+
+[^pre_4-1]: https://facebookresearch.github.io/nevergrad/
+
+[^pre_4-2]: https://developers.google.com/optimization
+
+[^pre_4-3]: https://pymoo.org/
+
+| Libraries   | Bentuk obj function | Banyak obj function   |
+|-------------|---------------------|-----------------------|
+| `or tools`  | Linear              | *Single obj function* |
+| *Nevergrad* | Linear              | *Multi obj function*  |
+| *Pymoo*     | Linear              | *Multi obj function*  |
