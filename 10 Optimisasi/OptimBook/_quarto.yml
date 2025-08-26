@@ -4,7 +4,7 @@ project:
 book:
   title: "Pengantar Optimisasi dalam Industri"
   author: "Ikang Fadhli"
-  date: "8/22/2025"
+  date: "8/26/2025"
   downloads: [pdf]
   sharing: [twitter, facebook]
   chapters:
@@ -17,6 +17,7 @@ book:
     - pre_6.qmd
     - pre_7.qmd
     - pre_8.qmd
+    - pre_9.qmd
 
 comments:
   hypothesis: true

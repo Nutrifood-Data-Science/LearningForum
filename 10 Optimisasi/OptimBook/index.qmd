@@ -2,7 +2,7 @@
 
 ## Latar Belakang
 
-Optimisasi menjadi hal yang krusial pada industri manufaktur. _Web-based-book_ ini disusun sedemikian sehingga mudah untuk dibaca dan diaplikasikan.
+Optimisasi menjadi hal yang krusial pada industri manufaktur. _Web-based-book_ ini disusun dalam sudut pandang komputasi dan _solver_ sehingga diharapkan mudah dibaca dan diaplikasikan.
 
 Disusun oleh [Ikang Fadhli](https://ikanx101.com/).
 

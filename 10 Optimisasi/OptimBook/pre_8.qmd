@@ -133,6 +133,10 @@ caret::R2(df$qsec,df$pred)
 
 ## _Clustering Analysis_
 
+Berikut adalah salah satu contoh bagaimana optimisasi bisa digunakan untuk membuat _cluster_ atau kelompok data.
+
+Berikut adalah contoh _clustering analysis_ dengan $k=4$ menggunakan `library(factoextra)` di __R__:
+
 ```{r}
 rm(list=ls())
 
@@ -145,11 +149,35 @@ fviz_nbclust(mtcars_scaled, kmeans, method = "silhouette") # Silhouette method
 
 # Final k-means clustering
 set.seed(123)
-optimal_k <- 3  # Dari analisis di atas
+optimal_k <- 4  # Dari analisis di atas
 kmeans_result <- kmeans(mtcars_scaled, centers = optimal_k, nstart = 25)
 kmeans_result$centers
 kmeans_result$cluster |> table()
+
+summary(kmeans_result)
+kmeans_result$tot.withinss
 ```
+
+## _Clustering_ dengan _Spiral Dynamic_
+
+Kita bisa melakukan _clustering analysis_ dengan mendefinisikan fungsi objektif sebagai berikut:
+
+1. Rata-rata jarak antar titik di satu _cluster_ yang sama harus sekecil-kecilnya.
+1. Jarak antar _cluster centers_ itu harus semaksimal mungkin.
+1. Tidak boleh ada satu _cluster_ yang hanya memiliki satu _cluster member_ saja.
+1. Banyaknya _cluster_ dijaga agar tetap __4__.
+
+Kita bisa tuliskan model matematisnya:
+
+$$f_1: \text{fungsi objektif jarak antar titik dalam cluster}$$
+
+$$f_2: \text{fungsi objektif jarak antar cluster centers}$$
+
+Maka fungsi objektifnya saya definisikan sebagai:
+
+$$\min \frac{f_1}{f_2}$$
+
+Bentuk skrip __R__-nya menjadi sebagai berikut:
 
 ```{r}
 rm(list=ls())
@@ -161,9 +189,9 @@ ncore = detectCores()
 
 # Data preparation
 data(mtcars)
-mtcars_scaled <- scale(mtcars) |> as.data.frame() |> mutate(cluster = 0)
+mtcars_scaled <- scale(mtcars) |> as.data.frame()
 n <- nrow(mtcars_scaled)
-k <- 3  # Number of clusters
+k <- 4  # Number of clusters
 
 # generate calon
 buat_bintang = function(){
@@ -172,7 +200,8 @@ buat_bintang = function(){
 
 # Calculate distance matrix
 hitung_jarak = function(input){
-  dist(input,method = "euclidean") |> mean()
+  output = dist(input,method = "euclidean") |> mean()
+  output = ifelse(is.nan(output),1000,output)
 }
 
 # objective function
@@ -181,10 +210,20 @@ obj_func = function(bintang){
     mtcars_scaled |> 
     mutate(cluster = bintang) |> 
     group_split(cluster)
-tot_jarak = lapply(split_df,hitung_jarak) |> unlist() |> sum()
-n_cal = bintang |> unique() |> length()
-skor = tot_jarak + (100/n_cal)
-return(skor)
+  f1 = lapply(split_df,hitung_jarak) |> unlist() |> sum()
+  
+  mat_f2 = 
+    mtcars_scaled |> 
+    mutate(cluster = bintang) |> 
+    group_by(cluster) |> 
+    summarise_all(mean) |> 
+    ungroup() |> 
+    select(-cluster)
+  f2 = hitung_jarak(mat_f2)
+
+  n_cal = bintang |> unique() |> length()
+  skor  = (f1 + n_cal)/f2
+  return(skor)
 }
 
 # function matriks rotasi
@@ -218,7 +257,7 @@ buat_rot_mat = function(theta,n){
 A_rot = buat_rot_mat(2*pi/30,n)
 
 # kita mulai spiralnya
-N_spiral = 100
+N_spiral = ncore * 7
 id_calon = 1:N_spiral
 calon = vector("list",N_spiral)
 for(i in 1:N_spiral){
@@ -231,6 +270,7 @@ f_hit = mcmapply(obj_func,calon,mc.cores = ncore)
 for(ikanx in 1:100){
   # penentuan calon paling minimum
   id_min = id_calon[which(f_hit == min(f_hit))] %>% min()
+  # ambil komponen terkecil pertama saja
   id_min = id_min[1]
   pusat  = calon[[id_min]]
   
@@ -241,38 +281,44 @@ for(ikanx in 1:100){
     Xt = calon[[i]]
     X  = A_rot %*% (Xt - pusat)
     X  = pusat + (.9 * X)
-    X  = ifelse(X >= 3,1,X)
-    X  = ifelse(X <= 1,3,X)
+    X  = ifelse(X >= 4,1,X)
+    X  = ifelse(X <= 1,4,X)
     calon[[i]] = floor(X)
     }
   f_hit = mcmapply(obj_func,calon,mc.cores = ncore)
 
 }
 
-
-
+# penentuan solusi
 id_min = id_calon[which(f_hit == min(f_hit))] %>% min()
 cluster_ = calon[[id_min]] %>% floor()
+```
+
+Berikut adalah berapa banyak _cluster_ yang dihasilkan:
+
+```{r}
 # tabulasi berapa banyak id per cluster
 table(cluster_)
-# totak jarak yang dihasilkan
-min(f_hit)
+```
 
+Nilai fungsi objektif yang dihasilkan:
+
+```{r}
+# nilai fungsi objektif yang dihasilkan
+min(f_hit)
+```
+
+Berikut ini adalah _cluster centers_-nya:
+
+```{r}
 mtcars_scaled |> 
   mutate(cluster = cluster_) |> 
   group_by(cluster) |> 
   summarise_all(mean) |> 
-  ungroup()
+  ungroup() |> 
+  gt_theme_538() |> 
+  tab_header(title = "Cluster Centers",
+             subtitle = "Hasil Spiral Dynamic")
 ```
-
-
-
-
-
-
-
-
-
-
 
 
