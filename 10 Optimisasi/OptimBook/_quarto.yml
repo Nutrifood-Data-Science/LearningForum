@@ -18,6 +18,7 @@ book:
     - pre_7.qmd
     - pre_8.qmd
     - pre_9.qmd
+    - pre_10.qmd
 
 comments:
   hypothesis: true

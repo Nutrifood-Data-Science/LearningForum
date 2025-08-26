@@ -329,40 +329,17 @@ mtcars_scaled |>
 
 Regresi dan _clustering_ menjadi dua contoh yang paling nyata tentang optimisasi pada _machine_ _learning_.
 
-1. Support Vector Machines (SVM)
+1. _Support Vector Machines_ (__SVM__)
 
-    Penjelasan: SVM bertujuan untuk menemukan hyperplane terbaik yang memisahkan dua kelas dengan margin sebesar mungkin. Ini diubah menjadi masalah optimisasi cembung (convex optimization) di mana kita meminimalkan norma bobot (untuk memaksimalkan margin) dengan kendala bahwa setiap titik data diklasifikasikan dengan benar (atau hampir benar untuk soft-margin SVM).
-    Fungsi Objektif: [ \min_{\mathbf{w}, b} \frac{1}{2} |\mathbf{w}|^2 + C \sum_{i=1}^n \xi_i ] dengan kendala ( y_i(\mathbf{w} \cdot \mathbf{x}_i + b) \geq 1 - \xi_i ) dan ( \xi_i \geq 0 ), di mana ( \xi_i ) adalah slack variables.
+__SVM__ bertujuan untuk menemukan _hyperplane_ terbaik yang memisahkan beberapa kelas (kategori) dengan _margin_ sebesar mungkin. Ini diubah menjadi masalah optimisasi cembung (_convex optimization_) di mana kita meminimalkan norma bobot (untuk memaksimalkan _margin_) dengan kendala bahwa setiap titik data diklasifikasikan dengan benar (atau hampir benar untuk _soft-margin_ __SVM__).
 
-2. Neural Networks (Deep Learning)
+2. _Neural Networks_ (___Deep Learning___)
 
-    Penjelasan: Pelatihan neural network melibatkan optimisasi bobot dan bias untuk meminimalkan fungsi kerugian (loss function) seperti cross-entropy atau mean squared error. Ini biasanya dilakukan dengan gradient descent (misalnya, SGD, Adam) yang merupakan algoritma optimisasi iteratif.
-    Fungsi Objektif: [ \min_{\theta} \frac{1}{n} \sum_{i=1}^n L(f(\mathbf{x}_i; \theta), y_i) + \lambda |\theta|^2 ] di mana ( \theta ) adalah parameter model, dan ( L ) adalah loss function.
+Proses _training_ _neural network_ melibatkan optimisasi bobot dan bias untuk meminimalkan fungsi kerugian (_loss function_) seperti _cross-entropy_ atau _mean squared error._ Ini biasanya dilakukan dengan _gradient descent_ (misalnya: SGD dan Adam) yang merupakan algoritma optimisasi iteratif.
 
-3. Principal Component Analysis (PCA)
+3. _Principal Component Analysis_ (__PCA__)
 
-    Penjelasan: PCA dapat diformulasikan sebagai masalah optimisasi di mana kita mencari arah (komponen utama) yang memaksimalkan varians data yang diproyeksikan. Ini equivalen dengan mencari eigenvectors dari matriks kovarians yang sesuai dengan eigenvalues terbesar.
-    Formulasi Optimisasi: [ \max_{\mathbf{w}} \mathbf{w}^T \mathbf{S} \mathbf{w} \quad \text{dengan kendala} \quad |\mathbf{w}| = 1 ] di mana ( \mathbf{S} ) adalah matriks kovarians.
-
-4. Matrix Factorization (e.g., Recommender Systems)
-
-    Penjelasan: Dalam sistem rekomendasi seperti collaborative filtering, kita mengoptimalkan faktor matriks pengguna dan item untuk meminimalkan kesalahan rekonstruksi matriks rating. Alternating Least Squares (ALS) atau gradient descent sering digunakan.
-    Fungsi Objektif: [ \min_{U, V} \sum_{(i,j) \in \Omega} (R_{ij} - \mathbf{u}_i^T \mathbf{v}_j)^2 + \lambda (|U|_F^2 + |V|_F^2) ] di mana ( \Omega ) adalah set indeks rating yang diketahui.
-
-5. Boosting Algorithms (e.g., XGBoost, LightGBM)
-
-    Penjelasan: Boosting membangun model secara iteratif dengan menambahkan weak learners yang mengoreksi kesalahan model sebelumnya. Setiap iterasi melibatkan optimisasi (biasanya gradient descent) untuk menemukan weak learner yang mengurangi loss secara maksimal.
-    Fungsi Objektif: XGBoost, misalnya, meminimalkan fungsi objektif reguler yang mencakup loss dan kompleksitas model: [ \mathcal{L} = \sum_{i=1}^n L(y_i, \hat{y}i) + \sum{k=1}^K \Omega(f_k) ] di mana ( \Omega(f_k) ) adalah term regulerisasi.
-
-6. K-Means (sebenarnya clustering, tetapi penting disebutkan)
-
-    Penjelasan: Meskipun Anda menyebutkan "selain clustering", K-Means adalah contoh klasik optimisasi: meminimalkan within-cluster sum of squares. Ini diselesaikan dengan algoritma Expectation-Maximization (EM).
-    Fungsi Objektif: [ \min_{S} \sum_{i=1}^k \sum_{\mathbf{x} \in S_i} |\mathbf{x} - \mu_i|^2 ] di mana ( S_i ) adalah cluster ke-(i).
-
-7. Linear Discriminant Analysis (LDA)
-
-    Penjelasan: LDA mencari proyeksi linear yang memaksimalkan rasio antara scatter antarkelas dan scatter dalam kelas. Ini adalah masalah optimisasi generalized eigenvalue.
-    Formulasi: [ \max_{\mathbf{w}} \frac{\mathbf{w}^T \mathbf{S}_B \mathbf{w}}{\mathbf{w}^T \mathbf{S}_W \mathbf{w}} ] di mana ( \mathbf{S}_B ) adalah scatter antarkelas dan ( \mathbf{S}_W ) scatter dalam kelas.
+PCA dapat diformulasikan sebagai masalah optimisasi di mana kita mencari arah (komponen utama) yang memaksimalkan varians data yang diproyeksikan. Ini equivalen dengan mencari _eigenvectors_ dari matriks kovarians yang sesuai dengan _eigenvalues_ terbesar.
 
 
 

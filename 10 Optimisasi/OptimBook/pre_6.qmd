@@ -57,96 +57,6 @@ $$\begin{bmatrix} x_1 (k+1) \\ x_2 (k+1) \end{bmatrix} = \begin{bmatrix} r \\ r 
 Salah satu prinsip utama dari _spiral optimization algorithm_ adalah menjadikan titik $x^*$ sebagai pusat rotasi di setiap iterasinya. Operasi matriksnya adalah sebagai berikut:
 
 $$\begin{bmatrix} x_1 (k+1) \\ x_2 (k+1) \end{bmatrix} = \begin{bmatrix} x_1^* \\ x_2^* \end{bmatrix} + \begin{bmatrix} r \\ r \end{bmatrix} \begin{bmatrix} \cos{\theta} & -\sin{\theta} \\ \sin{\theta} & \cos{\theta} \end{bmatrix} ( \begin{bmatrix} x_1 (k) \\ x_2 (k) \end{bmatrix} - \begin{bmatrix} x_1^* \\ x_2^* \end{bmatrix} )$$
-
-## Skrip _Spiral Optimization Algorithm_
-
-Misalkan suatu masalah matematis dituliskan sebagai berikut:
-
-$$f(x_1,x_2) = \frac{x_1^4 - 16 x_1^2 + 5 x_1}{2} + \frac{x_2^4 - 16 x_2^2 + 5 x_2}{2}$$
-
-$$-4 \leq x_1,x_2 \leq 4$$
-
-Kita akan mencari solusi $x_1$ dan $x_2$ menggunakan algoritma spiral. Berikut skripnya di __R__:
-
-```{r}
-#| include: false
-library(dplyr)
-library(tidyr)
-library(parallel)
-```
-
-```{r}
-soa_mrf = function(N,	  # banyak titik
-		   x1_d,  # batas bawah x1
-		   x1_u,  # batas atas x1
-		   x2_d,  # batas bawah x2
-		   x2_u,  # batas atas x2
-		   rot,	  # berapa banyak rotasi
-		   k_max, # iterasi maks
-		   r){	  # berapa rate konstraksi
-		   
-# N pasang titik random di selang [a,b] di R2
-x1 = runif(N,x1_d,x1_u)
-x2 = runif(N,x2_d,x2_u)
-# hitung theta
-theta = 2*pi / rot
-# definisi matriks rotasi
-A = matrix(c(cos(theta),-sin(theta),
-             sin(theta),cos(theta)),
-           ncol = 2,byrow = T)
-# bikin data frame
-temp = data.frame(x1,x2) %>% mutate(f = f(x1,x2))
-# proses iterasi
-for(i in 1:k_max){
-  # mencari titik x* dengan min(f)
-  f_min = 
-	temp %>% 
-	filter(f == min(f))
-  pusat = c(f_min$x1,f_min$x2)
-  for(j in 1:N){
-	# kita akan ambil titiknya satu persatu
-	x0 = c(temp$x1[j],temp$x2[j])
-	
-	# proses rotasi dan konstraksi terhadap pusat x*
-	xk = A %*% (x0-pusat) # diputar dengan x_bin sebagai pusat
-        xk = pusat + (r * xk)
-	
-	# proses mengembalikan nilai ke temp
-	temp$x1[j] = xk[1]
-	temp$x2[j] = xk[2]
-	}
-    
-    # hitung kembali nilai f(x1,x2)
-    temp = temp %>% mutate(f = f(x1,x2))
-    }
-# proses output hasil
-output = temp %>% filter(f == min(f))
-return(output)
-}
-```
-
-Kita akan pilih parameter spiral sebagai berikut: $r = 0.8, N = 50, rot = 20, k_{max} = 60$.
-
-
-```{r}
-# definisi
-N = 50
-a = -4 # x1 dan x2 punya batas bawah yang sama
-b = 4  # x1 dan x2 punya batas atas yang sama
-k_max = 70
-r = .75
-rot = 30
-f = function(x1,x2){
-	((x1^4 - 16 * x1^2 + 5 * x1)/2) + ((x2^4 - 16 * x2^2 + 5* x2)/2)
-	}
-# solving
-soa_mrf(N,a,b,a,b,rot,k_max,r)
-```
-
-__Catatan__
-
-Pada algoritma ini, penentuan $\theta, r, x$ menjadi penentu hasil perhitungan.
-
 ## Matriks Rotasi untuk n-Dimensi
 
 SOA relatif mudah untuk dituliskan dalam bentuk algoritma bahasa pemrograman manapun. Tapi ada satu hal yang bisa menjadi batu ganjalan dalam menuliskan algoritmanya. Apa itu? Yaitu pendefinisian matriks rotasi untuk masalah dengan n-dimensi.
@@ -232,6 +142,9 @@ Berikut adalah modifikasi menjadi _unconstrained optimization problem_:
 
 ```{r}
 rm(list=ls())
+
+library(dplyr)
+library(tidyr)
 
 f1 = function(x1,x2,x3){
   7*x1 + 3*x2 + x3
