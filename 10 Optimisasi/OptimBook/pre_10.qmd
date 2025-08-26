@@ -1,0 +1,169 @@
+```{r}
+#| include: false
+rm(list=ls())
+gc()
+library(dplyr)
+library(tidyr)
+library(gt)
+library(gtExtras)
+library(parallel)
+ncore = detectCores()
+```
+
+# JAWABAN SOAL
+
+Pada bagian ini, kita akan jawab soal pada _part_ sebelumnya dengan beberapa cara:
+
+## Masalah Regresi Linear
+
+Data:
+
+```{r}
+df = longley |> janitor::clean_names() |> select(employed,population)
+df
+```
+
+Definisikan fungsi matriks rotasi:
+
+```{r}
+buat_rot_mat = function(theta,n){
+  # buat template sebuah matriks identitas
+  temp_mat = matrix(0,ncol = n,nrow = n)
+  diag(temp_mat) = 1
+  
+  # buat matriks identitas terlebih dahulu
+  mat_rot = temp_mat
+
+  for(i in 1:(n-1)){
+    for(j in 1:i){
+      temp = temp_mat
+      idx = n-i
+      idy = n+1-j
+      # print(paste0("Matriks rotasi untuk ",idx," - ",idy,": DONE"))
+      temp[idx,idx] = cos(theta)
+      temp[idx,idy] = -sin(theta)
+      temp[idy,idx] = sin(theta)
+      temp[idy,idy] = cos(theta)
+      # assign(paste0("M",idx,idy),temp)
+      mat_rot = mat_rot %*% temp
+      mat_rot = mat_rot 
+    }
+  }
+  
+  return(mat_rot)
+}
+```
+
+Definisikan beberapa fungsi lain:
+
+```{r}
+# generate calon solusi
+generate_calon = function(){runif(2,min = -100,max = 100)}
+
+# fungsi objektif
+# input = generate_calon()
+obj_func = function(input){
+  pred = 
+    df |> 
+    # hitung value prediksi
+    mutate(pred = input[1] * employed + input[2]) |> 
+    pull(pred)
+  # perhitungan mae
+  Metrics::mae(df$population,pred)
+}
+```
+
+Kita mulai algoritmanya:
+
+```{r}
+N_spiral = ncore * 10
+iter_max = 60
+dimensi  = 2
+
+# bikin matriks rotasinya
+A_rot = buat_rot_mat(2*pi/30,dimensi)
+
+# kita generate calon solusi
+id_calon = 1:N_spiral
+calon    = vector("list",N_spiral)
+for(i in 1:N_spiral){
+  calon[[i]] = generate_calon()
+  }
+
+# iterasi pertama
+f_hit = mcmapply(obj_func,calon,mc.cores = ncore)
+
+# iterasi kedua dan seterusnya hingga iter_max
+for(ix in 1:iter_max){
+  # penentuan calon paling minimum
+  id_min = id_calon[which(f_hit == min(f_hit))] %>% min()
+  # ambil komponen terkecil pertama saja
+  id_min = id_min[1]
+  pusat  = calon[[id_min]]
+  
+  # kelak akan ada loop tapi pusat gravitasi tak diikutsertakan
+  loop = 1:N_spiral
+  loop = loop[-id_min]
+  
+  # proses rotasi semua calon
+  for(i in loop){
+    Xt = calon[[i]]
+    X  = A_rot %*% (Xt - pusat)
+    X  = pusat + (.9 * X)
+    calon[[i]] = X
+    }
+  f_hit = mcmapply(obj_func,calon,mc.cores = ncore)
+}
+
+# penentuan solusi final
+id_min = id_calon[which(f_hit == min(f_hit))] %>% min()
+# ambil komponen terkecil pertama saja
+id_min = id_min[1]
+solusi = calon[[id_min]]
+```
+
+Berikut adalah solusi yang dihasilkan:
+
+```{r}
+# solusinya
+data.frame(ket   = c("x_1","x_2"),
+           value = solusi) |> knitr::kable()
+```
+
+_Mean absolute error_ yang dihasilkan:
+
+```{r}
+# MAE
+min(f_hit)
+```
+
+Berikut adalah perbandingan dengan `base` __R__:
+
+```{r}
+model = lm(population~employed,df)
+pred  = predict(model,df)
+```
+
+_Mean absolute error_ yang dihasilkan:
+
+```{r}
+Metrics::mae(df$population,pred)
+```
+
+Berikut adalah koefisien regresinya:
+
+```{r}
+model
+```
+
+
+
+
+
+
+
+
+
+
+
+

@@ -46,208 +46,11 @@ Misalkan saya memiliki titik $x \in \mathbb{R}^2$. Untuk melakukan rotasi sebesa
 
 $$\begin{bmatrix} x_1 (k+1) \\ x_2 (k+1) \end{bmatrix} = \begin{bmatrix} \cos{\theta} & -\sin{\theta} \\ \sin{\theta} & \cos{\theta} \end{bmatrix} \begin{bmatrix} x_1 (k) \\ x_2 (k) \end{bmatrix}$$
 
-Berdasarkan operasi matriks di atas, saya membuat __program__ di __R__ dengan beberapa modifikasi. Sebagai contoh, saya akan membuat program yang bertujuan untuk melakukan rotasi suatu titik $x \in \mathbb{R}$ sebanyak $n$ kali:
-
-
-```{r,include = FALSE}
-rm(list=ls())
-library(dplyr)
-library(ggplot2)
-
-# function untuk random titik
-rand_titik = function(a,b){
-  runif(2,a,b)
-}
-```
-
-```{r}
-# mendefinisikan program
-rotasi_kan = function(x0,rot){
-  # menghitung theta
-  theta = 2*pi/rot
-  # definisi matriks rotasi
-  A = matrix(c(cos(theta),-sin(theta),
-             sin(theta),cos(theta)),
-           ncol = 2,byrow = T)
-  
-  # membuat template
-  temp = vector("list")
-  temp[[1]] = x0
-  # proses rotasi
-  for(i in 2:rot){
-    xk = A %*% x0
-    temp[[i]] = xk
-    x0 = xk
-  }
-  
-  # membuat template data frame
-  final = data.frame(x = rep(NA,rot),
-                     y = rep(NA,rot))
-  
-  # gabung data dari list
-  for(i in 1:rot){
-    tempura = temp[[i]]
-    final$x[i] = tempura[1]
-    final$y[i] = tempura[2]
-  }
-  # membuat plot
-  plot = 
-    ggplot() +
-    geom_point(aes(x,y),data = final) +
-    geom_point(aes(x[1],y[1]),
-               data = final,
-               color = "red") +
-    coord_equal() +
-    labs(title = "titik merah adalah titik initial") 
-  
-  # enrich dengan garis panah
-  panah = data.frame(
-    x_start = final$x[1:(rot-1)],
-    x_end = final$x[2:rot],
-    y_start = final$y[1:(rot-1)],
-    y_end = final$y[2:rot]
-  )
-  # menambahkan garis panah ke plot
-  plot = 
-    plot + 
-    geom_segment(aes(x = x_start,
-                 xend = x_end,
-                 y = y_start,
-                 yend = y_end),
-                 data = panah,
-                 arrow = arrow(length = unit(.3,"cm"))
-                 )
-  
-  # menyiapkan output
-  list("Grafik rotasi" = plot,
-       "Titik-titik rotasi" = final)
-  }
-```
-
-
-
-Berikut adalah uji coba dengan titik sembarang berikut ini:
-
-```{r,fig.align="center",fig.retina = 10}
-# uji coba
-rot = 12 # berapa banyak rotasi
-x0 = rand_titik(0,10) # generate random titik
-rotasi_kan(x0,rot)
-```
-
-
-
-Uji coba kembali dengan titik sembarang lainnya berikut ini:
-
-```{r,fig.align="center",fig.retina = 10,fig.caption = "Uji Coba Rotasi II"}
-# uji coba
-rot = 7 # berapa banyak rotasi
-x0 = rand_titik(0,10) # generate random titik
-rotasi_kan(x0,rot)
-```
-
 ### Operasi Matriks Rotasi dan Kontraksi
 
 Jika pada sebelumnya saya __hanya melakukan rotasi__, kali ini saya akan memodifikasi operasi matriks agar melakukan rotasi dan konstraksi secara bersamaan. Untuk melakukan hal tersebut, saya akan definisikan $r,0<r<1$ dan melakukan operasi matriks sebagai berikut:
 
 $$\begin{bmatrix} x_1 (k+1) \\ x_2 (k+1) \end{bmatrix} = \begin{bmatrix} r \\ r \end{bmatrix} \begin{bmatrix} \cos{\theta} & -\sin{\theta} \\ \sin{\theta} & \cos{\theta} \end{bmatrix} \begin{bmatrix} x_1 (k) \\ x_2 (k) \end{bmatrix}$$
-
-Oleh karena itu saya akan modifikasi program __R__ sebelumnya menjadi sebagai berikut:
-
-```{r}
-# mendefinisikan program
-rotasi_konstraksi_kan = function(x0,rot,r){
-  # menghitung theta
-  theta = 2*pi/rot
-  # definisi matriks rotasi
-  A = matrix(c(cos(theta),-sin(theta),
-             sin(theta),cos(theta)),
-           ncol = 2,byrow = T)
-  
-  # membuat template
-  temp = vector("list")
-  temp[[1]] = x0
-  # proses rotasi dan konstraksi
-  for(i in 2:rot){
-    xk = A %*% x0
-    xk = r * xk
-    temp[[i]] = xk
-    x0 = xk
-  }
-  
-  # membuat template data frame
-  final = data.frame(x = rep(NA,rot),
-                     y = rep(NA,rot))
-  
-  # gabung data dari list
-  for(i in 1:rot){
-    tempura = temp[[i]]
-    final$x[i] = tempura[1]
-    final$y[i] = tempura[2]
-  }
-  # membuat plot
-  plot = 
-    ggplot() +
-    geom_point(aes(x,y),data = final) +
-    geom_point(aes(x[1],y[1]),
-               data = final,
-               color = "red") +
-    coord_equal() +
-    labs(title = "titik merah adalah titik initial") 
-  
-  # enrich dengan garis panah
-  panah = data.frame(
-    x_start = final$x[1:(rot-1)],
-    x_end = final$x[2:rot],
-    y_start = final$y[1:(rot-1)],
-    y_end = final$y[2:rot]
-  )
-  # menambahkan garis panah ke plot
-  plot = 
-    plot + 
-    geom_segment(aes(x = x_start,
-                 xend = x_end,
-                 y = y_start,
-                 yend = y_end),
-                 data = panah,
-                 arrow = arrow(length = unit(.3,"cm"))
-                 )
-  
-  # menyiapkan output
-  list("Grafik rotasi" = plot,
-       "Titik-titik rotasi" = final)
-  }
-```
-
-Berikutnya saya akan tunjukkan ilustrasi dari program ini.
-
-
-
-Saya akan uji coba untuk sembarang titik berikut ini:
-
-```{r,fig.align="center",fig.retina = 10,fig.caption = "Uji Coba Rotasi-Konstraksi I"}
-# uji coba
-rot = 40 # berapa banyak rotasi
-x0 = rand_titik(0,4) # generate random titik
-r = .9
-rotasi_konstraksi_kan(x0,rot,r)
-```
-
-
-
-Saya akan uji coba kembali untuk sembarang titik lainnya berikut ini:
-
-```{r,fig.align="center",fig.retina = 10}
-# uji coba
-rot = 6 # berapa banyak rotasi
-x0 = rand_titik(0,4) # generate random titik
-r = .7
-rotasi_konstraksi_kan(x0,rot,r)
-```
-
-__Catatan penting:__
-
-Terlihat bahwa semakin banyak rotasi dan konstraksi yang dilakukan akan membuat titik _initial_ __menuju pusat__ $(0,0)$.
 
 ### Operasi Matriks Rotasi dan Kontraksi dengan Titik $x^*$ Sebagai Pusatnya
 
@@ -255,107 +58,22 @@ Salah satu prinsip utama dari _spiral optimization algorithm_ adalah menjadikan 
 
 $$\begin{bmatrix} x_1 (k+1) \\ x_2 (k+1) \end{bmatrix} = \begin{bmatrix} x_1^* \\ x_2^* \end{bmatrix} + \begin{bmatrix} r \\ r \end{bmatrix} \begin{bmatrix} \cos{\theta} & -\sin{\theta} \\ \sin{\theta} & \cos{\theta} \end{bmatrix} ( \begin{bmatrix} x_1 (k) \\ x_2 (k) \end{bmatrix} - \begin{bmatrix} x_1^* \\ x_2^* \end{bmatrix} )$$
 
-
-Oleh karena itu kita akan modifikasi program bagian sebelumnya menjadi seperti ini:
-
-```{r}
-# mendefinisikan program
-rotasi_konstraksi_pusat_kan = function(x0,rot,r,x_bin){
-  # pusat rotasi
-  pusat = x_bin
-  # menghitung theta
-  theta = 2*pi/rot
-  # definisi matriks rotasi
-  A = matrix(c(cos(theta),-sin(theta),
-             sin(theta),cos(theta)),
-           ncol = 2,byrow = T)
-  
-  # membuat template
-  temp = vector("list")
-  temp[[1]] = x0
-  # proses rotasi dan konstraksi
-  for(i in 2:rot){
-    xk = A %*% (x0-pusat) # diputar dengan x_bin sebagai pusat
-    xk = pusat + (r * xk)
-    temp[[i]] = xk
-    x0 = xk
-  }
-  
-  # membuat template data frame
-  final = data.frame(x = rep(NA,rot),
-                     y = rep(NA,rot))
-  
-  # gabung data dari list
-  for(i in 1:rot){
-    tempura = temp[[i]]
-    final$x[i] = tempura[1]
-    final$y[i] = tempura[2]
-  }
-  # membuat plot
-  plot = 
-    ggplot() +
-    geom_point(aes(x,y),data = final) +
-    geom_point(aes(x[1],y[1]),
-               data = final,
-               color = "red") +
-    geom_point(aes(x = pusat[1],
-		   y = pusat[2]),
-	       color = "blue") +
-    labs(title = "titik merah adalah titik initial\ntitik biru adalah pusat rotasi") 
-  
-  # enrich dengan garis panah
-  panah = data.frame(
-    x_start = final$x[1:(rot-1)],
-    x_end = final$x[2:rot],
-    y_start = final$y[1:(rot-1)],
-    y_end = final$y[2:rot]
-  )
-  # menambahkan garis panah ke plot
-  plot = 
-    plot + 
-    geom_segment(aes(x = x_start,
-                 xend = x_end,
-                 y = y_start,
-                 yend = y_end),
-                 data = panah,
-                 arrow = arrow(length = unit(.3,"cm"))
-                 )
-  
-  # menyiapkan output
-  list("Grafik rotasi" = plot,
-       "Titik-titik rotasi" = final)
-  }
-```
-
-Berikutnya saya akan tunjukkan ilustrasi dari program ini.
-
-Saya akan coba dengan sembarang titik berikut:
-
-```{r,fig.align="center",fig.retina = 10,fig.caption = "Uji Coba Rotasi-Konstraksi Terhadap x* I"}
-# uji coba
-rot = 10 # berapa banyak rotasi
-x0 = rand_titik(0,4) # generate random titik
-x_bintang = c(0,1) # contoh pusat rotasi
-r = .6
-rotasi_konstraksi_pusat_kan(x0,rot,r,x_bintang)
-```
-
-
-
-Saya akan coba kembali dengan sembarang titik lainnya:
-
-```{r,fig.align="center",fig.retina = 10,fig.caption = "Uji Coba Rotasi-Konstraksi Terhadap x* II"}
-# uji coba
-rot = 45 # berapa banyak rotasi
-x0 = rand_titik(0,10) # generate random titik
-x_bintang = c(2,3) # contoh pusat rotasi
-r = .87
-rotasi_konstraksi_pusat_kan(x0,rot,r,x_bintang)
-```
-
 ## Skrip _Spiral Optimization Algorithm_
 
-Berbekal program yang telah dituliskan di bagian sebelumnya, kita akan sempurnakan program untuk melakukan _spiral optimization_ sebagai berikut:
+Misalkan suatu masalah matematis dituliskan sebagai berikut:
+
+$$f(x_1,x_2) = \frac{x_1^4 - 16 x_1^2 + 5 x_1}{2} + \frac{x_2^4 - 16 x_2^2 + 5 x_2}{2}$$
+
+$$-4 \leq x_1,x_2 \leq 4$$
+
+Kita akan mencari solusi $x_1$ dan $x_2$ menggunakan algoritma spiral. Berikut skripnya di __R__:
+
+```{r}
+#| include: false
+library(dplyr)
+library(tidyr)
+library(parallel)
+```
 
 ```{r}
 soa_mrf = function(N,	  # banyak titik
@@ -407,15 +125,8 @@ return(output)
 }
 ```
 
-### Contoh Penggunaan Program
+Kita akan pilih parameter spiral sebagai berikut: $r = 0.8, N = 50, rot = 20, k_{max} = 60$.
 
-Kita akan coba performa program tersebut untuk menyelesaikan fungsi berikut:
-
-$$f(x_1,x_2) = \frac{x_1^4 - 16 x_1^2 + 5 x_1}{2} + \frac{x_2^4 - 16 x_2^2 + 5 x_2}{2}$$
-
-$$-4 \leq x_1,x_2 \leq 4$$
-
-Dengan $r = 0.8, N = 50, rot = 20, k_{max} = 60$.
 
 ```{r}
 # definisi
@@ -647,7 +358,13 @@ soa_mrf_ip_3_var(
 )
 ```
 
+## _Conclusion_
 
+Untuk bisa menuliskan skrip spiral, hal yang perlu diperhatikan adalah:
+
+1. Pendefinisian matriks rotasi.
+1. Pendefinisian fungsi objektif.
+1. Pemilihan parameter spiral seperti sudut rotasi, berapa besar konstraksi, dan iterasi maksimal.
 
 
 

@@ -1,0 +1,86 @@
+---
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+# SOAL
+
+Berikut ini ada beberapa masalah optimisasi yang bisa dicoba selesaikan
+dengan `ompr` atau *spiral dynamic*.
+
+```{r}
+#| include: false
+rm(list=ls())
+gc()
+library(dplyr)
+library(tidyr)
+library(gt)
+library(gtExtras)
+```
+
+## Masalah Regresi Linear
+
+Ambil data `longley` dari `base` **R** sebagai berikut:
+
+```{r}
+longley |> 
+  janitor::clean_names() |> 
+  gt() |> 
+  gt_theme_538() |>
+  tab_header(title = "Data Longley",
+             subtitle = "Diambil dari base R")
+```
+
+Kita akan membuat regresi linear sebagai berikut:
+
+$$population \simeq x_1employed + x_2$$
+
+## Masalah Regresi Non Linear
+
+Dari data `longley` yang digunakan pada masalah sebelumnya, buat regresi
+non linear sebagai berikut:
+
+$$population \simeq x_1 \ employed + x_2 \ \sqrt{unemployed} + x_3 \ armedforces^2 + x_4$$
+
+## Masalah Urutan
+
+Seorang pelatih estafet hendak mendaftarkan timnya untuk mengikuti kompetisi di suatu waktu. Pelatih tersebut harus memilih __4 dari 6 orang pelari__ anak didiknya. Untuk itu, dia melakukan beberapa kali simulasi dan mencatatkan waktunya sebagai berikut:
+
+
+| Pelari     | Fraction 1 | Fraction 2 | Fraction 3 | Fraction 4 |
+|------------|------------|------------|------------|------------|
+| Sprinter 1 | 12.27      | 11.57      | 11.54      | 12.07      |
+| Sprinter 2 | 11.34      | 11.45      | 12.45      | 12.34      |
+| Sprinter 3 | 11.29      | 11.50      | 11.45      | 11.52      |
+| Sprinter 4 | 12.54      | 12.34      | 12.32      | 11.57      |
+| Sprinter 5 | 12.20      | 11.22      | 12.07      | 12.03      |
+| Sprinter 6 | 11.54      | 11.48      | 11.56      | 12.30      |
+
+
+__Hanya boleh satu pelari yang menempati satu *fraction*.__
+
+Bagaimana cara si pelatih menentukan pelari mana yang harus di-_assign_?
+
+## Masalah Pengelompokkan _Routing_
+
+Misalkan suatu perusahaan logistik harus mengantarkan paket kepada 50 titik alamat pengantaran. Lokasi awal pengantaran ada di titik (50,50).
+
+Berikut adalah datanya:
+
+```{r}
+rm(list=ls())
+
+df = read.csv("data_toko.csv")
+
+df |> 
+  gt() |> 
+  gt_theme_538() |>
+  tab_header(title = "Data Titik Alamat",
+             subtitle = "50 Toko")
+```
+
+Data bisa di-_download_ di sini^[https://github.com/Nutrifood-Data-Science/LearningForum/blob/main/10%20Optimisasi/OptimBook/data_toko.csv].
+
+Misalkan dalam sekali pengantaran paket, kurir mampu membawa 10-15 paket, kelompokkan 50 titik tersebut menjadi seminimal mungkin kelompok dengan jarak rute terkecil!
+

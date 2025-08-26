@@ -290,7 +290,7 @@ for(ikanx in 1:100){
 }
 
 # penentuan solusi
-id_min = id_calon[which(f_hit == min(f_hit))] %>% min()
+id_min   = id_calon[which(f_hit == min(f_hit))] %>% min()
 cluster_ = calon[[id_min]] %>% floor()
 ```
 
@@ -316,6 +316,7 @@ mtcars_scaled |>
   group_by(cluster) |> 
   summarise_all(mean) |> 
   ungroup() |> 
+  gt() |> 
   gt_theme_538() |> 
   tab_header(title = "Cluster Centers",
              subtitle = "Hasil Spiral Dynamic")
