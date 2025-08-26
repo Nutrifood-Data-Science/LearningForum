@@ -11,7 +11,7 @@ library(ellmer)
 # https://ellmer.tidyverse.org/articles/ellmer.html
 
 # pada kasus ini kita akan ambil deepseek dan openAI saja
-Sys.setenv(DEEPSEEK_API_KEY="sk-24d2a5762f0841d0abcf39e018034d69")
+# Sys.setenv(DEEPSEEK_API_KEY="")
 
 # set sistem prompt di awal
 prompt_sys = 
