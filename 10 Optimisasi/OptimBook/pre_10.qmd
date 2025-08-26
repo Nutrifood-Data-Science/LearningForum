@@ -73,7 +73,7 @@ obj_func = function(input){
 }
 ```
 
-Kita mulai algoritmanya:
+Targetnya adalah meminimumkan _mean absolute error_ sebagai fungsi objektifnya. Kita mulai algoritmanya:
 
 ```{r}
 N_spiral = ncore * 10

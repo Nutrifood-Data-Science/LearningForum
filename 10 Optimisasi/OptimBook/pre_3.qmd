@@ -15,7 +15,7 @@ Dalam beberapa kasus, kita bisa mendapatkan _exact method_ bisa untuk menyelesai
 
 ## _Exact Method_
 
-Ciri khas dari _exact method_ adalah metode ini menjamin penyelesaian yang optimal karena menggunakan pendekatan analitis [@franz]. Salah satu contoh metode eksak adalah _Simplex Method_.
+Ciri khas dari _exact method_ adalah metode ini menjamin penyelesaian yang optimal karena menggunakan pendekatan analitis. Salah satu contoh metode eksak adalah _Simplex Method_.
 
 ## _Approximate Method_
 
