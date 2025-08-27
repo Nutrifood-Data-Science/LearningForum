@@ -2,12 +2,13 @@
 
 
 - [Mukadimah](#mukadimah)
-- [*Setting* Awal](#setting-awal)
+- [**Ellmer** dan **Ragnar**](#ellmer-dan-ragnar)
+- [*Setting* Awal *Python* di **R** untuk
+  *Huggingface*](#setting-awal-python-di-r-untuk-huggingface)
   - [Tahap 1](#tahap-1)
   - [Tahap 2](#tahap-2)
   - [Tahap 3](#tahap-3)
   - [Catatan Khusus](#catatan-khusus)
-- [**Ellmer** dan **Ragnar**](#ellmer-dan-ragnar)
 - [*Key Concept*](#key-concept)
   - [*Embedding*](#embedding)
 
@@ -20,10 +21,17 @@ LLM *open source* dari **Huggingface** hingga LLM komersial seperti
 Apa saja yang bisa dilakukan menggunakan LLM?
 
 1.  *Text clustering*.
-2.  *Retrieval augmented generation* (RAG).
-3.  *and many more*.
+2.  *Retrieval augmented generation* (*RAG*).
+3.  *Sentiment analysis*,
+4.  *and many more*.
 
-# *Setting* Awal
+# **Ellmer** dan **Ragnar**
+
+Kita akan *exploit* kegunaan `ellmer` dan `ragnar` pada *workshop* ini.
+Pastikan sudah ter-*install* dan kita memiliki salah satu dari **API
+Key** **DeepSeek** atau **OpenAI**.
+
+# *Setting* Awal *Python* di **R** untuk *Huggingface*
 
 Sebelum mulai, kita memerlukan *setting* awal khusus agar bisa melakukan
 komputasi model **Huggingface** di *local computer* menggunakan **R**,
@@ -69,12 +77,6 @@ sudah ter-*install* terlebih dahulu.
 Hal ini perlu dilakukan ulang setiap kali kita berpindah *working
 directory*.
 
-# **Ellmer** dan **Ragnar**
-
-Kita akan *exploit* kegunaan `ellmer` dan `ragnar` pada *workshop* ini.
-Pastikan sudah ter-*install* dan kita memiliki salah satu dari **API
-Key** **DeepSeek** atau **OpenAI**.
-
 # *Key Concept*
 
 Untuk bisa melakukan *text analysis* ataupun **RAG**, ada satu
@@ -85,11 +87,22 @@ Untuk bisa melakukan *text analysis* ataupun **RAG**, ada satu
 Apa itu proses *embedding*?
 
 *Embedding text* adalah proses transformasi teks menjadi representasi
-numerik padat (vektor) yang menangkap makna semantik dan hubungan
-kontekstual. LLM menggunakan *embedding* untuk memetakan kata/frasa ke
-ruang vektor multidimensi dimana jarak geometris mencerminkan kesamaan
-semantik. Proses ini memungkinkan model memahami konteks, melakukan
-operasi matematika pada teks, dan mengidentifikasi pola tersembunyi
-dalam data linguistik.
+numerik (bisa berupa vektor atau matriks) yang menangkap makna semantik
+dan hubungan kontekstual. LLM menggunakan *embedding* untuk memetakan
+kata/frasa ke ruang vektor multidimensi dimana **jarak geometris
+mencerminkan kesamaan semantik**. Proses ini memungkinkan model memahami
+konteks, melakukan operasi matematika pada teks, dan mengidentifikasi
+pola tersembunyi dalam data linguistik.
 
 <img src="flow.png" width="350" />
+
+Contoh kasus:
+
+Kalimat 1: Saya mau pergi ke pasar.
+
+Kalimat 2: Saya mau pergi ke sekolah.
+
+Menggunakan *embedding* secara LLM, konteks dari kedua kalimat ini
+sangat berbeda dan **jarak geometris**-nya akan besar. Namun jika kita
+menggunakan teknik *indexing words*, jarak antar kedua kalimat sangat
+dekat.

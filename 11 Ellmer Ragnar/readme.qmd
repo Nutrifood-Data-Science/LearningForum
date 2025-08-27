@@ -14,10 +14,15 @@ editor: source
 Apa saja yang bisa dilakukan menggunakan LLM?
 
 1.  *Text clustering*.
-2.  *Retrieval augmented generation* (RAG).
-3.  *and many more*.
+2.  *Retrieval augmented generation* (_RAG_).
+3.  _Sentiment analysis_,
+4. *and many more*.
 
-# *Setting* Awal
+# **Ellmer** dan **Ragnar**
+
+Kita akan *exploit* kegunaan `ellmer` dan `ragnar` pada *workshop* ini. Pastikan sudah ter-*install* dan kita memiliki salah satu dari **API Key** **DeepSeek** atau **OpenAI**.
+
+# *Setting* Awal _Python_ di __R__ untuk _Huggingface_
 
 Sebelum mulai, kita memerlukan *setting* awal khusus agar bisa melakukan komputasi model **Huggingface** di *local computer* menggunakan **R**, kita perlu membuat *virtual python environment* dengan cara sebagai berikut:
 
@@ -62,10 +67,6 @@ Saya melakukan instalasi menggunakan perintah `pip`. Jadi pastikan `pip` sudah t
 ## Catatan Khusus
 
 Hal ini perlu dilakukan ulang setiap kali kita berpindah *working directory*.
-
-# **Ellmer** dan **Ragnar**
-
-Kita akan *exploit* kegunaan `ellmer` dan `ragnar` pada *workshop* ini. Pastikan sudah ter-*install* dan kita memiliki salah satu dari **API Key** **DeepSeek** atau **OpenAI**.
 
 # *Key Concept*
 

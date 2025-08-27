@@ -11,35 +11,49 @@ library(stringr)
 # https://www.infoworld.com/article/4020484/generative-ai-rag-comes-to-the-r-tidyverse.html
 # https://blog.stephenturner.us/p/tidy-rag-in-r-with-ragnar?r=wxa1&utm_campaign=post&utm_medium=web
 
-setwd("~/RAG-using-R/5 RAG nar")
+setwd("~/LearningForum/11 Ellmer Ragnar")
 
 # Sys.setenv(OPENAI_API_KEY="")
 # Sys.setenv(DEEPSEEK_API_KEY="")
 
-load("url.rda")
-pages = temp[1:10]
+# load data
+load("dbase_produk.rda")
+
+# kita bikin function converter markdown dulu
+create_md = function(input,nama_file){
+  konten = glue::glue("# Title
+  
+  ## Isi
+  
+  ",input)
+  writeLines(konten,paste0(nama_file,".md"))
+}
 
 # Create and connect to a vector store
-store_location = "ikanx101.duckdb"
+store_location = "testmd.duckdb"
 store = ragnar_store_create(
   store_location,
   embed = \(x) ragnar::embed_openai(x, model = "text-embedding-3-small")
 )
 
-# Read each website and chunk it up
-for (i in 1:length(pages)) {
-  message("ingesting: ", pages[i])
+# Read each markdown and chunk it up
+for (i in 1:length(info)) {
+  create_md(info[[i]],i)
+  print(i)
+  mds = paste0(i,".md")
   chunks = 
-    pages[i] |>
+    mds |> 
     read_as_markdown() |>
     markdown_chunk(
       target_size = NA,
-      segment_by_heading_levels = 3
+      segment_by_heading_levels = 2
     ) |>
-    filter(str_starts(text, "### ")) 
+    filter(str_starts(text, "## ")) 
   
   ragnar_store_insert(store, chunks)
 }
+
+chunks$text
 
 # Build the index
 ragnar_store_build_index(store)
@@ -57,7 +71,7 @@ text = readline("Mau tanya apa? ")
 relevant_chunks = ragnar_retrieve_vss(
   store,
   text,
-  top_k = 2 # ambil top 3 konten yang paling relevan
+  top_k = 3 # ambil top 3 konten yang paling relevan
 )
 
 relevant_chunks$origin  %>% unique()
@@ -74,9 +88,9 @@ prompt_ = stringr::str_squish(
                   4. Buat dalam maksimal 5 paragraf tanpa melibatkan formula matematika.
                 
                 Mulai jawaban dengan menuliskan kalimat: 
-                Menurut blog ikanx101.com
+                Menurut hemat saya:
                 
-                Akhiri jawaban dengan menuliskan sumber blog dari informasi yang diberikan
+                Akhiri jawaban dengan menuliskan: Terima kasih
   ")
 
 chat <- ellmer::chat_openai(
