@@ -63,11 +63,14 @@ berikut:
 *Install library* `transformers` pada *local computer* sebagai berikut:
 
     # proses install transformers dan torch
+    pip install keras
+    pip install tensorflow
     pip install transformers
+    pip install sentence-transformers
     pip install 'transformers[torch]'
     pip install diffusers["torch"] transformers
-    pip install protobuf
-    pip install pandas
+    pip install tf-keras
+    pip install duckdb
 
 Saya melakukan instalasi menggunakan perintah `pip`. Jadi pastikan `pip`
 sudah ter-*install* terlebih dahulu.
