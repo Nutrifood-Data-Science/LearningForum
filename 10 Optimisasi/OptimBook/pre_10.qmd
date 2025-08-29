@@ -10,7 +10,7 @@ library(parallel)
 ncore = detectCores()
 ```
 
-# JAWABAN SOAL
+# JAWABAN SOAL OPTIMISASI
 
 Pada bagian ini, kita akan jawab soal pada _part_ sebelumnya dengan beberapa cara:
 
@@ -76,7 +76,7 @@ obj_func = function(input){
 Targetnya adalah meminimumkan _mean absolute error_ sebagai fungsi objektifnya. Kita mulai algoritmanya:
 
 ```{r}
-N_spiral = ncore * 10
+N_spiral = ncore * 15
 iter_max = 60
 dimensi  = 2
 
@@ -155,6 +155,523 @@ Berikut adalah koefisien regresinya:
 ```{r}
 model
 ```
+
+## Masalah Regresi Non Linear
+
+```{r}
+#| include: false
+rm(list=ls())
+gc()
+library(dplyr)
+library(tidyr)
+library(gt)
+library(gtExtras)
+library(parallel)
+ncore = detectCores()
+```
+
+Data:
+
+```{r}
+df = longley |> janitor::clean_names() |> select(population,employed,unemployed,armed_forces)
+df
+```
+
+Definisikan fungsi matriks rotasi:
+
+```{r}
+buat_rot_mat = function(theta,n){
+  # buat template sebuah matriks identitas
+  temp_mat = matrix(0,ncol = n,nrow = n)
+  diag(temp_mat) = 1
+  
+  # buat matriks identitas terlebih dahulu
+  mat_rot = temp_mat
+
+  for(i in 1:(n-1)){
+    for(j in 1:i){
+      temp = temp_mat
+      idx = n-i
+      idy = n+1-j
+      # print(paste0("Matriks rotasi untuk ",idx," - ",idy,": DONE"))
+      temp[idx,idx] = cos(theta)
+      temp[idx,idy] = -sin(theta)
+      temp[idy,idx] = sin(theta)
+      temp[idy,idy] = cos(theta)
+      # assign(paste0("M",idx,idy),temp)
+      mat_rot = mat_rot %*% temp
+      mat_rot = mat_rot 
+    }
+  }
+  
+  return(mat_rot)
+}
+```
+
+Definisikan beberapa fungsi lain:
+
+```{r}
+# generate calon solusi
+generate_calon = function(){runif(4,min = -400,max = 400)}
+
+# fungsi objektif
+# input = generate_calon()
+obj_func = function(input){
+  pred = 
+    df |> 
+    # hitung value prediksi
+    mutate(pred = input[1] * employed + 
+                  input[2] * sqrt(unemployed) + 
+                  input[3] * armed_forces^2 + 
+                  input[4]) |> 
+    pull(pred)
+  # perhitungan mae
+  Metrics::mae(df$population,pred)
+}
+```
+
+Targetnya adalah meminimumkan _mean absolute error_ sebagai fungsi objektifnya. Kita mulai algoritmanya:
+
+```{r}
+N_spiral = ncore * 100
+iter_max = 40
+dimensi  = 4
+
+# bikin matriks rotasinya
+A_rot = buat_rot_mat(2*pi/30,dimensi)
+
+# kita generate calon solusi
+id_calon = 1:N_spiral
+calon    = vector("list",N_spiral)
+for(i in 1:N_spiral){
+  calon[[i]] = generate_calon()
+  }
+
+# iterasi pertama
+f_hit = mcmapply(obj_func,calon,mc.cores = ncore)
+
+# iterasi kedua dan seterusnya hingga iter_max
+for(ix in 1:iter_max){
+  # penentuan calon paling minimum
+  id_min = id_calon[which(f_hit == min(f_hit))] %>% min()
+  # ambil komponen terkecil pertama saja
+  id_min = id_min[1]
+  pusat  = calon[[id_min]]
+  
+  # kelak akan ada loop tapi pusat gravitasi tak diikutsertakan
+  loop = 1:N_spiral
+  loop = loop[-id_min]
+  
+  # proses rotasi semua calon
+  for(i in loop){
+    Xt = calon[[i]]
+    X  = A_rot %*% (Xt - pusat)
+    X  = pusat + (.8 * X)
+    calon[[i]] = X
+    }
+  f_hit = mcmapply(obj_func,calon,mc.cores = ncore)
+}
+
+# penentuan solusi final
+id_min = id_calon[which(f_hit == min(f_hit))] %>% min()
+# ambil komponen terkecil pertama saja
+id_min = id_min[1]
+solusi = calon[[id_min]]
+```
+
+Berikut adalah solusi yang dihasilkan:
+
+```{r}
+# solusinya
+data.frame(ket   = c("x_1","x_2","x_3","x_4"),
+           value = solusi) |> knitr::kable()
+```
+
+_Mean absolute error_ yang dihasilkan:
+
+```{r}
+# MAE
+min(f_hit)
+```
+
+
+
+
+```{r}
+#| include: false
+rm(list=ls())
+gc()
+library(dplyr)
+library(tidyr)
+library(gt)
+library(gtExtras)
+library(parallel)
+ncore = detectCores()
+```
+
+
+## Masalah Urutan Pelari
+
+Kita punya data waktu pelari per _fraction_:
+
+```{r}
+df =data.frame(runner = c(1:6),
+               f1     = c(12.27,11.34,11.29,12.54,12.20,11.54),
+               f2     = c(11.57,11.45,11.50,12.34,11.22,11.48),
+               f3     = c(11.54,12.45,11.45,12.32,12.07,11.56),
+               f4     = c(12.07,12.34,11.52,11.57,12.03,12.30)
+               ) 
+df |> 
+  gt() %>% 
+  gt_theme_538() %>% 
+  tab_header(title = "Waktu Pelari di Setiap Fraction",
+             subtitle = "Data Input")
+```
+
+Definisikan fungsi matriks rotasi:
+
+```{r}
+buat_rot_mat = function(theta,n){
+  # buat template sebuah matriks identitas
+  temp_mat = matrix(0,ncol = n,nrow = n)
+  diag(temp_mat) = 1
+  
+  # buat matriks identitas terlebih dahulu
+  mat_rot = temp_mat
+
+  for(i in 1:(n-1)){
+    for(j in 1:i){
+      temp = temp_mat
+      idx = n-i
+      idy = n+1-j
+      # print(paste0("Matriks rotasi untuk ",idx," - ",idy,": DONE"))
+      temp[idx,idx] = cos(theta)
+      temp[idx,idy] = -sin(theta)
+      temp[idy,idx] = sin(theta)
+      temp[idy,idy] = cos(theta)
+      # assign(paste0("M",idx,idy),temp)
+      mat_rot = mat_rot %*% temp
+      mat_rot = mat_rot 
+    }
+  }
+  
+  return(mat_rot)
+}
+```
+
+
+Definisikan beberapa fungsi lain:
+
+
+
+```{r}
+# generate solusi
+generate_calon = function(){runif(6)}
+
+# objective function
+obj_func = function(calon){
+  # kita sort dulu
+  urut = calon |> sort()
+  # ambil hanya 4
+  urut = urut[1:4]
+  
+  # dimana letak urutannya
+  urutan_1 = which(calon == urut[1])
+  urutan_2 = which(calon == urut[2])
+  urutan_3 = which(calon == urut[3])
+  urutan_4 = which(calon == urut[4])
+  
+  # jumlahkan waktunya
+  output = sum(df$f1[urutan_1],df$f2[urutan_2],df$f3[urutan_3],df$f4[urutan_4])
+  return(output)
+}
+
+```
+
+Targetnya adalah meminimumkan waktu total lari sebagai fungsi objektifnya. Kita mulai algoritmanya:
+
+```{r}
+N_spiral = ncore * 2
+iter_max = 10
+dimensi  = 6
+
+# bikin matriks rotasinya
+A_rot = buat_rot_mat(2*pi/30,dimensi)
+
+# kita generate calon solusi
+id_calon = 1:N_spiral
+calon    = vector("list",N_spiral)
+for(i in 1:N_spiral){
+  calon[[i]] = generate_calon()
+  }
+
+# iterasi pertama
+f_hit = mcmapply(obj_func,calon,mc.cores = ncore)
+
+# iterasi kedua dan seterusnya hingga iter_max
+for(ix in 1:iter_max){
+  # penentuan calon paling minimum
+  id_min = id_calon[which(f_hit == min(f_hit))] %>% min()
+  # ambil komponen terkecil pertama saja
+  id_min = id_min[1]
+  pusat  = calon[[id_min]]
+  
+  # kelak akan ada loop tapi pusat gravitasi tak diikutsertakan
+  loop = 1:N_spiral
+  loop = loop[-id_min]
+  
+  # proses rotasi semua calon
+  for(i in loop){
+    Xt = calon[[i]]
+    X  = A_rot %*% (Xt - pusat)
+    X  = pusat + (.9 * X)
+    calon[[i]] = X
+    }
+  f_hit = mcmapply(obj_func,calon,mc.cores = ncore)
+}
+
+# penentuan solusi final
+id_min = id_calon[which(f_hit == min(f_hit))] %>% min()
+# ambil komponen terkecil pertama saja
+id_min = id_min[1]
+solusi = calon[[id_min]]
+```
+
+Berikut adalah solusi yang dihasilkan:
+
+```{r}
+# kita sort dulu
+urut = solusi |> sort()
+# ambil hanya 4
+urut = urut[1:4]
+  
+# dimana letak urutannya
+urutan_1 = which(solusi == urut[1])
+urutan_2 = which(solusi == urut[2])
+urutan_3 = which(solusi == urut[3])
+urutan_4 = which(solusi == urut[4])
+```
+
+Urutan pelari: `r paste(c(urutan_1,urutan_2,urutan_3,urutan_4),collapse = " -> ")`.
+
+Dengan total waktu yang didapatkan sebesar:
+
+```{r}
+f_hit[id_min]
+```
+
+
+## Masalah Pengelompokkan _Routing_
+
+```{r}
+#| include: false
+rm(list=ls())
+gc()
+library(dplyr)
+library(tidyr)
+library(gt)
+library(gtExtras)
+library(parallel)
+ncore = detectCores()
+```
+
+Kita punya data lokasi toko:
+
+```{r}
+df = read.csv("data_toko.csv") |> arrange(x,y)
+df |> 
+  gt() %>% 
+  gt_theme_538() %>% 
+  tab_header(title = "Data Lokasi Toko",
+             subtitle = "Data Input")
+```
+
+dan lokasi kantor di (50,50).
+
+Definisikan fungsi matriks rotasi:
+
+```{r}
+buat_rot_mat = function(theta,n){
+  # buat template sebuah matriks identitas
+  temp_mat = matrix(0,ncol = n,nrow = n)
+  diag(temp_mat) = 1
+  
+  # buat matriks identitas terlebih dahulu
+  mat_rot = temp_mat
+
+  for(i in 1:(n-1)){
+    for(j in 1:i){
+      temp = temp_mat
+      idx = n-i
+      idy = n+1-j
+      # print(paste0("Matriks rotasi untuk ",idx," - ",idy,": DONE"))
+      temp[idx,idx] = cos(theta)
+      temp[idx,idy] = -sin(theta)
+      temp[idy,idx] = sin(theta)
+      temp[idy,idy] = cos(theta)
+      # assign(paste0("M",idx,idy),temp)
+      mat_rot = mat_rot %*% temp
+      mat_rot = mat_rot 
+    }
+  }
+  
+  return(mat_rot)
+}
+```
+
+
+Definisikan beberapa fungsi lain:
+
+```{r}
+# generate solusi
+generate_calon = function(){
+  randomin = sample(4,1)
+  if(randomin == 1){output = sample(4,50,replace = T)}
+  if(randomin == 2){output = sample(5,50,replace = T)}
+  if(randomin == 3){output = sample(4,50,replace = T) |> sort()}
+  if(randomin == 4){output = sample(5,50,replace = T) |> sort()}
+  return(output)
+  }
+
+# info lokasi kantor
+lokasi_kantor = data.frame(x = 50,y = 50)
+
+# fungsi yang menambah lokasi kantor ke data frame per rute
+# lalu mengubahkan menjadi matriks jarak
+# kemudian dengan TSP mengubahnya menjadi jarak
+hitung_jarak = function(input){
+  mat_jar = 
+    input |> 
+    select(-rute) |> 
+    # menambahkan lokasi kantor
+    rbind(lokasi_kantor) |>
+    # mengubah menjadi matriks jarak
+    dist()
+
+  # mengubah matriks jarak menjadi TSP
+  obj = TSP::as.TSP(mat_jar)
+  tur = TSP::solve_TSP(obj)
+  # solving TSP
+  jar = TSP::tour_length(tur)
+
+  return(jar)
+}
+
+# objective function
+obj_func = function(calon){
+  calon = floor(calon)
+  # memasukkan calon rute
+  df_split = 
+    df |> 
+    mutate(rute = calon) |> 
+    group_split(rute)
+
+  # hitung total jarak
+  total_jarak = sapply(df_split,hitung_jarak) |> sum()
+  
+  # kasih penalti untuk rute yang isinya kurang dari 10 atau lebih dari 15
+  tes   = table(calon)
+  pen_1 = sum(tes < 10) * 100
+  pen_2 = sum(tes > 15) * 100
+  
+  # rute hanya boleh ada 4 atau 5 saja
+  n_rute = calon |> unique() |> length()
+  pen_ru = ifelse(n_rute < 4 | n_rute > 5,1000,0)
+  
+  # kita jumlahkan semua
+  output = total_jarak + pen_1 + pen_2 + pen_ru
+  return(output)
+}
+
+```
+
+Targetnya adalah meminimumkan total jarak serta penalti dari berapa banyak anggota rute sebagai fungsi objektifnya. Kita mulai algoritmanya:
+
+```{r}
+N_spiral = ncore * 30
+iter_max = 20
+dimensi  = 50
+
+# bikin matriks rotasinya
+A_rot = buat_rot_mat(2*pi/6,dimensi)
+
+# kita generate calon solusi
+id_calon = 1:N_spiral
+calon    = vector("list",N_spiral)
+for(i in 1:N_spiral){
+  calon[[i]] = generate_calon()
+  }
+
+# iterasi pertama
+f_hit = mcmapply(obj_func,calon,mc.cores = ncore)
+
+# iterasi kedua dan seterusnya hingga iter_max
+for(ix in 1:iter_max){
+  # penentuan calon paling minimum
+  id_min = id_calon[which(f_hit == min(f_hit))] %>% min()
+  # ambil komponen terkecil pertama saja
+  id_min = id_min[1]
+  pusat  = calon[[id_min]]
+  
+  # kelak akan ada loop tapi pusat gravitasi tak diikutsertakan
+  loop = 1:N_spiral
+  loop = loop[-id_min]
+  
+  # proses rotasi semua calon
+  for(i in loop){
+    Xt = calon[[i]]
+    X  = A_rot %*% (Xt - pusat)
+    X  = pusat + (.8 * X)
+    X  = ifelse(X < 1,max(X),X)
+    X  = ifelse(X > 5,1,X)
+    # X  = floor(X)
+    calon[[i]] = X
+    }
+  f_hit = mcmapply(obj_func,calon,mc.cores = ncore)
+}
+
+# penentuan solusi final
+id_min = id_calon[which(f_hit == min(f_hit))] %>% min()
+# ambil komponen terkecil pertama saja
+id_min = id_min[1]
+solusi = calon[[id_min]] |> floor()
+```
+
+Berikut adalah solusi yang dihasilkan:
+
+```{r}
+# solusi
+table(solusi)
+
+library(ggplot2)
+# Plot scatterplot dengan warna berdasarkan z dan garis penghubung
+df |> 
+  mutate(z = solusi) |> 
+  ggplot(aes(x = x, y = y, color = factor(z), group = z)) +
+  geom_point(size = 3) +  # Titik scatterplot
+  geom_line(alpha = 0.7) +  # Garis penghubung dalam kategori yang sama
+  labs(
+    title = "Pengelompokan Routing",
+    x = "x",
+    y = "y",
+    color = "Kelompok Routing"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+```
+
+Dengan nilai total jarak yang didapatkan sebesar:
+
+```{r}
+f_hit[id_min]
+```
+
+
+
+
 
 
 
