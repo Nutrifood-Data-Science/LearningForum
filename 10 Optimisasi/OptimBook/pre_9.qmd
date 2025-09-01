@@ -4,7 +4,7 @@ editor:
     wrap: 72
 ---
 
-# SOAL
+# SOAL OPTIMISASI
 
 Berikut ini ada beberapa masalah optimisasi yang bisa dicoba selesaikan
 dengan `ompr` atau *spiral dynamic*.
