@@ -8,6 +8,7 @@ book:
   downloads: [pdf]
   sharing: [twitter, facebook]
   chapters:
+    - prakata.qmd
     - index.qmd
     - pre_1.qmd
     - pre_2.qmd

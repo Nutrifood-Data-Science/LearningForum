@@ -1,0 +1,15 @@
+# MUKADIMAH
+
+## Kata Pengantar
+
+Sebagai seorang yang telah lama berkecimpung dalam dunia matematika terapan dan ilmu data, saya percaya bahwa optimisasi adalah jantung dari pengambilan keputusan yang cerdas dan efisien, khususnya dalam konteks industri manufaktur yang sarat dengan kompleksitas. Buku ini hadir sebagai jawaban atas kebutuhan akan pemahaman tentang bagaimana komputasi dan _solver_ dapat dimanfaatkan untuk menyelesaikan permasalahan optimisasi secara praktis dan efektif. Melalui pendekatan yang sistematis, saya mencoba menjembatani kesenjangan antara teori matematika yang abstrak dan penerapannya dalam dunia nyata, sehingga pembaca tidak hanya memahami konsep, tetapi juga mampu mengimplementasikannya.
+
+Dalam perspektif saya sebagai seorang matematikawan, keindahan optimisasi terletak pada kemampuannya untuk mentransformasikan kendala dan tujuan menjadi model matematis yang dapat dipecahkan. Buku ini tidak hanya menjelaskan teori di balik berbagai metode optimisasi—seperti _linear programming_, _integer programming_, dan _non-linear optimization_, tetapi juga menyoroti peran _solver_ modern dalam menyederhanakan proses komputasi. Pembaca akan diajak untuk melihat bagaimana persamaan dan pertidaksamaan yang rumit dapat diurai menjadi solusi yang optimal melalui alat-alat komputasi yang _powerful_, tanpa harus terjebak dalam kerumitan teknis yang berlebihan.
+
+Hal yang membuat buku ini istimewa adalah pendekatannya yang berbasis _web_, sehingga memudahkan pembaca untuk mengakses materi dan contoh kode kapan saja dan di mana saja. Akhir kata, saya berharap buku ini dapat menjadi panduan yang berharga bagi para praktisi industri, akademisi, maupun mahasiswa yang ingin mendalami optimisasi dari sudut pandang komputasi dan _solver_. 
+
+Disusun oleh [Ikang Fadhli](https://ikanx101.com/).
+
+## Tulisan Lain Terkait Optimisasi
+
+Saya telah menuliskan __setidaknya 22 contoh optimisasi dalam industri dan kehidupan sehari-hari__ di _blog_ saya. Silakan cek tautan berikut ini: [https://ikanx101.com/tags/#optimization-story](https://ikanx101.com/tags/#optimization-story)
