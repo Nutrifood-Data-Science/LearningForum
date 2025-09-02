@@ -214,8 +214,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#instalasi-or-tools" id="toc-instalasi-or-tools" class="nav-link active" data-scroll-target="#instalasi-or-tools"><span class="header-section-number">9.1</span> Instalasi <code>or tools</code></a></li>
-  <li><a href="#penyelesaian-masalah-knapsack-problem" id="toc-penyelesaian-masalah-knapsack-problem" class="nav-link" data-scroll-target="#penyelesaian-masalah-knapsack-problem"><span class="header-section-number">9.2</span> Penyelesaian Masalah <strong><em>Knapsack Problem</em></strong></a></li>
+  <li><a href="#filosofi-inti-define-solve-print" id="toc-filosofi-inti-define-solve-print" class="nav-link active" data-scroll-target="#filosofi-inti-define-solve-print"><span class="header-section-number">9.1</span> Filosofi Inti: <em>“Define, Solve, Print”</em></a></li>
+  <li><a href="#komponen-komponen-utama-dan-jenis-masalah-yang-ditangani" id="toc-komponen-komponen-utama-dan-jenis-masalah-yang-ditangani" class="nav-link" data-scroll-target="#komponen-komponen-utama-dan-jenis-masalah-yang-ditangani"><span class="header-section-number">9.2</span> Komponen-Komponen Utama dan Jenis Masalah yang Ditangani</a></li>
+  <li><a href="#keunggulan-or-tools" id="toc-keunggulan-or-tools" class="nav-link" data-scroll-target="#keunggulan-or-tools"><span class="header-section-number">9.3</span> Keunggulan OR-Tools</a></li>
+  <li><a href="#instalasi-or-tools" id="toc-instalasi-or-tools" class="nav-link" data-scroll-target="#instalasi-or-tools"><span class="header-section-number">9.4</span> Instalasi <code>or tools</code></a></li>
+  <li><a href="#penyelesaian-masalah-knapsack-problem" id="toc-penyelesaian-masalah-knapsack-problem" class="nav-link" data-scroll-target="#penyelesaian-masalah-knapsack-problem"><span class="header-section-number">9.5</span> Penyelesaian Masalah <strong><em>Knapsack Problem</em></strong></a></li>
   </ul>
 </nav>
     </div>
@@ -243,13 +246,84 @@ ul.task-list li input[type="checkbox"] {
 
 <p><strong>OR-Tools</strong> (<strong><em>Operations Research Tools</em></strong>) adalah <em>library</em> <em>open-source</em> buatan Google yang dikembangkan untuk menyelesaikan masalah optimasi kombinatorial dan pemrograman matematika. Diluncurkan sekitar tahun 2010, <em>library</em> ini dirancang untuk menjadi alat yang <em>scalable</em> dan efisien dalam menyelesaikan masalah kompleks seperti <em>routing</em> kendaraan, penjadwalan, penugasan, dan optimasi linear. <strong>OR-Tools</strong> dibangun berdasarkan pengalaman internal Google dalam menangani masalah optimasi skala besar dan menggabungkan berbagai <em>state-of-the-art solver</em> serta algoritma heuristik.</p>
 <p>Yang membuat <strong>OR-Tools</strong> istimewa adalah dukungannya terhadap <em>multiple programming</em> <em>languages</em> (C++, Python, Java, C#), fleksibilitas dalam pemodelan masalah, dan kemampuan untuk menangani berbagai tipe masalah optimasi seperti <em>linear programming</em>, <em>constraint programming</em>, dan <em>mixed-integer programming</em>. <em>Library</em> ini tidak hanya menyediakan <em>solver</em> internal yang powerful tetapi juga dapat terintegrasi dengan <em>solver</em> eksternal seperti <code>SCIP</code>, <code>GLPK</code>, dan <code>CP-SAT</code>, menjadikannya pilihan populer baik untuk penelitian akademis maupun aplikasi industri skala enterprise.</p>
-<section id="instalasi-or-tools" class="level2" data-number="9.1">
-<h2 data-number="9.1" class="anchored" data-anchor-id="instalasi-or-tools"><span class="header-section-number">9.1</span> Instalasi <code>or tools</code></h2>
+<section id="filosofi-inti-define-solve-print" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="filosofi-inti-define-solve-print"><span class="header-section-number">9.1</span> Filosofi Inti: <em>“Define, Solve, Print”</em></h2>
+<p>OR-Tools menganut filosofi yang sangat jelas dan elegan:</p>
+<ol type="1">
+<li><p><strong>Define</strong>: Anda mendefinisikan <em>model</em> permasalahan optimisasi Anda. Ini melibatkan:</p>
+<ul>
+<li><strong>Variabel Keputusan</strong>: Hal-hal yang nilainya ingin Anda cari (misal: apakah truk A pergi ke kota X? Kapan mesin B mulai memproduksi barang C?).</li>
+<li><strong>Constraints (Kendala)</strong>: Batasan-batasan yang harus dipatuhi (misal: sebuah truk tidak dapat membawa melebihi kapasitasnya, sebuah tugas harus selesai sebelum tugas lainnya dimulai).</li>
+<li><strong>Objective Function (Fungsi Tujuan)</strong>: Tujuan yang ingin dimaksimalkan atau diminimalkan (misal: minimalkan total jarak tempuh, maksimalkan utilisasi mesin, minimalkan total keterlambatan).</li>
+</ul></li>
+<li><p><strong>Solve</strong>: Anda memilih <em>solver</em> yang tepat (CP-SAT, Linear Solver, dll.) dan meminta OR-Tools untuk mencari solusi terbaik yang memenuhi semua kendala.</p></li>
+<li><p><strong>Print</strong>: Anda mengekstrak dan menampilkan atau menggunakan solusi yang ditemukan.</p></li>
+</ol>
+</section>
+<section id="komponen-komponen-utama-dan-jenis-masalah-yang-ditangani" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="komponen-komponen-utama-dan-jenis-masalah-yang-ditangani"><span class="header-section-number">9.2</span> Komponen-Komponen Utama dan Jenis Masalah yang Ditangani</h2>
+<p>OR-Tools bukanlah satu <em>solver</em> tunggal, melainkan kumpulan beberapa <em>solver</em> yang masing-masing ahli di bidangnya:</p>
+<ol type="1">
+<li><strong>Constraint Programming (CP-SAT Solver)</strong>
+<ul>
+<li><strong>Apa itu?</strong> Sebuah <em>solver</em> yang dirancang untuk masalah dengan banyak kendala logis yang kompleks dan variabel yang harus mengambil nilai dari himpunan yang terbatas (diskrit).</li>
+<li><strong>Kekuatan:</strong> Sangat hebat dalam menangani kendala “jika-maka”, “alldifferent”, dan logika non-linear.</li>
+<li><strong>Contoh Masalah:</strong>
+<ul>
+<li>Penjadwalan: Penjadwalan shift karyawan, penjadwalan produksi di pabrik.</li>
+<li>Perutean Kendaraan (<em>Vehicle Routing</em>).</li>
+<li>Penempatan (<em>Assignment</em>): Menugaskan tugas ke mesin atau pekerja.</li>
+<li>Puzzles: Seperti Sudoku, N-Queens.</li>
+</ul></li>
+</ul></li>
+<li><strong>Linear and Mixed-Integer Programming (MIP Solver)</strong>
+<ul>
+<li><strong>Apa itu?</strong> <em>Solver</em> untuk masalah dimana Fungsi Tujuan dan semua Kendala adalah <em>linear</em>. Jika beberapa variabel harus bilangan integer (bilangan bulat), disebut <em>Mixed-Integer Programming</em> (MIP).</li>
+<li><strong>Kekuatan:</strong> Efisien untuk masalah optimisasi dengan struktur matematis linear yang jelas, sering digunakan dalam alokasi sumber daya dan perencanaan.</li>
+<li><strong>Contoh Masalah:</strong>
+<ul>
+<li>Masalah Knapsack: Memilih kombinasi barang dengan nilai tertinggi tanpa melebihi kapasitas.</li>
+<li>Alokasi Anggaran.</li>
+<li><em>Blending Problems</em>: Mencampur bahan baku dengan biaya terendah untuk memenuhi spesifikasi.</li>
+<li><em>Cutting Stock</em>: Memotong material besar (kayu, kertas) dengan waste seminimal mungkin.</li>
+</ul></li>
+</ul></li>
+<li><strong>Vehicle Routing Library (VRP)</strong>
+<ul>
+<li><strong>Apa itu?</strong> Sebuah <em>library</em> khusus yang dibangun di atas CP-SAT dan MIP solver untuk menyelesaikan berbagai varian masalah <em>Vehicle Routing Problem</em> (VRP).</li>
+<li><strong>Fitur Unggulan:</strong> Sudah memiliki built-in support untuk kendala seperti kapasitas kendaraan, waktu layanan, time windows (jendela waktu dimana lokasi harus dikunjungi), durasi perjalanan maksimal, dan banyak lagi. Ini sangat menghemat waktu karena kita tidak perlu mendefinisikan semua kendala ini dari nol.</li>
+<li><strong>Contoh Masalah:</strong> Logistik dan distribusi, layanan kurir, pengumpulan sampah.</li>
+</ul></li>
+<li><strong>Graph Algorithms</strong>
+<ul>
+<li><strong>Apa itu?</strong> Kumpulan algoritma klasik untuk menyelesaikan masalah pada graf (jaringan).</li>
+<li><strong>Contoh Algoritma:</strong>
+<ul>
+<li><em>Shortest Path</em> (Dijkstra, A*): Mencari rute terpendek.</li>
+<li><em>Minimal Cost Flow</em>: Mengalirkan barang dalam jaringan dengan biaya minimal.</li>
+<li><em>Max Flow</em>: Mencari kapasitas maksimal aliran dalam jaringan.</li>
+</ul></li>
+</ul></li>
+</ol>
+</section>
+<section id="keunggulan-or-tools" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="keunggulan-or-tools"><span class="header-section-number">9.3</span> Keunggulan OR-Tools</h2>
+<ol type="1">
+<li><strong>Berbasis Bahasa, Bukan GUI:</strong> Berbeda dengan banyak software optimisasi komersial yang berbasis GUI (seperti Excel Solver), OR-Tools adalah sebuah <em>library</em> pemrograman. Ini memberikan fleksibilitas yang sangat tinggi. Anda dapat dengan mudah mengintegrasikannya ke dalam <em>pipeline</em> data, aplikasi web, atau sistem yang sudah ada.</li>
+<li><strong>Multi-Bahasa:</strong> Dukungan untuk Python, C++, Java, dan C# membuatnya dapat diadopsi oleh hampir semua tim pengembangan.</li>
+<li><strong>Open Source dan Gratis:</strong> Dapat digunakan untuk proyek komersial sekalipun tanpa biaya lisensi, dengan dukungan komunitas yang besar.</li>
+<li><strong>Powerful dan Terbukti:</strong> Dikembangkan dan digunakan secara internal oleh Google untuk memecahkan masalah dunia nyata mereka (misal, penugasan iklan, perutean kendaraan, penjadwalan). Ini adalah jaminan kualitas yang sangat kuat.</li>
+<li><strong>Portabel:</strong> Dapat dijalankan di Windows, macOS, Linux, dan bahkan di lingkungan cloud.</li>
+<li><strong>Tidak Bergantung pada Solver Eksternal (Opsional):</strong> OR-Tools datang dengan solver-nya sendiri yang sudah sangat capable (CP-SAT, GLOP). Namun, ia juga menyediakan antarmuka untuk solver komersial high-end seperti <strong>Gurobi</strong>, <strong>CPLEX</strong>, dan <strong>SCIP</strong> jika Anda membutuhkan kinerja ekstrem untuk masalah yang sangat besar dan sulit.</li>
+</ol>
+</section>
+<section id="instalasi-or-tools" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="instalasi-or-tools"><span class="header-section-number">9.4</span> Instalasi <code>or tools</code></h2>
 <p>Jangan lupa untuk menginstall <code>ortools</code> di <code>terminal</code>:</p>
 <pre><code>pip install ortools</code></pre>
 </section>
-<section id="penyelesaian-masalah-knapsack-problem" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="penyelesaian-masalah-knapsack-problem"><span class="header-section-number">9.2</span> Penyelesaian Masalah <strong><em>Knapsack Problem</em></strong></h2>
+<section id="penyelesaian-masalah-knapsack-problem" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="penyelesaian-masalah-knapsack-problem"><span class="header-section-number">9.5</span> Penyelesaian Masalah <strong><em>Knapsack Problem</em></strong></h2>
 <p>Berikut adalah skrip di <strong>Python</strong> nya:</p>
 <pre><code>from ortools.linear_solver import pywraplp
 
