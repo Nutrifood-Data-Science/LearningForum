@@ -218,7 +218,6 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#komponen-komponen-utama-dan-jenis-masalah-yang-ditangani" id="toc-komponen-komponen-utama-dan-jenis-masalah-yang-ditangani" class="nav-link" data-scroll-target="#komponen-komponen-utama-dan-jenis-masalah-yang-ditangani"><span class="header-section-number">9.2</span> Komponen-Komponen Utama dan Jenis Masalah yang Ditangani</a></li>
   <li><a href="#keunggulan-or-tools" id="toc-keunggulan-or-tools" class="nav-link" data-scroll-target="#keunggulan-or-tools"><span class="header-section-number">9.3</span> Keunggulan OR-Tools</a></li>
   <li><a href="#instalasi-or-tools" id="toc-instalasi-or-tools" class="nav-link" data-scroll-target="#instalasi-or-tools"><span class="header-section-number">9.4</span> Instalasi <code>or tools</code></a></li>
-  <li><a href="#penyelesaian-masalah-knapsack-problem" id="toc-penyelesaian-masalah-knapsack-problem" class="nav-link" data-scroll-target="#penyelesaian-masalah-knapsack-problem"><span class="header-section-number">9.5</span> Penyelesaian Masalah <strong><em>Knapsack Problem</em></strong></a></li>
   </ul>
 </nav>
     </div>
@@ -321,80 +320,6 @@ ul.task-list li input[type="checkbox"] {
 <h2 data-number="9.4" class="anchored" data-anchor-id="instalasi-or-tools"><span class="header-section-number">9.4</span> Instalasi <code>or tools</code></h2>
 <p>Jangan lupa untuk menginstall <code>ortools</code> di <code>terminal</code>:</p>
 <pre><code>pip install ortools</code></pre>
-</section>
-<section id="penyelesaian-masalah-knapsack-problem" class="level2" data-number="9.5">
-<h2 data-number="9.5" class="anchored" data-anchor-id="penyelesaian-masalah-knapsack-problem"><span class="header-section-number">9.5</span> Penyelesaian Masalah <strong><em>Knapsack Problem</em></strong></h2>
-<p>Berikut adalah skrip di <strong>Python</strong> nya:</p>
-<pre><code>from ortools.linear_solver import pywraplp
-
-def solve_milp():
-    # Membuat solver
-    solver = pywraplp.Solver.CreateSolver('SCIP')
-    
-    # Membuat variabel
-    x = {}
-    y = {}
-    for i in range(1, 3):
-        x[i] = solver.IntVar(0, solver.infinity(), f'x_{i}')
-        y[i] = solver.BoolVar(f'y_{i}')
-    
-    # Membuat objective function
-    objective = solver.Objective()
-    objective.SetCoefficient(x[1], 400000)
-    objective.SetCoefficient(x[2], 250000)
-    objective.SetCoefficient(y[1], -500000)
-    objective.SetCoefficient(y[2], -300000)
-    objective.SetMaximization()
-    
-    # Menambah constraints
-    # Constraint 1: 4*x1 + 2*x2 &lt;= 100
-    constraint1 = solver.Constraint(-solver.infinity(), 100)
-    constraint1.SetCoefficient(x[1], 4)
-    constraint1.SetCoefficient(x[2], 2)
-    
-    # Constraint 2: 2*x1 + 3*x2 &lt;= 90
-    constraint2 = solver.Constraint(-solver.infinity(), 90)
-    constraint2.SetCoefficient(x[1], 2)
-    constraint2.SetCoefficient(x[2], 3)
-    
-    # Constraint 3: 5*x1 + 3*x2 &lt;= 120
-    constraint3 = solver.Constraint(-solver.infinity(), 120)
-    constraint3.SetCoefficient(x[1], 5)
-    constraint3.SetCoefficient(x[2], 3)
-    
-    # Constraint 4: x1 &lt;= 1000*y1
-    constraint4 = solver.Constraint(-solver.infinity(), 0)
-    constraint4.SetCoefficient(x[1], 1)
-    constraint4.SetCoefficient(y[1], -1000)
-    
-    # Constraint 5: x2 &lt;= 1000*y2
-    constraint5 = solver.Constraint(-solver.infinity(), 0)
-    constraint5.SetCoefficient(x[2], 1)
-    constraint5.SetCoefficient(y[2], -1000)
-    
-    # Solve the problem
-    status = solver.Solve()
-    
-    # Print results
-    if status == pywraplp.Solver.OPTIMAL:
-        print('Solution:')
-        print('Objective value =', solver.Objective().Value())
-        for i in range(1, 3):
-            print(f'x[{i}] =', x[i].solution_value())
-        for i in range(1, 3):
-            print(f'y[{i}] =', int(y[i].solution_value()))
-    else:
-        print('The problem does not have an optimal solution.')
-
-# Run the solver
-solve_milp()</code></pre>
-<p>Kita dapatkan hasil yang sama, yakni:</p>
-<pre><code>Solution:
-Objective value = 9100000.000000002
-x[1] = 24.0
-x[2] = 0.0
-y[1] = 1
-y[2] = 0</code></pre>
 
 
 </section>
