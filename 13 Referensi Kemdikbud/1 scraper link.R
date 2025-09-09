@@ -42,7 +42,7 @@ for(url in urls){
     baca |> 
     html_nodes("a") |> 
     html_attr("href")
-  links = links[grepl("/dikmen/",links,fixed = T)]
+  links = links[grepl("/dikdas/",links,fixed = T)]
   
   # masukin ke rumah
   link_kota[[i]] = links
@@ -75,7 +75,7 @@ for(url in link_kota_final){
     baca |> 
     html_nodes("a") |> 
     html_attr("href")
-  links = links[grepl("/dikmen/",links,fixed = T)]
+  links = links[grepl("/dikdas/",links,fixed = T)]
   
   # masukin ke rumah
   link_kecamatan[[i]] = links

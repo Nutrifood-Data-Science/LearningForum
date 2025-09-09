@@ -28,5 +28,4 @@ df_all  =
          kecamatan = stringr::str_squish(kecamatan)
          )
 
-
 openxlsx::write.xlsx(df_all,file = "Menengah.xlsx")
