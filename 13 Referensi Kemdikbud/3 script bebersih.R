@@ -4,7 +4,7 @@ gc()
 library(dplyr)
 library(tidyr)
 
-load("SMP.rda")
+load("SD_SMP.rda")
 
 df_all = data.table::rbindlist(rumah_kita,fill = T) |> as.data.frame()
 df_all = df_all |> distinct() |> janitor::clean_names() |> 
@@ -26,6 +26,7 @@ df_all  =
          prov      = stringr::str_squish(prov),
          kota_kab  = stringr::str_squish(kota_kab),
          kecamatan = stringr::str_squish(kecamatan)
-         )
+         ) |> 
+  arrange(prov,kota_kab,kecamatan)
 
-openxlsx::write.xlsx(df_all,file = "Menengah.xlsx")
+openxlsx::write.xlsx(df_all,file = "SD dan SMP.xlsx")
