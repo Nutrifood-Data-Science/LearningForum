@@ -1,0 +1,187 @@
+---
+title: "Multi Objective Optimization"
+subtitle: "Industrial Mathematics Week 2025"
+author: "Departemen Market Research"
+institute: Nutrifood Indonesia
+date: "today"
+title-slide-attributes:
+  data-background-image: logo.jpg
+  data-background-size: cover
+  data-background-opacity: "0.3"
+format: 
+  revealjs:
+    theme: serif
+    slide-number: true
+    footer: Industrial Mathematics Week 2025
+    incremental: false
+    show-slide-number: all
+    transition: convex
+    width: 1920
+    height: 1080
+    highlight-style: arrow-dark
+    output-location: column
+    code-overflow: scroll
+    scrollable: true
+    fig-dpi: 650
+    fig-format: svg
+    fig-align: center
+    toc: false
+    toc-depth: 2
+editor: source
+execute: 
+  echo: true
+  warning: false
+  message: false
+---
+
+## Misalkan {.center .unlisted}
+
+Kita hendak membeli suatu laptop baru.
+
+::::: columns
+::: {.column width="50%"}
+![](high.jpeg){width="600"}
+:::
+
+::: {.column width="50%"}
+![](cheap.jpg){width="600"}
+:::
+:::::
+
+## Biasanya {.center .unlisted}
+
+**Laptop dengan performa tertinggi biasanya harganya sangat mahal.**
+
+**Laptop dengan harga termurah biasanya performanya sangat rendah.**
+
+Disinilah masalahnya: kedua tujuan ini berkonflik. Anda tidak bisa mendapatkan keduanya secara bersamaan dalam tingkat yang paling ideal. Anda harus berkompromi.
+
+## **Optimisasi Multi-Tujuan adalah ilmu untuk menemukan kumpulan "kompromi terbaik" dalam situasi seperti ini.** {.center .unlisted}
+
+## Apa itu Multi-Objective Optimization? {.center}
+
+Dalam **optimisasi tradisional (satu tujuan)**, kita hanya mencari satu nilai terbaik. Misalnya, **"cari harga termurah"**. Jawabannya hanya satu: laptop dengan harga terendah.
+
+Dalam MOO, kita memiliki lebih dari satu tujuan yang saling bertentangan. Tujuannya bukan lagi mencari satu solusi terbaik, melainkan **mencari sekumpulan solusi terbaik yang mewakili berbagai kompromi antar tujuan tersebut**.
+
+-   Tujuan 1: Maksimalkan Performa $(f_1(x))$.
+-   Tujuan 2: Minimalkan Harga $(f_2(x))$.
+
+Dimana $x$ adalah variabel keputusan (spesifikasi laptop yang kita pilih).
+
+## Konsep ***Pareto Optimality*** {.center}
+
+### Definisi Sederhana:
+
+**Sebuah solusi (laptop $x$) disebut Pareto Optimal jika tidak ada solusi lain yang lebih baik di SEMUA tujuan.**
+
+### Contoh
+
+Perhatikan tabel berikut ini:
+
+| Laptop   | Skor Performa (skala 1-10) | Harga (dalam juta Rp) |
+|----------|----------------------------|-----------------------|
+| Laptop A | 8                          | 12                    |
+| Laptop B | 6                          | 10                    |
+| Laptop C | 5                          | 15                    |
+
+: Pilihan Laptop
+
+
+## Analisa Sederhana {.center .smaller}
+
+::::: columns
+::: {.column width="50%"}
+
+| Laptop   | Skor Performa (skala 1-10) | Harga (dalam juta Rp) |
+|----------|----------------------------|-----------------------|
+| Laptop A | 8                          | 12                    |
+| Laptop B | 6                          | 10                    |
+| Laptop C | 5                          | 15                    |
+
+: Pilihan Laptop
+
+:::
+
+::: {.column width="50%"}
+
+- __A vs B__: B lebih murah tapi A lebih cepat. Tidak ada yang lebih unggul di semua aspek. Jadi, A dan B adalah __kompromi yang valid__.
+- __A vs C__: A lebih cepat dan lebih murah daripada C! Ini berarti C tidak perlu dipertimbangkan. Dalam bahasa MOO, __C terdominasi oleh A__.
+- __B vs C__: B lebih murah dan lebih cepat daripada C. __C lagi-lagi terdominasi__.
+
+:::
+:::::
+
+## Kesimpulan {.center}
+
+1. Laptop A dan B adalah ___pareto front___, yakni bagian dari ___pareto optimal___.
+1. Laptop C __bukan *pareto optimal*__ karena ada solusi lain yang lebih baik.
+
+___Pareto front___ adalah kumpulan dari semua solusi ___pareto optimal___.
+
+## Bagaimana Caranya Menemukan _Pareto Front_? {.smaller .center}
+
+Mencari semua solusi di __*pareto front*__ secara manual sangat sulit, apalagi untuk masalah kompleks (seperti desain pesawat atau portofolio investasi). Beberapa metode yang digunakan adalah:
+
+::::: columns
+::: {.column width="50%"}
+### Metode Klasik: 
+
+- _Weighted Sum_
+    - Memberikan bobot kepada masing-masing _objective_.
+    - Misal 70% harga dan 30% performa.
+- $\epsilon$ _contraint methods_
+    - Menjadikan salah satu _objective_ sebagai _constraint_.
+    - Misal: Harga tak boleh lebih dari 12 juta.
+
+:::
+
+::: {.column width="50%"}
+### Metode Modern: Algoritma Evolusioner (MOEA)
+
+Ini adalah metode yang paling populer dan powerful. Bayangkan ini seperti proses evolusi alam untuk mencari solusi terbaik.
+
+- __Populasi__: Alih-alih mencari satu solusi, algoritma ini menghasilkan ratusan atau ribuan "calon solusi" (seperti sekumpulan laptop berbeda).
+- __Seleksi Alam__: Solusi-solusi yang berada di Pareto Front (atau mendekati) memiliki "fitness" yang lebih baik dan lebih mungkin untuk "bertahan hidup" dan "berkembang biak".
+- __Rekombinasi dan Mutasi__: Solusi-solusi terbaik ini akan "kawin" (menukar properti) dan mengalami "mutasi" (perubahan kecil) untuk menghasilkan generasi solusi baru yang lebih baik.
+- __Pengulangan__: Proses ini diulang selama ribuan generasi sampai akhirnya populasi tersebut konvergen (mendekati) ke Pareto Front yang sebenarnya.
+
+Algoritma terkenal dalam kategori ini adalah __NSGA-II (Non-dominated Sorting Genetic Algorithm II)__.
+:::
+:::::
+
+## _Solving_ MOO {.center}
+
+Ada beberapa cara menyelesaikan MOO, yakni:
+
+::::: columns
+::: {.column width="50%"}
+### Metode Klasik
+
+- `library(ompr)`
+- `library(lpsolve)`
+- _Build custom optimization algorithm_, seperti _genetic algorithm_, _spiral dynamic optimization_, _artificial bee colony optimization_, dll.
+
+:::
+::: {.column width="50%"}
+### Metode Modern: Algoritma Evolusioner (MOEA)
+
+- `pymoo`
+- `rmoo`
+- `nevergrad`
+
+:::
+:::::
+
+## _Summary_
+
+- MOO adalah tentang berkompromi ketika dihadapkan pada banyak tujuan yang saling bertentangan.
+- Tujuannya bukan satu solusi, tetapi __sekumpulan solusi kompromi terbaik yang disebut *Pareto Front*__.
+- Sebuah solusi adalah ___Pareto Optimal___ jika tidak ada solusi lain yang lebih baik di semua aspek.
+- Metode seperti Algoritma Evolusioner (NSGA-II) sangat efektif untuk menemukan aproksimasi ___Pareto Front___ untuk masalah yang kompleks.
+
+# _End of Slides_
+
+Lain kali ketika Anda harus memilih antara performa dan harga, atau antara gaji dan _work-life balance_, ingatlah bahwa Anda sedang melakukan ___Multi Objective Optimization___ dalam hidup Anda!
+
+## _Salam super_ {.center background-image="itu.jpg"}
