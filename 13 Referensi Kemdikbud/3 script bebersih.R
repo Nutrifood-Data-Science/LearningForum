@@ -4,7 +4,7 @@ gc()
 library(dplyr)
 library(tidyr)
 
-load("SD_SMP.rda")
+load("dikdas.rda")
 
 df_all = data.table::rbindlist(rumah_kita,fill = T) |> as.data.frame()
 df_all = df_all |> distinct() |> janitor::clean_names() |> 

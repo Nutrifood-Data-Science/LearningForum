@@ -11,7 +11,7 @@ library(tidyr)
 
 # ==============================================================================
 # buka selenium session
-ip_add        = "172.17.0.2"
+ip_add        = "172.17.0.3"
 remote_driver = remoteDriver(remoteServerAddr = ip_add, 
                              port = 4444L, 
                              browserName = "firefox")
@@ -19,7 +19,7 @@ remote_driver$open()
 # ==============================================================================
 
 # ==============================================================================
-load("links.rda")
+load("link_dikmen_kecamatan.rda")
 urls = link_kecamatan_final[!grepl("all/all",link_kecamatan_final,fixed = T)]
 
 input = urls[80]
@@ -45,7 +45,7 @@ ekstraksi = function(input){
   tabel = tabel[[1]]
   
   # ini kita lanjutkan sampe selesai
-  for(ikanx in 1:20){
+  for(ikanx in 1:15){
     # mencari tombol next
     elemen = "#table1_next"
     lanjut <<- remote_driver$findElement("css", elemen)
@@ -75,12 +75,12 @@ ekstraksi = function(input){
 
 # siapkan rumah
 # rumah_kita = vector("list",length(urls))
-for(ix in 830:length(urls)){
+for(ix in 1:length(urls)){
   temp = ekstraksi(urls[[ix]])
   Sys.sleep(1)
   rumah_kita[[ix]] = temp
   print(ix)
 }
 
- save(rumah_kita,file = "SD_SMP.rda")
+save(rumah_kita,file = "dikmen.rda")
 
