@@ -1,6 +1,6 @@
 # ==============================================================================
-rm(list=ls())
-gc()
+# rm(list=ls())
+# gc()
 
 # libraries
 library(dplyr)
@@ -33,7 +33,7 @@ input
 ekstraksi = function(input){
   # menuju url
   remote_driver$navigate(input)
-  jeda = runif(1,1,3)
+  jeda = runif(1,1,1.3)
   Sys.sleep(jeda)
 
   # baca tabel dari pagination pertama
@@ -50,7 +50,7 @@ ekstraksi = function(input){
     elemen = "#table1_next"
     lanjut <<- remote_driver$findElement("css", elemen)
     lanjut$clickElement()
-    jeda = runif(1,1,3)
+    jeda = runif(1,1,1.2)
     Sys.sleep(jeda)
     
     # baca webnya
@@ -75,7 +75,7 @@ ekstraksi = function(input){
 
 # siapkan rumah
 # rumah_kita = vector("list",length(urls))
-for(ix in 1:length(urls)){
+for(ix in 109:length(urls)){
   temp = ekstraksi(urls[[ix]])
   Sys.sleep(1)
   rumah_kita[[ix]] = temp
