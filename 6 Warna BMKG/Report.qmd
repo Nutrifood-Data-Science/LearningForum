@@ -11,8 +11,8 @@ format:
     incremental: false
     show-slide-number: all
     transition: convex
-    width: 1440
-    height: 1080
+    width: 1280
+    height: 720
     highlight-style: arrow-dark
     output-location: column
     code-overflow: scroll
@@ -664,4 +664,76 @@ create_wilcox_heatmap(result_matrix)
 
 # _PREDICTIVE MODELLING_
 
-# TERIMA KASIH
+## Membuat _Predictive Modelling_ {.center}
+
+Pada bagian ini, kita akan membuat model prediktif yang berfungsi untuk memprediksi nilai _selling out_ berdasarkan nilai warna yang telah kita hitung pada bagian sebelumnya.
+
+_Selling out value_ yang digunakan adalah khusus produk NutriSari Polos sejak Januari 2021 hingga September 2025.
+
+Model dibuat menggunakan prinsip _deep learning_ dengan _framework_ __Tensorflow__.
+
+## Tujuan _Predictive Modelling_ {.center}
+
+Model yang dibangun kelak akan di-_explain_ sehingga kita bisa mengetahui faktor apa saja yang berpengaruh terhadap _selling out_.
+
+## _Goodness of Fit_ {.center}
+
+Model dibangun menggunakan semua data dengan _epochs_ sebanyak __12.000__.
+
+_Goodness of fit_ dari model dihitung menggunakan $R^2$ sebesar __0.7538__.
+
+```{r}
+#| include: false
+
+rm(list=ls())
+library(DALEX)
+
+load("hasil_keras.rda")
+```
+
+## _Model Explainer_ {.center .smaller}
+
+::: {style="font-size: 60%;"}
+Tiga variabel yang paling berpengaruh adalah _dominance_, baik untuk warna biru, hijau, dan merah.
+:::
+
+```{r}
+plot_importance
+```
+
+## _Model Explainer_ {.center}
+
+::: {style="font-size: 50%;"}
+Ada kecenderungan:
+
+- __Semakin hijau, maka _selling out_ semakin rendah__.
+- __Semakin merah, maka _selling out_ semakin tinggi__.
+
+:::
+
+```{r}
+plot(mp_mmm)
+```
+
+# TERIMA KASIH {.center}
+
+# LAMPIRAN {.center}
+
+## _Model Explainer_ {.center}
+
+::::: columns
+::: {.column width="50%"}
+### Pada saat _max selling out_
+
+![](max_so.png)
+:::
+::: {.column width="50%"}
+### Pada saat _min selling out_
+![](min_so.png)
+:::
+:::::
+
+
+
+
+

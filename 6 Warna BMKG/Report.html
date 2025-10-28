@@ -533,10 +533,66 @@ Departemen Market Research
 <p>Berikut adalah hasil uji signifikansinya:</p>
 
 <img data-src="Report_files/figure-revealjs/unnamed-chunk-39-1.svg" class="r-stretch"></section></section>
+<section>
+<section id="predictive-modelling" class="title-slide slide level1 center">
+<h1><em>PREDICTIVE MODELLING</em></h1>
+
+</section>
+<section id="membuat-predictive-modelling" class="slide level2 center">
+<h2>Membuat <em>Predictive Modelling</em></h2>
+<p>Pada bagian ini, kita akan membuat model prediktif yang berfungsi untuk memprediksi nilai <em>selling out</em> berdasarkan nilai warna yang telah kita hitung pada bagian sebelumnya.</p>
+<p><em>Selling out value</em> yang digunakan adalah khusus produk NutriSari Polos sejak Januari 2021 hingga September 2025.</p>
+<p>Model dibuat menggunakan prinsip <em>deep learning</em> dengan <em>framework</em> <strong>Tensorflow</strong>.</p>
+</section>
+<section id="tujuan-predictive-modelling" class="slide level2 center">
+<h2>Tujuan <em>Predictive Modelling</em></h2>
+<p>Model yang dibangun kelak akan di-<em>explain</em> sehingga kita bisa mengetahui faktor apa saja yang berpengaruh terhadap <em>selling out</em>.</p>
+</section>
+<section id="goodness-of-fit" class="slide level2 center">
+<h2><em>Goodness of Fit</em></h2>
+<p>Model dibangun menggunakan semua data dengan <em>epochs</em> sebanyak <strong>12.000</strong>.</p>
+<p><em>Goodness of fit</em> dari model dihitung menggunakan <span class="math inline">\(R^2\)</span> sebesar <strong>0.7538</strong>.</p>
+</section>
+<section id="model-explainer" class="slide level2 center smaller">
+<h2><em>Model Explainer</em></h2>
+<div style="font-size: 60%;">
+<p>Tiga variabel yang paling berpengaruh adalah <em>dominance</em>, baik untuk warna biru, hijau, dan merah.</p>
+</div>
+
+<img data-src="Report_files/figure-revealjs/unnamed-chunk-41-1.svg" class="r-stretch"></section>
+<section id="model-explainer-1" class="slide level2 center">
+<h2><em>Model Explainer</em></h2>
+<div style="font-size: 50%;">
+<p>Ada kecenderungan:</p>
+<ul>
+<li><strong>Semakin hijau, maka <em>selling out</em> semakin rendah</strong>.</li>
+<li><strong>Semakin merah, maka <em>selling out</em> semakin tinggi</strong>.</li>
+</ul>
+</div>
+
+<img data-src="Report_files/figure-revealjs/unnamed-chunk-42-1.svg" class="r-stretch"></section></section>
 <section id="terima-kasih" class="title-slide slide level1 center">
 <h1>TERIMA KASIH</h1>
 
 </section>
+
+<section>
+<section id="lampiran" class="title-slide slide level1 center">
+<h1>LAMPIRAN</h1>
+
+</section>
+<section id="model-explainer-2" class="slide level2 center">
+<h2><em>Model Explainer</em></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h3 id="pada-saat-max-selling-out">Pada saat <em>max selling out</em></h3>
+<p><img data-src="max_so.png"></p>
+</div><div class="column" style="width:50%;">
+<h3 id="pada-saat-min-selling-out">Pada saat <em>min selling out</em></h3>
+<p><img data-src="min_so.png"></p>
+</div></div>
+
+</section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
@@ -718,9 +774,9 @@ Departemen Market Research
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1440,
+        width: 1280,
 
-        height: 1080,
+        height: 720,
 
         // Factor of the display size that should remain empty around the content
         margin: 0.1,

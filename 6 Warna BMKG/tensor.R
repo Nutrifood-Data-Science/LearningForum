@@ -117,6 +117,8 @@ df_hasil %>%
 setwd("~/LearningForum/6 Warna BMKG/saved_model/model_1")
 keras3::save_model(model,"model.keras")
 
+model = keras3::load_model("model.keras")
+
 library(DALEX)
 
 explainer_mmm = DALEX::explain(model = model,
@@ -134,7 +136,7 @@ plot_importance = plot(var_importante,show_boxplots = FALSE)
 plot_importance
 
 mp_mmm = model_profile(explainer_mmm, 
-                       variable =  c("average_blue_dominance","average_green_dominance",
+                       variable =  c("average_green_dominance",
                                      "average_red_dominance"), 
                        type = "accumulated")
 plot(mp_mmm)
