@@ -1,8 +1,0 @@
-- source: Report.qmd
-  quarto-pub:
-    - id: 48252751-5fa6-4d3a-b418-dfd50245fc48
-      url: 'https://ikanx101.quarto.pub/analisa_curah_hijau'
-- source: Merah.qmd
-  quarto-pub:
-    - id: dd3c4cda-16eb-45c1-864a-0a8775f38270
-      url: 'https://ikanx101.quarto.pub/analisa_curah_merah'

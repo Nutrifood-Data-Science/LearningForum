@@ -62,4 +62,4 @@ df_hijau =
   arrange(tgl)
 
 setwd("~/LearningForum/6 Warna BMKG")
-save(df_hijau,file = "data.rda")
+save(df_hijau,file = "data_hijau.rda")

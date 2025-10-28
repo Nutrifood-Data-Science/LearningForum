@@ -1,6 +1,6 @@
 ---
 title: "Analisa Curah Hujan Tahunan"
-subtitle: "Berdasarkan Tingkat Warna Hijau Pada Laporan BMKG"
+subtitle: "Berdasarkan Tingkat Warna Pada Laporan BMKG"
 author: "Departemen Market Research"
 institute: Nutrifood Indonesia
 format: 
@@ -11,8 +11,8 @@ format:
     incremental: false
     show-slide-number: all
     transition: convex
-    width: 1280
-    height: 720
+    width: 1440
+    height: 1080
     highlight-style: arrow-dark
     output-location: column
     code-overflow: scroll
@@ -45,11 +45,13 @@ Semakin **hijau** petanya, berarti curah hujannya semakin tinggi.
 
 ## Membandingkan Curah Hujan Tahunan {.smaller .center}
 
-Untuk membandingkan curah hujan tahunan, kita perlu mengumpulkan data bulanan terlebih dahulu. Oleh karena itu, kami mengumpulkan semua gambar dari laporan bulanan di *website* BMKG sejak **Desember 2022 hingga Maret 2025**.
+Untuk membandingkan curah hujan tahunan, kita perlu mengumpulkan data bulanan terlebih dahulu. Oleh karena itu, kami mengumpulkan semua gambar dari laporan bulanan di *website* BMKG sejak **Desember 2022 hingga September 2025**.
 
 Berdasarkan gambar tersebut, kita akan melakukan pendekatan sebagai berikut: **untuk menghitung curah hujan bulanan, kita bisa mengukur seberapa hijau gambar tersebut**.
 
 > ***Semakin hijau gambar bulanan, maka curah hujan semakin tinggi.***
+
+Selain itu, kita juga akan menghitung seberapa **merah** dan **biru**.
 
 ```{r}
 #| include: false
@@ -61,12 +63,11 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 
-load("data.rda")
+load("data_hijau.rda")
 
 df_hijau = 
   df_hijau %>% 
-  mutate(tahun = lubridate::year(tgl)) %>% 
-  filter(tahun != 2022) 
+  mutate(tahun = lubridate::year(tgl))
 
 df_q = 
   df_hijau %>% 
@@ -75,12 +76,16 @@ df_q =
   summarise_all(mean) %>% 
   ungroup() %>% 
   mutate(kyu = paste0("Q",kyu,"-",tahun)) %>% 
-  mutate(kyu = factor(kyu,levels = c("Q1-2023","Q2-2023","Q3-2023","Q4-2023",
+  mutate(kyu = factor(kyu,levels = c("Q1-2021","Q2-2021","Q3-2021","Q4-2021",
+                                     "Q1-2022","Q2-2022","Q3-2022","Q4-2022",
+                                     "Q1-2023","Q2-2023","Q3-2023","Q4-2023",
                                      "Q1-2024","Q2-2024","Q3-2024","Q4-2024",
-                                     "Q1-2025")
+                                     "Q1-2025","Q2-2025","Q3-2025")
                       )
          )
 ```
+
+# ANALISA HIJAU
 
 ## Cara Mengukur Seberapa Hijau {.center .smaller}
 
@@ -120,7 +125,7 @@ df_hijau %>%
 :::
 :::::
 
-------------------------------------------------------------------------
+## *Trend* `average_green_intensity` _per Quarter_{.center}
 
 ```{r}
 df_q %>% 
@@ -130,7 +135,8 @@ df_q %>%
   geom_label(aes(label = round(average_green_intensity,3))) +
   theme_minimal() +
   theme(axis.title = element_blank(),
-        axis.text.y = element_blank())
+        axis.text.y = element_blank()) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 4))
 ```
 
 ## Perbedaan Tahunan: Uji *Mean* {.smaller .center}
@@ -140,43 +146,10 @@ df_q %>%
 Berikut adalah hasil uji signifikansinya:
 
 ```{r}
-#| include: false
-
-df_temp = df_hijau %>% filter(tahun %in% 2023:2024)
-t1 = 
-  wilcox.test(
-    as.numeric(average_green_intensity) ~ factor(tahun),exact = F,
-    data = df_temp
-  )
-k1 = ifelse(t1$p.value < 0.05,"Sig","No Sig")
-
-
-df_temp = df_hijau %>% filter(tahun %in% 2024:2025)
-t2 =
-  wilcox.test(
-    as.numeric(average_green_intensity) ~ factor(tahun),exact = F,
-    data = df_temp
-  )
-k2 = ifelse(t2$p.value < 0.05,"Sig","No Sig")
-
-
-df_temp = df_hijau %>% filter(tahun %in% c(2023,2025))
-t3 =
-  wilcox.test(
-    as.numeric(average_green_intensity) ~ factor(tahun),exact = F,
-    data = df_temp
-  )
-k3 = ifelse(t3$p.value < 0.05,"Sig","No Sig")
-
+source("create_analisa.R")
+result_matrix <- create_wilcox_comparison_matrix(df_hijau, "tahun", "average_green_intensity")
+create_wilcox_heatmap(result_matrix)
 ```
-
-|           | Data 2023 | Data 2024 | Data 2025 |
-|-----------|-----------|-----------|-----------|
-| Data 2023 |           | `r k1`    | `r k3`    |
-| Data 2024 | `r k1`    |           | `r k2`    |
-| Data 2025 | `r k3`    | `r k2`    |           |
-
-Catatan: Perhitungan rata-rata data bulanan.
 
 ## *Trend* `proportion_high_green` {.center}
 
@@ -204,7 +177,7 @@ df_hijau %>%
 :::
 :::::
 
-------------------------------------------------------------------------
+## *Trend* `proportion_high_green` _per Quarter_{.center}
 
 ```{r}
 df_q %>% 
@@ -214,7 +187,8 @@ df_q %>%
   geom_label(aes(label = round(proportion_high_green,3))) +
   theme_minimal() +
   theme(axis.title = element_blank(),
-        axis.text.y = element_blank())
+        axis.text.y = element_blank()) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 4))
 ```
 
 ## Perbedaan Tahunan: Uji *Mean* {.smaller .center}
@@ -224,43 +198,10 @@ df_q %>%
 Berikut adalah hasil uji signifikansinya:
 
 ```{r}
-#| include: false
-
-df_temp = df_hijau %>% filter(tahun %in% 2023:2024)
-t1 = 
-  wilcox.test(
-    as.numeric(proportion_high_green) ~ factor(tahun),exact = F,
-    data = df_temp
-  )
-k1 = ifelse(t1$p.value < 0.05,"Sig","No Sig")
-
-
-df_temp = df_hijau %>% filter(tahun %in% 2024:2025)
-t2 =
-  wilcox.test(
-    as.numeric(proportion_high_green) ~ factor(tahun),exact = F,
-    data = df_temp
-  )
-k2 = ifelse(t2$p.value < 0.05,"Sig","No Sig")
-
-
-df_temp = df_hijau %>% filter(tahun %in% c(2023,2025))
-t3 =
-  wilcox.test(
-    as.numeric(proportion_high_green) ~ factor(tahun),exact = F,
-    data = df_temp
-  )
-k3 = ifelse(t3$p.value < 0.05,"Sig","No Sig")
-
+source("create_analisa.R")
+result_matrix <- create_wilcox_comparison_matrix(df_hijau, "tahun", "proportion_high_green")
+create_wilcox_heatmap(result_matrix)
 ```
-
-|           | Data 2023 | Data 2024 | Data 2025 |
-|-----------|-----------|-----------|-----------|
-| Data 2023 |           | `r k1`    | `r k3`    |
-| Data 2024 | `r k1`    |           | `r k2`    |
-| Data 2025 | `r k3`    | `r k2`    |           |
-
-Catatan: Perhitungan rata-rata data bulanan.
 
 ## *Trend* `average_green_dominance` {.center}
 
@@ -288,7 +229,7 @@ df_hijau %>%
 :::
 :::::
 
-------------------------------------------------------------------------
+## *Trend* `average_green_dominance` _per Quarter_{.center}
 
 ```{r}
 df_q %>% 
@@ -298,7 +239,8 @@ df_q %>%
   geom_label(aes(label = round(average_green_dominance,3))) +
   theme_minimal() +
   theme(axis.title = element_blank(),
-        axis.text.y = element_blank())
+        axis.text.y = element_blank()) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 4))
 ```
 
 ## Perbedaan Tahunan: Uji *Mean* {.center .smaller}
@@ -308,42 +250,418 @@ df_q %>%
 Berikut adalah hasil uji signifikansinya:
 
 ```{r}
-#| include: false
-
-df_temp = df_hijau %>% filter(tahun %in% 2023:2024)
-t1 = 
-  wilcox.test(
-    as.numeric(average_green_dominance) ~ factor(tahun),exact = F,
-    data = df_temp
-  )
-k1 = ifelse(t1$p.value < 0.05,"Sig","No Sig")
-
-
-df_temp = df_hijau %>% filter(tahun %in% 2024:2025)
-t2 =
-  wilcox.test(
-    as.numeric(average_green_dominance) ~ factor(tahun),exact = F,
-    data = df_temp
-  )
-k2 = ifelse(t2$p.value < 0.05,"Sig","No Sig")
-
-
-df_temp = df_hijau %>% filter(tahun %in% c(2023,2025))
-t3 =
-  wilcox.test(
-    as.numeric(average_green_dominance) ~ factor(tahun),exact = F,
-    data = df_temp
-  )
-k3 = ifelse(t3$p.value < 0.05,"Sig","No Sig")
-
+source("create_analisa.R")
+result_matrix <- create_wilcox_comparison_matrix(df_hijau, "tahun", "average_green_dominance")
+create_wilcox_heatmap(result_matrix)
 ```
 
-|           | Data 2023 | Data 2024 | Data 2025 |
-|-----------|-----------|-----------|-----------|
-| Data 2023 |           | `r k1`    | `r k3`    |
-| Data 2024 | `r k1`    |           | `r k2`    |
-| Data 2025 | `r k3`    | `r k2`    |           |
+# ANALISA MERAH
 
-Catatan: Perhitungan rata-rata data bulanan.
+```{r}
+#| include: false
+
+rm(list=ls())
+gc()
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+load("data_merah.rda")
+
+df_merah = 
+  df_merah %>% 
+  mutate(tahun = lubridate::year(tgl))
+
+df_q = 
+  df_merah %>% 
+  mutate(kyu = lubridate::quarter(tgl)) %>% 
+  group_by(kyu,tahun) %>% 
+  summarise_all(mean) %>% 
+  ungroup() %>% 
+  mutate(kyu = paste0("Q",kyu,"-",tahun)) %>% 
+  mutate(kyu = factor(kyu,levels = c("Q1-2021","Q2-2021","Q3-2021","Q4-2021",
+                                     "Q1-2022","Q2-2022","Q3-2022","Q4-2022",
+                                     "Q1-2023","Q2-2023","Q3-2023","Q4-2023",
+                                     "Q1-2024","Q2-2024","Q3-2024","Q4-2024",
+                                     "Q1-2025","Q2-2025","Q3-2025")
+                      )
+         )
+```
+
+## Cara Mengukur Seberapa Merah {.center .smaller}
+
+Setiap gambar digital memiliki setidaknya tiga *layers* yang terdiri dari *layer **Red***, ***Green***, dan ***Blue***. Ketiga nilai dari setiap *layer* ini bisa diekstrak dengan teknik tertentu dan disajikan dalam bentuk matriks. Ukuran dari matriks ini merupakan $n \times m$ yang berasal dari dimensi *pixel* gambar tersebut.
+
+::: {style="font-size: 80%;"}
+Dari data berbentuk matriks tersebut, akan dihitung **tiga *metrics*** pengukuran, yakni:
+
+1.  `average_red_intensity`: merupakan nilai rata-rata dari matriks di *layer red*.
+2.  `proportion_high_red`: merupakan proporsi berapa banyak *pixel* di *layer red* yang memiliki tingkat merah di atas *threhold* yang kita definisikan dibandingkan total *pixel* yang ada di *layer red* tersebut.
+3.  `average_red_dominance`: merupakan nilai rata-rata dominasi warna *red* dibandingkan warna *green* dan *blue*.
+:::
+
+## *Trend* `average_red_intensity` {.center}
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+df_merah %>% 
+  ggplot(aes(x = tgl,
+             y = average_red_intensity)) +
+  geom_line(group = 1,color = "darkred") +
+  ylim(.7,1) +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+df_merah %>% 
+  ggplot(aes(x = factor(tahun),y = average_red_intensity)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+:::::
+
+## *Trend* `average_red_intensity` _per Quarter_ {.center}
+
+```{r}
+df_q %>% 
+  ggplot(aes(x = kyu,
+             y = average_red_intensity)) +
+  geom_col(color = "black",fill = "red",alpha = .3) +
+  geom_label(aes(label = round(average_red_intensity,3))) +
+  theme_minimal() +
+  theme(axis.title = element_blank(),
+        axis.text.y = element_blank()) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 4))
+```
+
+## Perbedaan Tahunan: Uji *Mean* {.smaller .center}
+
+### `average_red_intensity`
+
+Berikut adalah hasil uji signifikansinya:
+
+```{r}
+source("create_analisa.R")
+result_matrix <- create_wilcox_comparison_matrix(df_merah, "tahun", "average_red_intensity")
+create_wilcox_heatmap(result_matrix)
+```
+
+
+## *Trend* `proportion_high_red` {.center}
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+df_merah %>% 
+  ggplot(aes(x = tgl,
+             y = proportion_high_red)) +
+  geom_line(group = 1,color = "darkred") +
+  ylim(.7,1) +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+df_merah %>% 
+  ggplot(aes(x = factor(tahun),y = proportion_high_red)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+:::::
+
+## *Trend* `proportion_high_red` _per Quarter_ {.center}
+
+```{r}
+df_q %>% 
+  ggplot(aes(x = kyu,
+             y = proportion_high_red)) +
+  geom_col(color = "black",fill = "red",alpha = .3) +
+  geom_label(aes(label = round(proportion_high_red,3))) +
+  theme_minimal() +
+  theme(axis.title = element_blank(),
+        axis.text.y = element_blank()) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 4))
+```
+
+## Perbedaan Tahunan: Uji *Mean* {.smaller .center}
+
+### `proportion_high_red`
+
+Berikut adalah hasil uji signifikansinya:
+
+```{r}
+source("create_analisa.R")
+result_matrix <- create_wilcox_comparison_matrix(df_merah, "tahun", "proportion_high_red")
+create_wilcox_heatmap(result_matrix)
+```
+
+## *Trend* `average_red_dominance` {.center}
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+df_merah %>% 
+  ggplot(aes(x = tgl,
+             y = average_red_dominance)) +
+  geom_line(group = 1,color = "darkred") +
+  # ylim(0,.1) +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+df_merah %>% 
+  ggplot(aes(x = factor(tahun),y = average_red_dominance)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+:::::
+
+## *Trend* `average_red_dominance` _per Quarter_ {.center}
+
+```{r}
+df_q %>% 
+  ggplot(aes(x = kyu,
+             y = average_red_dominance)) +
+  geom_col(color = "black",fill = "red",alpha = .3) +
+  geom_label(aes(label = round(average_red_dominance,3))) +
+  theme_minimal() +
+  theme(axis.title = element_blank(),
+        axis.text.y = element_blank()) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 4))
+```
+
+## Perbedaan Tahunan: Uji *Mean* {.center .smaller}
+
+### `average_red_dominance`
+
+Berikut adalah hasil uji signifikansinya:
+
+```{r}
+source("create_analisa.R")
+result_matrix <- create_wilcox_comparison_matrix(df_merah, "tahun", "average_red_dominance")
+create_wilcox_heatmap(result_matrix)
+```
+
+# ANALISA BIRU
+
+```{r}
+#| include: false
+
+rm(list=ls())
+gc()
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+load("data_biru.rda")
+
+df_biru = 
+  df_biru %>% 
+  mutate(tahun = lubridate::year(tgl)) 
+
+df_q = 
+  df_biru %>% 
+  mutate(kyu = lubridate::quarter(tgl)) %>% 
+  group_by(kyu,tahun) %>% 
+  summarise_all(mean) %>% 
+  ungroup() %>% 
+  mutate(kyu = paste0("Q",kyu,"-",tahun)) %>% 
+  mutate(kyu = factor(kyu,levels = c("Q1-2021","Q2-2021","Q3-2021","Q4-2021",
+                                     "Q1-2022","Q2-2022","Q3-2022","Q4-2022",
+                                     "Q1-2023","Q2-2023","Q3-2023","Q4-2023",
+                                     "Q1-2024","Q2-2024","Q3-2024","Q4-2024",
+                                     "Q1-2025","Q2-2025","Q3-2025")
+                      )
+         )
+```
+
+## Cara Mengukur Seberapa Biru {.center .smaller}
+
+Setiap gambar digital memiliki setidaknya tiga *layers* yang terdiri dari *layer **Red***, ***Green***, dan ***Blue***. Ketiga nilai dari setiap *layer* ini bisa diekstrak dengan teknik tertentu dan disajikan dalam bentuk matriks. Ukuran dari matriks ini merupakan $n \times m$ yang berasal dari dimensi *pixel* gambar tersebut.
+
+::: {style="font-size: 80%;"}
+Dari data berbentuk matriks tersebut, akan dihitung **tiga *metrics*** pengukuran, yakni:
+
+1.  `average_blue_intensity`: merupakan nilai rata-rata dari matriks di *layer blue*.
+2.  `proportion_high_blue`: merupakan proporsi berapa banyak *pixel* di *layer blue* yang memiliki tingkat biru di atas *threhold* yang kita definisikan dibandingkan total *pixel* yang ada di *layer blue* tersebut.
+3.  `average_blue_dominance`: merupakan nilai rata-rata dominasi warna *blue* dibandingkan warna *red* dan *green*.
+:::
+
+## *Trend* `average_blue_intensity` {.center}
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+df_biru %>% 
+  ggplot(aes(x = tgl,
+             y = average_blue_intensity)) +
+  geom_line(group = 1,color = "darkblue") +
+  ylim(.7,1) +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+df_biru %>% 
+  ggplot(aes(x = factor(tahun),y = average_blue_intensity)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+:::::
+
+## *Trend* `average_blue_intensity` _per Quarter_ {.center}
+
+```{r}
+df_q %>% 
+  ggplot(aes(x = kyu,
+             y = average_blue_intensity)) +
+  geom_col(color = "black",fill = "blue",alpha = .3) +
+  geom_label(aes(label = round(average_blue_intensity,3))) +
+  theme_minimal() +
+  theme(axis.title = element_blank(),
+        axis.text.y = element_blank()) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 4))
+```
+
+## Perbedaan Tahunan: Uji *Mean* {.smaller .center}
+
+### `average_blue_intensity`
+
+Berikut adalah hasil uji signifikansinya:
+
+```{r}
+source("create_analisa.R")
+result_matrix <- create_wilcox_comparison_matrix(df_biru, "tahun", "average_blue_intensity")
+create_wilcox_heatmap(result_matrix)
+```
+
+## *Trend* `proportion_high_blue` {.center}
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+df_biru %>% 
+  ggplot(aes(x = tgl,
+             y = proportion_high_blue)) +
+  geom_line(group = 1,color = "darkblue") +
+  ylim(.7,1) +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+df_biru %>% 
+  ggplot(aes(x = factor(tahun),y = proportion_high_blue)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+:::::
+
+## *Trend* `proportion_high_blue` _per Quarter_ {.center}
+
+
+```{r}
+df_q %>% 
+  ggplot(aes(x = kyu,
+             y = proportion_high_blue)) +
+  geom_col(color = "black",fill = "blue",alpha = .3) +
+  geom_label(aes(label = round(proportion_high_blue,3))) +
+  theme_minimal() +
+  theme(axis.title = element_blank(),
+        axis.text.y = element_blank()) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 4))
+```
+
+## Perbedaan Tahunan: Uji *Mean* {.smaller .center}
+
+### `proportion_high_blue`
+
+Berikut adalah hasil uji signifikansinya:
+
+```{r}
+source("create_analisa.R")
+result_matrix <- create_wilcox_comparison_matrix(df_biru, "tahun", "proportion_high_blue")
+create_wilcox_heatmap(result_matrix)
+```
+
+
+## *Trend* `average_blue_dominance` {.center}
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+df_biru %>% 
+  ggplot(aes(x = tgl,
+             y = average_blue_dominance)) +
+  geom_line(group = 1,color = "darkblue") +
+  # ylim(0,.1) +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+df_biru %>% 
+  ggplot(aes(x = factor(tahun),y = average_blue_dominance)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.title = element_blank())
+```
+:::
+:::::
+
+## *Trend* `average_blue_dominance` _per Quarter_ {.center}
+
+```{r}
+df_q %>% 
+  ggplot(aes(x = kyu,
+             y = average_blue_dominance)) +
+  geom_col(color = "black",fill = "blue",alpha = .3) +
+  geom_label(aes(label = round(average_blue_dominance,3))) +
+  theme_minimal() +
+  theme(axis.title = element_blank(),
+        axis.text.y = element_blank()) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 4))
+```
+
+## Perbedaan Tahunan: Uji *Mean* {.center .smaller}
+
+### `average_blue_dominance`
+
+Berikut adalah hasil uji signifikansinya:
+
+```{r}
+source("create_analisa.R")
+result_matrix <- create_wilcox_comparison_matrix(df_biru, "tahun", "average_blue_dominance")
+create_wilcox_heatmap(result_matrix)
+```
+
+# _PREDICTIVE MODELLING_
 
 # TERIMA KASIH
