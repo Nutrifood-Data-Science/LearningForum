@@ -33,7 +33,7 @@ input
 ekstraksi = function(input){
   # menuju url
   remote_driver$navigate(input)
-  jeda = runif(1,1,1.3)
+  jeda = runif(1,.5,1)
   Sys.sleep(jeda)
 
   # baca tabel dari pagination pertama
@@ -45,12 +45,12 @@ ekstraksi = function(input){
   tabel = tabel[[1]]
   
   # ini kita lanjutkan sampe selesai
-  for(ikanx in 1:15){
+  for(ikanx in 1:12){
     # mencari tombol next
     elemen = "#table1_next"
     lanjut <<- remote_driver$findElement("css", elemen)
     lanjut$clickElement()
-    jeda = runif(1,1,1.2)
+    jeda = runif(1,.7,1)
     Sys.sleep(jeda)
     
     # baca webnya
@@ -75,12 +75,13 @@ ekstraksi = function(input){
 
 # siapkan rumah
 # rumah_kita = vector("list",length(urls))
-for(ix in 109:length(urls)){
+for(ix in 1808:length(urls)){
   temp = ekstraksi(urls[[ix]])
   Sys.sleep(1)
   rumah_kita[[ix]] = temp
   print(ix)
 }
 
-save(rumah_kita,file = "dikmen.rda")
+# sampe 1808
+save(rumah_kita,file = "dikmen sampai 1808.rda")
 
