@@ -4,20 +4,37 @@ gc()
 library(dplyr)
 library(tidyr)
 
-load("dikdas.rda")
+load("dikmen.rda")
 
 df_all = data.table::rbindlist(rumah_kita,fill = T) |> as.data.frame()
 df_all = df_all |> distinct() |> janitor::clean_names() |> 
   filter(npsn != "1") |> 
   filter(npsn != "2") |> 
   filter(npsn != "No data available in table")
+df_1   = df_all
 
-df_all |> janitor::tabyl(npsn) |> arrange(desc(n)) |> head(20)
+load("dikmen sampai 1808.rda")
 
-df_all |> pull(alamat_2) |> head(2)
+df_all = data.table::rbindlist(rumah_kita,fill = T) |> as.data.frame()
+df_all = df_all |> distinct() |> janitor::clean_names() |> 
+  filter(npsn != "1") |> 
+  filter(npsn != "2") |> 
+  filter(npsn != "No data available in table")
+df_2   = df_all
+
+load("dikmen lanjut 1808.rda")
+
+df_all = data.table::rbindlist(rumah_kita,fill = T) |> as.data.frame()
+df_all = df_all |> distinct() |> janitor::clean_names() |> 
+  filter(npsn != "1") |> 
+  filter(npsn != "2") |> 
+  filter(npsn != "No data available in table")
+df_3   = df_all
 
 df_all  = 
-  df_all |> 
+  rbind(df_1,df_2) |> 
+  rbind(df_3) |> 
+  distinct() |> 
   separate(alamat_2,
            into = c("negara","prov","kota_kab","kecamatan"),
            sep = ">>"
@@ -29,4 +46,4 @@ df_all  =
          ) |> 
   arrange(prov,kota_kab,kecamatan)
 
-openxlsx::write.xlsx(df_all,file = "SD dan SMP.xlsx")
+openxlsx::write.xlsx(df_all,file = "SMA.xlsx")

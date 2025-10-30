@@ -22,9 +22,9 @@ remote_driver$open()
 load("link_dikmen_kecamatan.rda")
 urls = link_kecamatan_final[!grepl("all/all",link_kecamatan_final,fixed = T)]
 
-input = urls[80]
-
-input
+# input = urls[80]
+# 
+# input
 
 
 
@@ -83,5 +83,5 @@ for(ix in 1808:length(urls)){
 }
 
 # sampe 1808
-save(rumah_kita,file = "dikmen sampai 1808.rda")
+save(rumah_kita,file = "dikmen lanjut 1808.rda")
 
