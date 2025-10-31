@@ -41,11 +41,11 @@ ekstraksi = function(input){
   baca   = remote_driver$getPageSource()[[1]] %>% read_html()
   
   # ambil tabel
-  tabel = baca |> html_table(fill = T)
+  tabel = baca |> html_table(fill = T,convert = F)
   tabel = tabel[[1]]
   
   # ini kita lanjutkan sampe selesai
-  for(ikanx in 1:10){
+  for(ikanx in 1:20){
     # mencari tombol next
     elemen = "#table1_next"
     lanjut <<- remote_driver$findElement("css", elemen)
@@ -57,7 +57,7 @@ ekstraksi = function(input){
     baca   = remote_driver$getPageSource()[[1]] %>% read_html()
     
     # ambil tabel
-    tempo = baca |> html_table(fill = T)
+    tempo = baca |> html_table(fill = T,convert = F)
   
     # gabung
     tabel = bind_rows(tabel,tempo)
@@ -81,6 +81,6 @@ for(ix in 1:length(urls)){
   print(ix)
 }
 
-# sampe 1808
+# mulai lagi
 save(rumah_kita,file = "dikdas ulang.rda")
 
