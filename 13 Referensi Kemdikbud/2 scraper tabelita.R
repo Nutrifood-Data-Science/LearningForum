@@ -33,7 +33,7 @@ urls = link_kecamatan_final[!grepl("all/all",link_kecamatan_final,fixed = T)]
 ekstraksi = function(input){
   # menuju url
   remote_driver$navigate(input)
-  jeda = runif(1,.5,1)
+  jeda = runif(1,.5,.7)
   Sys.sleep(jeda)
 
   # baca tabel dari pagination pertama
@@ -50,7 +50,7 @@ ekstraksi = function(input){
     elemen = "#table1_next"
     lanjut <<- remote_driver$findElement("css", elemen)
     lanjut$clickElement()
-    jeda = runif(1,.7,1)
+    jeda = runif(1,.4,.7)
     Sys.sleep(jeda)
     
     # baca webnya
@@ -74,7 +74,7 @@ ekstraksi = function(input){
 
 # siapkan rumah
 # rumah_kita = vector("list",length(urls))
-for(ix in 18:length(urls)){
+for(ix in 150:length(urls)){
   temp = ekstraksi(urls[[ix]])
   Sys.sleep(1)
   rumah_kita[[ix]] = temp
@@ -82,5 +82,5 @@ for(ix in 18:length(urls)){
 }
 
 # mulai lagi
-save(rumah_kita,file = "dikdas ulang.rda")
+save(rumah_kita,file = "dikdas ulang 935.rda")
 
