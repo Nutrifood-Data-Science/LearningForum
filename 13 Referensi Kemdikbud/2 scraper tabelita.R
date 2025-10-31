@@ -19,7 +19,7 @@ remote_driver$open()
 # ==============================================================================
 
 # ==============================================================================
-load("link_dikmen_kecamatan.rda")
+load("link_dikdas_kecamatan.rda")
 urls = link_kecamatan_final[!grepl("all/all",link_kecamatan_final,fixed = T)]
 
 # input = urls[80]
@@ -45,7 +45,7 @@ ekstraksi = function(input){
   tabel = tabel[[1]]
   
   # ini kita lanjutkan sampe selesai
-  for(ikanx in 1:12){
+  for(ikanx in 1:10){
     # mencari tombol next
     elemen = "#table1_next"
     lanjut <<- remote_driver$findElement("css", elemen)
@@ -58,10 +58,9 @@ ekstraksi = function(input){
     
     # ambil tabel
     tempo = baca |> html_table(fill = T)
-    tempo = tabel[[1]]
-    
+  
     # gabung
-    tabel = rbind(tabel,tempo)
+    tabel = bind_rows(tabel,tempo)
   }
   
   # yang kumau
@@ -74,8 +73,8 @@ ekstraksi = function(input){
 }
 
 # siapkan rumah
-# rumah_kita = vector("list",length(urls))
-for(ix in 1808:length(urls)){
+rumah_kita = vector("list",length(urls))
+for(ix in 1:length(urls)){
   temp = ekstraksi(urls[[ix]])
   Sys.sleep(1)
   rumah_kita[[ix]] = temp
@@ -83,5 +82,5 @@ for(ix in 1808:length(urls)){
 }
 
 # sampe 1808
-save(rumah_kita,file = "dikmen lanjut 1808.rda")
+save(rumah_kita,file = "dikdas ulang.rda")
 
