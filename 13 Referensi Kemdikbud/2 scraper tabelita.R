@@ -45,7 +45,7 @@ ekstraksi = function(input){
   tabel = tabel[[1]]
   
   # ini kita lanjutkan sampe selesai
-  for(ikanx in 1:20){
+  for(ikanx in 1:27){
     # mencari tombol next
     elemen = "#table1_next"
     lanjut <<- remote_driver$findElement("css", elemen)
@@ -73,8 +73,8 @@ ekstraksi = function(input){
 }
 
 # siapkan rumah
-rumah_kita = vector("list",length(urls))
-for(ix in 1:length(urls)){
+# rumah_kita = vector("list",length(urls))
+for(ix in 18:length(urls)){
   temp = ekstraksi(urls[[ix]])
   Sys.sleep(1)
   rumah_kita[[ix]] = temp
