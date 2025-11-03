@@ -74,7 +74,7 @@ ekstraksi = function(input){
 
 # siapkan rumah
 # rumah_kita = vector("list",length(urls))
-for(ix in 150:length(urls)){
+for(ix in 935:length(urls)){
   temp = ekstraksi(urls[[ix]])
   Sys.sleep(1)
   rumah_kita[[ix]] = temp
@@ -82,5 +82,5 @@ for(ix in 150:length(urls)){
 }
 
 # mulai lagi
-save(rumah_kita,file = "dikdas ulang 935.rda")
+save(rumah_kita,file = "dikdas ulang lanjut.rda")
 
