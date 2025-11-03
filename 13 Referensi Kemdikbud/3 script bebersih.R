@@ -4,7 +4,7 @@ gc()
 library(dplyr)
 library(tidyr)
 
-load("dikmen.rda")
+load("dikmen ulang.rda")
 
 df_all = data.table::rbindlist(rumah_kita,fill = T) |> as.data.frame()
 df_all = df_all |> distinct() |> janitor::clean_names() |> 
@@ -13,7 +13,7 @@ df_all = df_all |> distinct() |> janitor::clean_names() |>
   filter(npsn != "No data available in table")
 df_1   = df_all
 
-load("dikmen sampai 1808.rda")
+load("dikmen ulang.rda")
 
 df_all = data.table::rbindlist(rumah_kita,fill = T) |> as.data.frame()
 df_all = df_all |> distinct() |> janitor::clean_names() |> 
@@ -22,7 +22,7 @@ df_all = df_all |> distinct() |> janitor::clean_names() |>
   filter(npsn != "No data available in table")
 df_2   = df_all
 
-load("dikmen lanjut 1808.rda")
+load("dikmen ulang.rda")
 
 df_all = data.table::rbindlist(rumah_kita,fill = T) |> as.data.frame()
 df_all = df_all |> distinct() |> janitor::clean_names() |> 
@@ -46,4 +46,19 @@ df_all  =
          ) |> 
   arrange(prov,kota_kab,kecamatan)
 
-openxlsx::write.xlsx(df_all,file = "SMA.xlsx")
+openxlsx::write.xlsx(df_all,file = "SMA ulang.xlsx")
+
+library(janitor)
+df_all |> 
+  tabyl(prov) |> 
+  arrange(n)
+
+
+
+
+
+
+
+
+
+
