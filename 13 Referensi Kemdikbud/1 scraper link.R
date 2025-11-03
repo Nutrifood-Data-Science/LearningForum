@@ -38,7 +38,7 @@ i=1
 for(url in urls){
   print(url)
   remote_driver$navigate(url)
-  jeda = runif(1,1,3)
+  jeda = runif(1,.4,.7)
   Sys.sleep(jeda)
   
   # baca webnya
@@ -57,9 +57,9 @@ for(url in urls){
     i = i + 1
     
     klik_donk_satt()
-    Sys.sleep(1)
+    Sys.sleep(.1)
   }
-  print(i)
+  cat(i)
   }
 
 # sudah jadi link kota final
