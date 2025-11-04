@@ -55,12 +55,11 @@ for(url in urls){
     # masukin ke rumah
     link_kota[[i]] = links
     i = i + 1
-    
+    cat(i)
     klik_donk_satt()
     Sys.sleep(.1)
   }
-  cat(i)
-  }
+}
 
 # sudah jadi link kota final
 link_kota_final = link_kota |> unlist() |> unique()
@@ -77,13 +76,13 @@ i = 1
 for(url in link_kota_final){
   print(url)
   remote_driver$navigate(url)
-  jeda = runif(1,1,1.3)
+  jeda = runif(1,.1,.4)
   Sys.sleep(jeda)
   
   # baca webnya
   baca   = remote_driver$getPageSource()[[1]] %>% read_html()
   
-  for(iterasi in 1:10){
+  for(iterasi in 1:15){
     # ambil link nya
     links = 
       baca |> 
@@ -94,12 +93,11 @@ for(url in link_kota_final){
     # masukin ke rumah
     link_kecamatan[[i]] = links
     i = i + 1
+    cat(i)
     
     klik_donk_satt()
-    Sys.sleep(1)
+    Sys.sleep(.05)
   }
-  
-  print(i)
 }
 
 # sudah jadi link kota final
