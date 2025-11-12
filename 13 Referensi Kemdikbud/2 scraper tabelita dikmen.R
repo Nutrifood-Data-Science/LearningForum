@@ -20,7 +20,12 @@ remote_driver$open()
 
 # ==============================================================================
 load("link_dikmen_kecamatan.rda")
-urls = link_kecamatan_final[!grepl("all/all",link_kecamatan_final,fixed = T)]
+urls_1 = link_kecamatan_final[!grepl("all/all",link_kecamatan_final,fixed = T)]
+
+load("link_dikmen_kecamatan lama.rda")
+urls_2 = link_kecamatan_final[!grepl("all/all",link_kecamatan_final,fixed = T)]
+
+urls = setdiff(urls_1,urls_2)
 
 # input = urls[80]
 # 
@@ -75,7 +80,7 @@ ekstraksi = function(input){
 
 # siapkan rumah
 # rumah_kita = vector("list",length(urls))
-for(ix in 1:length(urls)){
+for(ix in 3250:length(urls)){
   temp = ekstraksi(urls[[ix]])
   Sys.sleep(.1)
   rumah_kita[[ix]] = temp
@@ -83,5 +88,5 @@ for(ix in 1:length(urls)){
 }
 
 # mulai lagi
-save(rumah_kita,file = "dikmen ulang lagi.rda")
+save(rumah_kita,file = "dikmen ulang lagi beda beda.rda")
 

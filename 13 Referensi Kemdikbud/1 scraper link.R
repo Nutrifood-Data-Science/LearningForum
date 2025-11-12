@@ -38,13 +38,12 @@ i=1
 for(url in urls){
   print(url)
   remote_driver$navigate(url)
-  jeda = runif(1,.4,.7)
+  jeda = runif(1,.1,.2)
   Sys.sleep(jeda)
   
-  # baca webnya
-  baca   = remote_driver$getPageSource()[[1]] %>% read_html()
-  
   for(iterasi in 1:15){
+    # baca webnya
+    baca   = remote_driver$getPageSource()[[1]] %>% read_html()
     # ambil link nya
     links = 
       baca |> 
@@ -76,13 +75,13 @@ i = 1
 for(url in link_kota_final){
   print(url)
   remote_driver$navigate(url)
-  jeda = runif(1,.1,.4)
+  jeda = runif(1,.1,.2)
   Sys.sleep(jeda)
   
-  # baca webnya
-  baca   = remote_driver$getPageSource()[[1]] %>% read_html()
   
   for(iterasi in 1:15){
+    # baca webnya
+    baca   = remote_driver$getPageSource()[[1]] %>% read_html()
     # ambil link nya
     links = 
       baca |> 

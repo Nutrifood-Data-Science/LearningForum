@@ -13,7 +13,7 @@ df_all = df_all |> distinct() |> janitor::clean_names() |>
   filter(npsn != "No data available in table")
 df_1   = df_all
 
-load("dikmen ulang.rda")
+load("dikmen ulang lagi.rda")
 
 df_all = data.table::rbindlist(rumah_kita,fill = T) |> as.data.frame()
 df_all = df_all |> distinct() |> janitor::clean_names() |> 
@@ -22,7 +22,7 @@ df_all = df_all |> distinct() |> janitor::clean_names() |>
   filter(npsn != "No data available in table")
 df_2   = df_all
 
-load("dikmen ulang.rda")
+load("dikmen ulang lagi beda.rda")
 
 df_all = data.table::rbindlist(rumah_kita,fill = T) |> as.data.frame()
 df_all = df_all |> distinct() |> janitor::clean_names() |> 
@@ -32,8 +32,8 @@ df_all = df_all |> distinct() |> janitor::clean_names() |>
 df_3   = df_all
 
 df_all  = 
-  rbind(df_1,df_2) |> 
-  rbind(df_3) |> 
+  bind_rows(df_1,df_2) |> 
+  bind_rows(df_3) |> 
   distinct() |> 
   separate(alamat_2,
            into = c("negara","prov","kota_kab","kecamatan"),
@@ -46,13 +46,12 @@ df_all  =
          ) |> 
   arrange(prov,kota_kab,kecamatan)
 
-openxlsx::write.xlsx(df_all,file = "SMA ulang.xlsx")
+# openxlsx::write.xlsx(df_all,file = "SMA ulang.xlsx")
 
 library(janitor)
 df_all |> 
   tabyl(prov) |> 
-  arrange(n)
-
+  arrange(desc(n))
 
 
 

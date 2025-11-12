@@ -1,6 +1,6 @@
 # ==============================================================================
-# rm(list=ls())
-# gc()
+rm(list=ls())
+gc()
 
 # libraries
 library(dplyr)
@@ -21,6 +21,10 @@ remote_driver$open()
 # ==============================================================================
 load("link_dikdas_kecamatan.rda")
 urls = link_kecamatan_final[!grepl("all/all",link_kecamatan_final,fixed = T)]
+
+cek = "https://referensi.data.kemendikdasmen.go.id/pendidikan/dikmen/370111/3"
+
+sum(urls == cek )
 
 # input = urls[80]
 # 
