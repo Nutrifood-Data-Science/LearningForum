@@ -50,7 +50,7 @@ for(url in urls){
       baca |> 
       html_nodes("a") |> 
       html_attr("href")
-    links = links[grepl("/dikmen/",links,fixed = T)]
+    links = links[grepl("/dikdas/",links,fixed = T)]
     
     # masukin ke rumah
     link_kota[[i]] = links
@@ -64,7 +64,7 @@ for(url in urls){
 
 # sudah jadi link kota final
 link_kota_final = link_kota |> unlist() |> unique()
-save(link_kota_final,file = "link_dikmen_kota.rda")
+save(link_kota_final,file = "link_dikdas_kota.rda")
 # ==============================================================================
 
 # ==============================================================================
@@ -77,33 +77,32 @@ i = 1
 for(url in link_kota_final){
   print(url)
   remote_driver$navigate(url)
-  jeda = runif(1,1,1.3)
+  jeda = runif(1,.3,.5)
   Sys.sleep(jeda)
   
   # baca webnya
   baca   = remote_driver$getPageSource()[[1]] %>% read_html()
   
-  for(iterasi in 1:10){
+  for(iterasi in 1:15){
     # ambil link nya
     links = 
       baca |> 
       html_nodes("a") |> 
       html_attr("href")
-    links = links[grepl("/dikmen/",links,fixed = T)]
+    links = links[grepl("/dikdas/",links,fixed = T)]
     
     # masukin ke rumah
     link_kecamatan[[i]] = links
     i = i + 1
-    
+    cat(i)
     klik_donk_satt()
-    Sys.sleep(1)
+    Sys.sleep(.2)
   }
   
-  print(i)
 }
 
 # sudah jadi link kota final
 link_kecamatan_final = link_kecamatan |> unlist() |> unique()
 
-save(link_kecamatan_final,link_kota_final,file = "link_dikmen_kecamatan.rda")
+save(link_kecamatan_final,link_kota_final,file = "link_dikdas_kecamatan.rda")
 # ==============================================================================
