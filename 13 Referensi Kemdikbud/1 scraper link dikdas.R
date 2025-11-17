@@ -38,13 +38,12 @@ i=1
 for(url in urls){
   print(url)
   remote_driver$navigate(url)
-  jeda = runif(1,.4,.7)
+  jeda = runif(1,.1,.2)
   Sys.sleep(jeda)
   
-  # baca webnya
-  baca   = remote_driver$getPageSource()[[1]] %>% read_html()
-  
   for(iterasi in 1:15){
+    # baca webnya
+    baca   = remote_driver$getPageSource()[[1]] %>% read_html()
     # ambil link nya
     links = 
       baca |> 
@@ -55,12 +54,11 @@ for(url in urls){
     # masukin ke rumah
     link_kota[[i]] = links
     i = i + 1
-    
+    cat(i)
     klik_donk_satt()
     Sys.sleep(.1)
   }
-  cat(i)
-  }
+}
 
 # sudah jadi link kota final
 link_kota_final = link_kota |> unlist() |> unique()
@@ -77,13 +75,20 @@ i = 1
 for(url in link_kota_final){
   print(url)
   remote_driver$navigate(url)
+<<<<<<< HEAD:13 Referensi Kemdikbud/1 scraper link dikdas.R
   jeda = runif(1,.3,.5)
+=======
+  jeda = runif(1,.1,.2)
+>>>>>>> 02e92b9ea592b3d428e6cc55e6a2553906657ad0:13 Referensi Kemdikbud/1 scraper link.R
   Sys.sleep(jeda)
   
-  # baca webnya
-  baca   = remote_driver$getPageSource()[[1]] %>% read_html()
   
   for(iterasi in 1:15){
+<<<<<<< HEAD:13 Referensi Kemdikbud/1 scraper link dikdas.R
+=======
+    # baca webnya
+    baca   = remote_driver$getPageSource()[[1]] %>% read_html()
+>>>>>>> 02e92b9ea592b3d428e6cc55e6a2553906657ad0:13 Referensi Kemdikbud/1 scraper link.R
     # ambil link nya
     links = 
       baca |> 
@@ -95,14 +100,25 @@ for(url in link_kota_final){
     link_kecamatan[[i]] = links
     i = i + 1
     cat(i)
+<<<<<<< HEAD:13 Referensi Kemdikbud/1 scraper link dikdas.R
     klik_donk_satt()
     Sys.sleep(.2)
   }
   
+=======
+    
+    klik_donk_satt()
+    Sys.sleep(.05)
+  }
+>>>>>>> 02e92b9ea592b3d428e6cc55e6a2553906657ad0:13 Referensi Kemdikbud/1 scraper link.R
 }
 
 # sudah jadi link kota final
 link_kecamatan_final = link_kecamatan |> unlist() |> unique()
 
 save(link_kecamatan_final,link_kota_final,file = "link_dikdas_kecamatan.rda")
+<<<<<<< HEAD:13 Referensi Kemdikbud/1 scraper link dikdas.R
 # ==============================================================================
+=======
+# ==============================================================================
+>>>>>>> 02e92b9ea592b3d428e6cc55e6a2553906657ad0:13 Referensi Kemdikbud/1 scraper link.R
