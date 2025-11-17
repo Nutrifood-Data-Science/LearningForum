@@ -31,9 +31,21 @@ df_all = df_all |> distinct() |> janitor::clean_names() |>
   filter(npsn != "No data available in table")
 df_3   = df_all
 
+
+load("dikmen ulang lagi beda beda.rda")
+
+df_all = data.table::rbindlist(rumah_kita,fill = T) |> as.data.frame()
+df_all = df_all |> distinct() |> janitor::clean_names() |> 
+  filter(npsn != "1") |> 
+  filter(npsn != "2") |> 
+  filter(npsn != "No data available in table")
+df_4   = df_all
+
+
 df_all  = 
   bind_rows(df_1,df_2) |> 
   bind_rows(df_3) |> 
+  bind_rows(df_4) |> 
   distinct() |> 
   separate(alamat_2,
            into = c("negara","prov","kota_kab","kecamatan"),
@@ -46,7 +58,7 @@ df_all  =
          ) |> 
   arrange(prov,kota_kab,kecamatan)
 
-# openxlsx::write.xlsx(df_all,file = "SMA ulang.xlsx")
+openxlsx::write.xlsx(df_all,file = "SMA ulang.xlsx")
 
 library(janitor)
 df_all |> 

@@ -49,7 +49,7 @@ for(url in urls){
       baca |> 
       html_nodes("a") |> 
       html_attr("href")
-    links = links[grepl("/dikmen/",links,fixed = T)]
+    links = links[grepl("/dikdas/",links,fixed = T)]
     
     # masukin ke rumah
     link_kota[[i]] = links
@@ -62,7 +62,7 @@ for(url in urls){
 
 # sudah jadi link kota final
 link_kota_final = link_kota |> unlist() |> unique()
-save(link_kota_final,file = "link_dikmen_kota.rda")
+save(link_kota_final,file = "link_dikdas_kota.rda")
 # ==============================================================================
 
 # ==============================================================================
@@ -87,7 +87,7 @@ for(url in link_kota_final){
       baca |> 
       html_nodes("a") |> 
       html_attr("href")
-    links = links[grepl("/dikmen/",links,fixed = T)]
+    links = links[grepl("/dikdas/",links,fixed = T)]
     
     # masukin ke rumah
     link_kecamatan[[i]] = links
@@ -102,5 +102,5 @@ for(url in link_kota_final){
 # sudah jadi link kota final
 link_kecamatan_final = link_kecamatan |> unlist() |> unique()
 
-save(link_kecamatan_final,link_kota_final,file = "link_dikmen_kecamatan.rda")
+save(link_kecamatan_final,link_kota_final,file = "link_dikdas_kecamatan.rda")
 # ==============================================================================
